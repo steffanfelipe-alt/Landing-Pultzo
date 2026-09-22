@@ -109,13 +109,26 @@ ol, ul { padding: 0; list-style: none; }
 }
 .hero__line {
   position: absolute; left: 50%; translate: -50% 0;
-  bottom: clamp(2.5rem, 7vh, 5rem);
+  bottom: clamp(4rem, 9vh, 6.5rem);
   width: min(36rem, calc(100vw - 2 * var(--sc-gutter)));
   text-align: center;
   font-size: var(--sc-t-lg); line-height: 1.4; letter-spacing: var(--sc-track-snug);
   color: var(--sc-ink-soft);
   z-index: 2;
 }
+
+/* a quiet nudge on the first screen only; it is gone by 6% of the act */
+.hero__hint {
+  position: absolute; left: 50%; translate: -50% 0;
+  bottom: calc(clamp(0.75rem, 2.5vh, 1.5rem) + env(safe-area-inset-bottom, 0px));
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: var(--sc-t-xs); letter-spacing: var(--sc-track-wide); text-transform: uppercase;
+  color: var(--sc-ink-soft); white-space: nowrap;
+  z-index: 2;
+}
+.hero__hint svg { width: 14px; height: 14px; animation: hintBob 1.8s var(--sc-ease-in-out) infinite; }
+@keyframes hintBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+@media (prefers-reduced-motion: reduce) { .hero__hint svg { animation: none; } }
 
 /* ------------------------------------------------------------------- tour */
 .tour__stage { display: block; }
@@ -680,7 +693,7 @@ ol, ul { padding: 0; list-style: none; }
 @media (max-width: 860px) {
   .hero__word { top: clamp(3.5rem, 12vh, 6rem); }
   .hero__h1 { font-size: clamp(4rem, 21vw, 8rem); }
-  .hero__line { bottom: clamp(1.5rem, 5vh, 3rem); font-size: var(--sc-t-base); }
+  .hero__line { bottom: clamp(3.25rem, 8vh, 5rem); font-size: var(--sc-t-base); }
   /* the copy takes the band under the flat window: 7vh + 53vh + a breath */
   .tour__copy {
     left: var(--sc-gutter); right: var(--sc-gutter); width: auto;
