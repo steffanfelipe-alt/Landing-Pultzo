@@ -158,13 +158,13 @@ ol, ul { padding: 0; list-style: none; }
 .hero__hint {
   position: absolute; left: 50%; translate: -50% 0;
   bottom: calc(clamp(0.75rem, 2.5vh, 1.5rem) + env(safe-area-inset-bottom, 0px));
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  font-size: var(--sc-t-xs); letter-spacing: var(--sc-track-wide); text-transform: uppercase;
-  color: var(--sc-ink-soft); white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  font-size: var(--sc-t-sm); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--sc-ink); white-space: nowrap;
   z-index: 2;
 }
-.hero__hint svg { width: 14px; height: 14px; animation: hintBob 1.8s var(--sc-ease-in-out) infinite; }
-@keyframes hintBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+.hero__hint svg { width: 20px; height: 20px; animation: hintBob 1.8s var(--sc-ease-in-out) infinite; }
+@keyframes hintBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 @media (prefers-reduced-motion: reduce) { .hero__hint svg { animation: none; } }
 
 /* ------------------------------------------------------------------- tour */
@@ -730,7 +730,9 @@ ol, ul { padding: 0; list-style: none; }
 @media (max-width: 860px) {
   .hero__word { top: clamp(3.5rem, 12vh, 6rem); }
   .hero__h1 { font-size: clamp(4rem, 21vw, 8rem); }
-  .hero__line { bottom: clamp(3.25rem, 8vh, 5rem); font-size: var(--sc-t-base); }
+  .hero__line { bottom: clamp(4.5rem, 10vh, 6rem); font-size: var(--sc-t-base); }
+  /* the arrow goes under the words: the line does not fit a narrow screen */
+  .hero__hint { flex-direction: column; gap: 0.15rem; font-size: 0.8rem; letter-spacing: 0.08em; }
   /* the copy takes the band under the flat window: 7vh + 53vh + a breath */
   .tour__copy {
     left: var(--sc-gutter); right: var(--sc-gutter); width: auto;
@@ -742,7 +744,11 @@ ol, ul { padding: 0; list-style: none; }
   .feat li { font-size: 0.95rem; line-height: 1.38; grid-template-columns: 1.05rem 1fr; gap: 0.6rem; }
   .feat svg { width: 1.05rem; height: 1.05rem; margin-top: 0.16em; }
   .onb { gap: var(--sc-7); }
-  .steps { grid-template-columns: 1fr; gap: var(--sc-5); padding-left: calc(var(--n) + var(--sc-4)); }
+  /* no wipe on a phone: the stacked steps make the section tall, so the
+     reveal (keyed to the section's progress) was still mid-way while the
+     reader was on it and clipped the right third of every line. The
+     engine writes clip-path inline; !important is the only override. */
+  .steps { grid-template-columns: 1fr; gap: var(--sc-5); padding-left: calc(var(--n) + var(--sc-4)); clip-path: none !important; }
   .steps::before { left: calc(var(--n) / 2); right: auto; top: calc(var(--n) / 2); bottom: calc(var(--n) / 2); width: 1px; height: auto; }
   .steps li { padding-right: 0; }
   .steps__n { position: absolute; left: calc(-1 * (var(--n) + var(--sc-4))); top: 0; margin: 0; }
