@@ -134,6 +134,22 @@ reaches further left than the screen, in perspective) sits flush to the right
 of the copy column, and the scale is capped so the screen stays inside the
 viewport. The copy can no longer be covered at any width.
 
+## Revision 5 (same day): one rhythm for every act
+
+Items were timed as fractions of their act, and acts had different lengths,
+so Seguimiento and Panel raced past. Now every act follows the same rule in
+scroll distance: heading at 0.2 viewport-heights (1.5 in the merged hero, after
+the lid), one item every 0.5, a 0.2 ramp each, and a full viewport of reading
+after the last item before the copy fades. Spans: hero+assistant 4.6, agenda
+3.0, seguimiento 3.0, panel 3.4 (the machine leaves from 0.8). Total about
+16.5 viewport-heights: longer than the skill's reference band on purpose,
+because the owner asked for slower, even pacing.
+
+On a phone the first view switch waits for the handover to the window
+(`data-tour-at-phone="0.42"`), so the cursor, the layout change and the view
+change never happen in the same moment. Copy verified to clear the fold on
+390x844 and 360x640 (a short-screen rule tightens the window and the type).
+
 ## Journey
 
 ```

@@ -8,7 +8,7 @@ for (const [name, vp] of [["desk", { width: 1440, height: 900 }], ["phone", { wi
   const acts = await pg.evaluate(() => Object.fromEntries(["hero","a-agenda","a-seguimiento","a-panel","onboarding"].map(id => { const el = document.getElementById(id); return [id, { top: el.offsetTop, h: el.offsetHeight }]; })));
   const vh = vp.height;
   const at = (id, f) => acts[id].top + f * (acts[id].h - vh);
-  const shots = [["hero0", at("hero", 0)], ["hero15", at("hero", 0.15)], ["hero30", at("hero", 0.30)], ["hero34", at("hero", 0.34)], ["hero36", at("hero", 0.36)], ["hero42", at("hero", 0.42)], ["hero62", at("hero", 0.62)], ["hero85", at("hero", 0.85)], ["agenda", at("a-agenda", 0.75)], ["seg", at("a-seguimiento", 0.7)], ["panel", at("a-panel", 0.55)], ["onb", acts.onboarding.top + 80]];
+  const shots = [["hero0", at("hero", 0)], ["hero15", at("hero", 0.15)], ["hero34", at("hero", 0.34)], ["hero40", at("hero", 0.40)], ["hero45", at("hero", 0.45)], ["hero55", at("hero", 0.55)], ["hero90", at("hero", 0.90)], ["agenda", at("a-agenda", 0.78)], ["seg", at("a-seguimiento", 0.78)], ["panel", at("a-panel", 0.7)], ["onb", acts.onboarding.top + 80]];
   // walk there in steps so the choreography sees the scroll, like a person would
   let y = 0;
   for (const [label, target] of shots) {

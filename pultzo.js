@@ -266,15 +266,15 @@
 
     // the lid opens in the first quarter of the merged act and the machine
     // settles by a third, which is where the first copy arrives
-    var eLid = reduce ? (ph > 0.12 ? 1 : 0) : smooth(ph, 0.02, 0.26);
+    var eLid = reduce ? (ph > 0.12 ? 1 : 0) : smooth(ph, 0.02, 0.25);
     var lidDeg = LID_OPEN * eLid;
 
     // pose: hero -> tour; at the end of the tour the machine recedes and leaves
-    var eMove = reduce ? (ph > 0.2 ? 1 : 0) : smooth(ph, 0.08, 0.34);
-    var eExit = reduce ? (pl > 0.85 ? 1 : 0) : smooth(pl, 0.72, 1);
+    var eMove = reduce ? (ph > 0.2 ? 1 : 0) : smooth(ph, 0.08, 0.33);
+    var eExit = reduce ? (pl > 0.9 ? 1 : 0) : smooth(pl, 0.8, 1);
     var k = lerp(kH, kT, eMove) * (1 - 0.22 * eExit);
     var tx = lerp(tH.x, tT.x, eMove), ty = lerp(tH.y, tT.y, eMove) + eExit * vh * 0.1;
-    var opacity = 1 - smooth(pl, 0.8, 1);
+    var opacity = 1 - smooth(pl, 0.86, 1);
     // on a phone the screen grows into the flat window while the deck fades;
     // the app moves over once the two rectangles coincide
     var eFlat = phone ? (reduce ? (ph > 0.3 ? 1 : 0) : smooth(ph, 0.26, 0.4)) : 0;
@@ -306,7 +306,7 @@
 
     if (phone) {
       hostApp(eFlat > 0.5);
-      var flatOp = smooth(eFlat, 0.1, 0.5) * (1 - smooth(pl, 0.8, 1));
+      var flatOp = smooth(eFlat, 0.1, 0.5) * (1 - smooth(pl, 0.86, 1));
       flat.style.opacity = flatOp.toFixed(3);
       flat.style.transform = "translate3d(0," + (eExit * vh * 0.06).toFixed(1) + "px,0) scale(" + (1 - 0.06 * eExit).toFixed(3) + ")";
       flat.classList.toggle("is-hidden", flatOp <= 0.001);
@@ -325,7 +325,9 @@
     var idx = -1;
     for (var i = 0; i < tours.length; i++) {
       var pi = P(tours[i]);
-      var at = parseFloat(tours[i].getAttribute("data-tour-at")) || 0.03;
+      // on a phone the first switch waits for the handover to the window to
+      // finish, so the cursor, the layout and the view never change at once
+      var at = parseFloat(tours[i].getAttribute(phone ? "data-tour-at-phone" : "data-tour-at") || tours[i].getAttribute("data-tour-at")) || 0.03;
       if (pi > at) idx = i;
       if (pi >= 0.985 && i + 1 < tours.length) idx = i + 1;
     }
