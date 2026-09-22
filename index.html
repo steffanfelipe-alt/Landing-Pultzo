@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pultzo Admin</title>
+<meta name="description" content="Pultzo: un asistente de WhatsApp que atiende y reserva turnos, agenda, seguimiento de pacientes y panel para clínicas odontológicas. Nosotros dejamos la cuenta lista.">
+<meta name="theme-color" content="#f7f6f2">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2317181a'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-weight='700' font-size='18' fill='%23f7f6f2' text-anchor='middle'>P</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="scrollcraft.css">
+<link rel="stylesheet" href="pultzo.css">
+</head>
+<body>
+
+<a class="skip" href="#contacto">Ir al contacto</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 16 16"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+  <symbol id="i-users" viewBox="0 0 16 16"><circle cx="6" cy="5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.8 13.5c.4-2.6 2.2-4 4.2-4s3.8 1.4 4.2 4M11 5.2a2 2 0 010 3.8M12.5 9.6c1.2.5 2 1.6 2.2 3.4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 16 16"><path d="M2.5 3.5h9a1 1 0 011 1v5a1 1 0 01-1 1H6l-3.5 2.6V4.5a1 1 0 011-1z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M14 6.5v4.8a1 1 0 01-1 1h-.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5V8l2.4 1.6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.2 10.2L14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+  <symbol id="i-out" viewBox="0 0 16 16"><path d="M6 2.5H3.5a1 1 0 00-1 1v9a1 1 0 001 1H6M10 5l3 3-3 3M13 8H6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6.2 10.3l2.5 2.5 5.1-5.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="chrome" id="chrome">
+  <a class="chrome__mark" href="#top" aria-label="Pultzo, volver al inicio">Pultzo</a>
+  <a class="chrome__cta" href="#contacto">Hablemos</a>
+</header>
+
+<!-- The laptop. One object, fixed to the viewport, posed from the acts'
+     scroll progress by pultzo.js. On a phone the app leaves the lid after the
+     hero and runs 1:1 inside #flat, a plain window at the top of the screen.
+     Decorative for assistive tech: every word on the screen is repeated as
+     real copy beside it. -->
+<div class="device" id="device" aria-hidden="true">
+  <div class="scene" id="scene">
+    <div class="shadow" id="shadow"><i class="shadow__ambient"></i><i class="shadow__contact"></i></div>
+    <div class="laptop" id="laptop">
+      <div class="base" id="base">
+        <div class="base__deck">
+          <div class="base__well"><div class="base__keys"></div><div class="base__fnrow"></div></div>
+          <div class="base__pad"></div>
+          <div class="base__lip"></div>
+        </div>
+        <div class="base__front"></div>
+        <div class="hinge"></div>
+        <div class="lid" id="lid">
+          <div class="lid__cover"><span class="lid__mark">P</span></div>
+          <div class="lid__edge"></div>
+          <div class="lid__screen" id="screen">
+            <div class="bezel" id="bezel">
+              <div class="app" id="app">
+
+                <nav class="app__nav">
+                  <div class="app__brand"><span class="app__logo">P</span><span class="app__brand-name">Pultzo</span></div>
+                  <ul class="app__menu">
+                    <li><button type="button" tabindex="-1" data-view="panel" data-act="a-panel" class="is-active"><svg><use href="#i-grid"/></svg>Panel</button></li>
+                    <li><button type="button" tabindex="-1" data-view="cartera"><svg><use href="#i-users"/></svg>Cartera</button></li>
+                    <li><button type="button" tabindex="-1" data-view="agenda" data-act="a-agenda"><svg><use href="#i-cal"/></svg>Agenda</button></li>
+                    <li><button type="button" tabindex="-1" data-view="conversaciones" data-act="a-bot"><svg><use href="#i-chat"/></svg>Conversaciones</button></li>
+                    <li><button type="button" tabindex="-1" data-view="campanas"><svg><use href="#i-chat"/></svg>Campañas</button></li>
+                    <li><button type="button" tabindex="-1" data-view="seguimiento" data-act="a-seguimiento"><svg><use href="#i-chat"/></svg>Seguimiento</button></li>
+                    <li><button type="button" tabindex="-1" data-view="sesiones"><svg><use href="#i-clock"/></svg>Sesiones pendientes</button></li>
+                  </ul>
+                  <div class="app__menu-foot">
+                    <div class="app__user"><span class="app__avatar">N</span><span>Clínica de ejemplo</span></div>
+                    <button type="button" tabindex="-1" data-view="salir"><svg><use href="#i-out"/></svg>Cerrar sesión</button>
+                  </div>
+                </nav>
+
+                <div class="app__main">
+                  <div class="app__top">
+                    <span class="app__focus"><svg><use href="#i-grid"/></svg></span>
+                    <span class="app__demo">Datos ficticios</span>
+                    <span class="app__search"><svg><use href="#i-search"/></svg><span>Buscar pacientes...</span></span>
+                  </div>
+
+                  <!-- PANEL (home) -->
+                  <section class="app__view is-on" data-view-id="panel">
+                    <header class="pg__head">
+                      <div>
+                        <h3 class="pg__title">Martes 22 de septiembre</h3>
+                        <p class="pg__meta">Cartera de 408 pacientes · últimos 30 días · datos al mar, 22 sept · 06:37</p>
+                      </div>
+                    </header>
+                    <div class="sg__label"><small>A QUIÉN CONTACTAR</small><span>Cada número abre la lista exacta que lo produce.</span></div>
+                    <div class="pn">
+                      <div class="tile"><span>Necesitan atención</span><b>3</b><small>El bot las derivó al equipo: una urgencia, una consulta de precios, o algo que no pudo resolver.</small><em>Atender →</em></div>
+                      <div class="tile"><span>Riesgo alto</span><b>8</b><small>Acumulan ausencias y cancelaciones tardías. Es una marca interna: no se les dice.</small><em>Ver lista →</em></div>
+                      <div class="tile" data-at="0.5" data-cursor="self"><span>Inactivos</span><b>23</b><small>Pasó más tiempo del esperable desde su última visita, según la configuración de la clínica.</small><em>Ver lista →</em></div>
+                      <div class="tile"><span>Sin turno futuro</span><b>112</b><small>No tienen nada agendado por delante. De acá sale una campaña de recontacto.</small><em>Armar campaña →</em></div>
+                      <div class="tile tile--5"><span>Tratamientos abandonados</span><b>11</b><small>Aceptaron el tratamiento y hace más de 60 días que no vuelven, con sesiones por delante.</small><em>Ver los tratamientos →</em></div>
+                    </div>
+                    <div class="sg__label"><small>DEL MENSAJE AL TURNO · ÚLTIMOS 30 DÍAS</small></div>
+                    <div class="funnel">
+                      <div class="funnel__stats">
+                        <span><small>CONVERSACIONES</small><b>190</b><em>Entraron por cualquier canal</em></span>
+                        <span><small>TERMINARON EN TURNO</small><b>69%</b><em>132 de 190</em></span>
+                        <span><small>TURNOS RESERVADOS</small><b>132</b><em>2 todavía por delante</em></span>
+                        <span><small>ASISTENCIA</small><b>77%</b><em>100 de 130 ya pasados</em></span>
+                      </div>
+                      <div class="funnel__bar"><i style="--w:44%"></i><i style="--w:30%"></i><i style="--w:1%"></i><i style="--w:25%"></i></div>
+                      <div class="funnel__legend"><span>190 conversaciones</span><span>132 con turno</span><span>2 pendientes</span><span>100 asistieron</span></div>
+                    </div>
+                  </section>
+
+                  <!-- CONVERSACIONES -->
+                  <section class="app__view" data-view-id="conversaciones">
+                    <header class="pg__head">
+                      <div>
+                        <h3 class="pg__title">Conversaciones</h3>
+                        <p class="pg__meta">Todo lo que pacientes y clínica se dijeron, por cualquier canal.</p>
+                      </div>
+                      <span class="seg seg--filters"><b>Todas</b><i>Necesitan atención</i><i>Esperan respuesta</i></span>
+                    </header>
+                    <div class="cv">
+                      <ul class="cv__list">
+                        <li class="is-active"><b>Carla Méndez</b><time>hoy</time><span>Bot: Listo. Te agendé el jueves 24 a las 10:30…</span><em><i class="dot dot--wa"></i>WhatsApp</em></li>
+                        <li><b>Martín Sosa</b><time>ayer</time><span>Gracias, ahí voy</span><em><i class="dot dot--wa"></i>WhatsApp</em></li>
+                        <li><b>Sofía Bianchi</b><time>lun</time><span>Bot: Te recuerdo tu turno de mañana a las 9:30.</span><em><i class="dot dot--wa"></i>WhatsApp</em></li>
+                        <li><b>Hugo Benítez</b><time>vie</time><span>Bot: Te paso el presupuesto por acá.</span><em><i class="dot dot--wa"></i>WhatsApp</em></li>
+                      </ul>
+                      <div class="cv__thread">
+                        <div class="cv__head"><b>Carla Méndez</b><span><i class="dot dot--wa"></i>WhatsApp · asistente activo</span></div>
+                        <div class="cv__msgs">
+                          <div class="msg msg--in" data-at="0.08"><p>Hola, quería sacar turno para una limpieza. ¿Tienen algo esta semana?</p><time>23:14</time></div>
+                          <div class="msg msg--typing" data-at="0.14" data-until="0.24"><span></span><span></span><span></span></div>
+                          <div class="msg msg--out" data-at="0.24"><small>Bot</small><p>Hola Carla. Sí: tengo lugar el jueves 24 a las 10:30 o el viernes 25 a las 16:00. ¿Cuál te queda mejor?</p><time>23:14</time></div>
+                          <div class="msg msg--in" data-at="0.36"><p>Jueves 10:30</p><time>23:16</time></div>
+                          <div class="msg msg--typing" data-at="0.40" data-until="0.46"><span></span><span></span><span></span></div>
+                          <div class="msg msg--out" data-at="0.46"><small>Bot</small><p>Listo. Te agendé el jueves 24 a las 10:30 con la Dra. Giménez. Un día antes te mando un recordatorio.</p><time>23:16</time></div>
+                        </div>
+                        <div class="cv__toast" data-at="0.5"><i class="check"></i><b>Turno reservado</b><span>Jue 24 sep · 10:30 · Dra. Carla Giménez</span></div>
+                      </div>
+                    </div>
+                  </section>
+
+                  <!-- AGENDA -->
+                  <section class="app__view" data-view-id="agenda">
+                    <header class="pg__head">
+                      <div>
+                        <h3 class="pg__title">Martes 22 de septiembre</h3>
+                        <p class="pg__meta">9 turnos · 5 agendados · 4 confirmados · 0 completados · 0 ausentes</p>
+                      </div>
+                      <div class="ag__controls">
+                        <span class="seg"><i>‹</i><b>Hoy</b><i>›</i></span>
+                        <span class="seg seg--date"><i>22/09/2026</i><i>Ir</i></span>
+                        <span class="btn-dark" id="btn-reservar">+ Reservar un turno</span>
+                      </div>
+                    </header>
+                    <div class="chips">
+                      <span class="chip is-active">Todos <small>9</small></span>
+                      <span class="chip">Dr. Martín Suárez <small>3</small></span>
+                      <span class="chip">Dra. Carla Giménez <small>3</small></span>
+                      <span class="chip">Dra. Fernanda López <small>3</small></span>
+                    </div>
+                    <div class="ag" data-at="0.36" data-until="0.58">
+                      <div class="ag__cols-head">
+                        <span></span>
+                        <span><b>Dr. Martín Suárez</b><small>3 · 2.5 h</small></span>
+                        <span class="ag__c2"><b>Dra. Carla Giménez</b><small>3 · 1.8 h</small></span>
+                        <span class="ag__c3"><b>Dra. Fernanda López</b><small>3 · 2.3 h</small></span>
+                      </div>
+                      <div class="ag__grid">
+                        <div class="ag__hours"><span>08:00</span><span>09:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span></div>
+                        <div class="ag__col">
+                          <div class="ag__now" style="--h:3.33"><span>11:20</span></div>
+                          <div class="turno turno--ok" style="--s:0;--d:1"><small>08:00–09:00</small><b>Daniela Molina Medina</b><span>Endodoncia</span></div>
+                          <div class="turno turno--ok" style="--s:1.25;--d:0.75"><small>09:15–10:00</small><b>Gustavo Torres Molina</b></div>
+                          <div class="turno" style="--s:4.5;--d:0.75"><small>12:30–13:15</small><b>Franco Domínguez Acosta</b></div>
+                        </div>
+                        <div class="ag__col ag__c2">
+                          <div class="turno" style="--s:2;--d:0.75"><small>10:00–10:45</small><b>Ana Belén Ferreyra</b></div>
+                          <div class="turno" style="--s:5.5;--d:0.75"><small>13:30–14:15</small><b>Jorge Ruiz Ibáñez</b></div>
+                          <div class="turno turno--ok turno--short" style="--s:6.25;--d:0.4"><small>14:15</small><b>Daniela Castro Fernández</b></div>
+                        </div>
+                        <div class="ag__col ag__c3">
+                          <div class="turno turno--ok" style="--s:0;--d:1"><small>08:00–09:00</small><b>Ezequiel López Aguirre</b><span>Endodoncia</span></div>
+                          <div class="turno turno--short" style="--s:3;--d:0.4"><small>11:00</small><b>Carolina Acosta Rodríguez</b></div>
+                          <div class="turno" style="--s:5;--d:1"><small>13:00–14:00</small><b>Marina Ledesma</b><span>Conducto · 2ª sesión</span></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="ag__new" data-at="0.62" data-cursor="#btn-reservar">
+                      <b>Nuevo turno</b>
+                      <div class="ag__new-row"><small>Paciente</small><span>Lucía Ferreyra</span></div>
+                      <div class="ag__new-row"><small>Profesional</small><span>Dra. Carla Giménez</span></div>
+                      <div class="ag__new-row"><small>Cuándo</small><span>Mié 23 sep · 15:00 a 15:45</span></div>
+                      <div class="ag__new-row"><small>Tratamiento</small><span>Limpieza</span></div>
+                      <span class="btn-dark">Reservar</span>
+                    </div>
+                  </section>
+
+                  <!-- SEGUIMIENTO -->
+                  <section class="app__view" data-view-id="seguimiento">
+                    <header class="pg__head">
+                      <div>
+                        <h3 class="pg__title">Seguimiento</h3>
+                        <p class="pg__meta">Las conversaciones que quedaron sin respuesta, a quiénes se les volvió a escribir, y qué pasó con cada uno.</p>
+                      </div>
+                      <div class="sg__counters">
+                        <span><b data-at="0.34" data-to="4">3</b><small>les escribimos</small></span>
+                        <span><b data-at="0.62" data-to="1">0</b><small>sacaron turno</small></span>
+                        <span class="is-warn"><b>5</b><small>por hacer</small></span>
+                      </div>
+                    </header>
+                    <div class="sg__bar"><small>SEGUIMIENTO AUTOMÁTICO</small><span class="pill pill--ok"><i class="dot dot--wa"></i>Activo · escribe solo después de 24 h</span></div>
+                    <div class="sg__label"><small>LO QUE ESTÁ POR HACERSE</small><span>Más de 24 h sin respuesta. Mirar esta lista no le escribe a nadie.</span></div>
+                    <table class="sg">
+                      <thead><tr><th>A quién</th><th>De qué se trata</th><th class="num">Sin responder</th><th>Cómo saldría</th><th>Qué pasó</th></tr></thead>
+                      <tbody>
+                        <tr><td><b>Nora Castro</b><small>canceló el martes y no dijo cuándo</small></td><td><i class="dot"></i>Canceló y no reprogramó</td><td class="num">31 h</td><td>Reprogramación</td><td><span class="st st--sent">Enviado</span></td></tr>
+                        <tr><td><b>Diego Pardo</b><small>faltó a la 2ª sesión del conducto</small></td><td><i class="dot"></i>Sesión pendiente</td><td class="num">52 h</td><td>Sesión pendiente</td><td><span class="st st--sent" data-at="0.58" data-to="Respondió" data-cls="st--reply">Enviado</span></td></tr>
+                        <tr><td><b>Valeria Ortiz</b><small>última visita hace 11 meses</small></td><td><i class="dot"></i>Reactivación</td><td class="num">—</td><td>Mensaje de reactivación</td><td><span class="st st--todo" data-at="0.34" data-to="Enviado" data-cls="st--sent">Por enviar</span></td></tr>
+                        <tr><td><b>Hugo Benítez</b><small>hola, cuánto sale un implante?</small></td><td><i class="dot"></i>Pregunta abierta</td><td class="num">27 h</td><td>Presupuesto</td><td><span class="st st--sent" data-at="0.62" data-to="Sacó turno" data-cls="st--booked">Enviado</span></td></tr>
+                        <tr><td><b>Marina Ledesma</b><small>dejó el tratamiento a la mitad</small></td><td><i class="dot"></i>Tratamiento abandonado</td><td class="num">—</td><td>Tratamiento abandonado</td><td><span class="st st--sent">Enviado</span></td></tr>
+                      </tbody>
+                    </table>
+                  </section>
+
+                </div>
+
+                <div class="cursor" id="cursor">
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5 3l14 9.2-6.1 1.1 3.6 6.6-2.5 1.4-3.6-6.6L5 19z" fill="#17181a" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                </div>
+
+              </div>
+            </div>
+            <div class="lid__glass"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- phone only: the app moves here after the hero and runs at 1:1 -->
+  <div class="flat" id="flat">
+    <div class="flat__bar"><i></i><i></i><i></i><span>Pultzo · Clínica de ejemplo</span></div>
+    <div class="flat__host" id="flat-host"></div>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- HERO. The wordmark is the far plane; the laptop (fixed layer) is the
+       subject; its lid rises and occludes the word as the act progresses. -->
+  <!-- HERO + FIRST FUNCTION, one act. The lid opens in the first third; the
+       assistant's copy arrives as soon as the machine settles, with no empty
+       slide between the two. Beats and the view switch are keyed to this
+       act's progress from data-tour-at / data-beat-from onward. -->
+  <section id="hero" class="hero tour tour--peak" data-sc-act="pin" data-sc-span="4.4" data-sc-drift="#f7f6f2"
+           data-tour-view="conversaciones" data-tour-at="0.3" data-beat-from="0.36" data-beat-to="0.96">
+    <div data-sc-stage class="hero__stage">
+      <div class="hero__word">
+        <h1 class="hero__h1">Pultzo</h1>
+      </div>
+      <p class="hero__line" data-sc-cue="0 0.12 0">Un asistente que atiende WhatsApp, la agenda y el seguimiento de pacientes, en un solo lugar.</p>
+      <div class="tour__copy">
+        <h2 class="tour__h2" data-sc-cue="0.34 0.96 0.06 0.04">Un asistente que atiende WhatsApp por vos.</h2>
+        <ul class="feat">
+          <li data-sc-cue="0.39 0.96 0.06 0.04"><svg><use href="#i-check"/></svg><span>Responde al toque, a cualquier hora. Son las once de la noche y una paciente escribe.</span></li>
+          <li data-sc-cue="0.51 0.96 0.06 0.04"><svg><use href="#i-check"/></svg><span>Ofrece tus horarios libres, los de verdad.</span></li>
+          <li data-sc-cue="0.65 0.96 0.06 0.04"><svg><use href="#i-check"/></svg><span>Reserva el turno y lo deja en tu agenda. Nadie de tu equipo tocó el teléfono.</span></li>
+          <li data-sc-cue="0.79 0.96 0.06 0.04"><svg><use href="#i-check"/></svg><span>Habla como vos le digas: las instrucciones las escribís en tus palabras y las cambiás cuando quieras.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOUR. Three more pinned acts. The laptop holds; the copy crosses, item by item. -->
+
+  <section id="a-agenda" class="tour" data-sc-act="pin" data-sc-span="2.2" data-tour-view="agenda" data-sc-drift="#f5f4ef">
+    <div data-sc-stage class="tour__stage">
+      <div class="tour__copy">
+        <h2 class="tour__h2" data-sc-cue="0.04 0.92 0.1 0.06">Tu día, en una sola pantalla.</h2>
+        <ul class="feat">
+          <li data-sc-cue="0.12 0.92 0.1 0.06"><svg><use href="#i-check"/></svg><span>Todos los profesionales, el mismo día, una sola agenda.</span></li>
+          <li data-sc-cue="0.36 0.92 0.1 0.06"><svg><use href="#i-check"/></svg><span>Quién confirmó y quién todavía no, a simple vista.</span></li>
+          <li data-sc-cue="0.60 0.92 0.1 0.06"><svg><use href="#i-check"/></svg><span>Un turno nuevo en dos clics. Para moverlo, lo arrastrás.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="a-seguimiento" class="tour" data-sc-act="pin" data-sc-span="2.0" data-tour-view="seguimiento" data-sc-drift="#f2f1ec">
+    <div data-sc-stage class="tour__stage">
+      <div class="tour__copy">
+        <h2 class="tour__h2" data-sc-cue="0.04 0.92 0.1 0.06">Nadie se pierde en el camino.</h2>
+        <ul class="feat">
+          <li data-sc-cue="0.12 0.92 0.1 0.06"><svg><use href="#i-check"/></svg><span>Junta a los que cancelaron, dejaron un tratamiento a la mitad o preguntaron y nadie les contestó.</span></li>
+          <li data-sc-cue="0.36 0.92 0.1 0.06"><svg><use href="#i-check"/></svg><span>Les escribe por vos, con el mensaje que vos aprobaste.</span></li>
+          <li data-sc-cue="0.60 0.92 0.1 0.06"><svg><use href="#i-check"/></svg><span>Cuando responden o sacan turno, se marca solo.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="a-panel" class="tour" data-sc-act="pin" data-sc-span="2.0" data-tour-view="panel" data-sc-drift="#efeee9">
+    <div data-sc-stage class="tour__stage">
+      <div class="tour__copy">
+        <h2 class="tour__h2" data-sc-cue="0.04 0.72 0.1 0.1">Sabés a quién llamar antes de que sea tarde.</h2>
+        <ul class="feat">
+          <li data-sc-cue="0.10 0.72 0.1 0.1"><svg><use href="#i-check"/></svg><span>Quién hace meses que no viene.</span></li>
+          <li data-sc-cue="0.30 0.72 0.1 0.1"><svg><use href="#i-check"/></svg><span>Quién no tiene ningún turno por delante.</span></li>
+          <li data-sc-cue="0.50 0.72 0.1 0.1"><svg><use href="#i-check"/></svg><span>Cada número abre la lista exacta. Vos decidís a quién llamar hoy.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONBOARDING. The machine has left. The column narrows: the funnel. -->
+  <section id="onboarding" class="onb" data-sc-act="flow" data-sc-drift="#eeede8">
+    <div class="onb__head" data-sc-in data-sc-stagger="70">
+      <p class="onb__kicker">Puesta en marcha</p>
+      <h2 class="onb__h2">Vos no configurás nada.</h2>
+      <p class="onb__p">Nosotros dejamos la cuenta lista para usar. La clínica arranca con Pultzo un lunes a la mañana, sin frenar la atención.</p>
+    </div>
+    <ol class="steps" data-sc-reveal="left" data-sc-reveal-at="0.42 0.72">
+      <li><span class="steps__n">1</span><b>Nos contás cómo trabajan hoy</b><p>Una charla de media hora: profesionales, horarios, tratamientos y duraciones.</p></li>
+      <li><span class="steps__n">2</span><b>Cargamos y migramos</b><p>Tus pacientes y los turnos que ya tenés, desde una planilla, otro sistema o una agenda de papel.</p></li>
+      <li><span class="steps__n">3</span><b>Escribimos el asistente con vos</b><p>Sus instrucciones, en tus palabras. Lo probamos juntos antes de que hable con un paciente.</p></li>
+      <li><span class="steps__n">4</span><b>Arrancan un lunes</b><p>Con la agenda cargada y el asistente atendiendo. Nosotros seguimos del otro lado.</p></li>
+    </ol>
+  </section>
+
+  <!-- CLOSE. Hard cut to the rail colour. Holds. -->
+  <section id="contacto" class="close" data-sc-act="pin" data-sc-span="1.4">
+    <div data-sc-stage class="close__stage">
+      <div class="close__copy" data-sc-cue="0 1 0 0">
+        <h2 class="close__h2">Hablemos de tu clínica.</h2>
+        <p class="close__p">Contanos cómo trabajan hoy y te mostramos Pultzo con tus propios turnos.</p>
+        <div class="close__actions">
+          <a class="btn btn--primary" data-sc-magnet="0.24" data-sc-rise="0" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20ver%20Pultzo%20para%20mi%20cl%C3%ADnica.">Escribir por WhatsApp</a>
+          <a class="btn btn--ghost" href="mailto:steffanfelipe@gmail.com?subject=Quiero%20ver%20Pultzo%20para%20mi%20cl%C3%ADnica">Mandar un mail</a>
+        </div>
+        <p class="close__meta"><span>+54 9 223 541 2083</span><span>steffanfelipe@gmail.com</span></p>
+      </div>
+      <p class="close__foot">Pultzo Admin · 2026</p>
+    </div>
+  </section>
+
+</main>
+
+<script src="scrollcraft.js"></script>
+<script>ScrollCraft.mount(document.body);</script>
+<script src="pultzo.js"></script>
+</body>
+</html>

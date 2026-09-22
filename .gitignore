@@ -1,0 +1,8 @@
+node_modules/
+lab/desktop/
+lab/mobile/
+lab/reduced/
+lab/walk/*.png
+lab/serve.log
+lab/ref/*.mjs
+.DS_Store
