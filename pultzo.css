@@ -15,6 +15,17 @@
 
    Engine selectors (.sc-*, [data-sc-*]) are never restyled here. */
 
+/* Inter, self-hosted: one variable file, latin subset, preloaded from the
+   head. No third-party round trips before the first paint. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("fonts/inter-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --sc-canvas:      #f7f6f2;
   --sc-surface:     #ffffff;
@@ -55,6 +66,7 @@ body {
 }
 h1, h2, h3, p, figure, ol, ul { margin: 0; }
 ol, ul { padding: 0; list-style: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 .skip {
   position: fixed; left: var(--sc-gutter); top: -3rem; z-index: 100;
@@ -115,6 +127,31 @@ ol, ul { padding: 0; list-style: none; }
   font-size: var(--sc-t-lg); line-height: 1.4; letter-spacing: var(--sc-track-snug);
   color: var(--sc-ink-soft);
   z-index: 2;
+}
+
+.hero__letters { display: inline-block; }
+.hero__letters i { display: inline-block; font-style: normal; }
+
+/* ------------------------------------------------------------ entrance
+   Plays once, on a fresh load at the top: the letters rise into the word,
+   the machine settles onto its shadow, then the line and the nudge. Gated
+   by html.is-entering, which pultzo.js sets only when the page opens at the
+   top and removes when the sequence is over. Only opacity and translate. */
+.is-entering .hero__letters i {
+  animation: letterIn 720ms var(--sc-ease-out) both;
+  animation-delay: calc(80ms + var(--i) * 55ms);
+}
+@keyframes letterIn { from { opacity: 0; translate: 0 0.22em; } to { opacity: 1; translate: 0 0; } }
+.is-entering .laptop { animation: machineIn 900ms var(--sc-ease-out) 260ms both; }
+@keyframes machineIn { from { opacity: 0; translate: 0 36px; } to { opacity: 1; translate: 0 0; } }
+.is-entering .shadow { animation: shadowIn 900ms var(--sc-ease-out) 260ms both; }
+@keyframes shadowIn { from { opacity: 0; } to { opacity: 1; } }
+.is-entering .hero__line { animation: fadeUp 700ms var(--sc-ease-out) 760ms both; }
+.is-entering .hero__hint { animation: fadeUp 700ms var(--sc-ease-out) 1050ms both; }
+@keyframes fadeUp { from { opacity: 0; translate: -50% 10px; } to { opacity: 1; translate: -50% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .is-entering .hero__letters i, .is-entering .laptop, .is-entering .hero__line, .is-entering .hero__hint { animation-name: fadeOnly; }
+  @keyframes fadeOnly { from { opacity: 0; } to { opacity: 1; } }
 }
 
 /* a quiet nudge on the first screen only; it is gone by 6% of the act */
@@ -385,17 +422,17 @@ ol, ul { padding: 0; list-style: none; }
 }
 .shadow { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform, opacity; }
 .shadow__ambient, .shadow__contact { position: absolute; left: 50%; border-radius: 50%; display: block; }
+/* no filter: blur here. A blur re-rasterises every time the scene scales,
+   which is every frame of the hero; a soft gradient costs nothing. */
 .shadow__ambient {
-  width: calc(var(--lap-w) * 1.12); height: calc(var(--lap-d) * 0.36);
-  translate: -50% 0; top: calc(var(--lap-d) * -0.02);
-  background: radial-gradient(50% 50% at 50% 50%, rgba(23,24,26,0.30), rgba(23,24,26,0.08) 55%, transparent 74%);
-  filter: blur(22px);
+  width: calc(var(--lap-w) * 1.18); height: calc(var(--lap-d) * 0.42);
+  translate: -50% 0; top: calc(var(--lap-d) * -0.05);
+  background: radial-gradient(50% 50% at 50% 50%, rgba(23,24,26,0.26) 0%, rgba(23,24,26,0.14) 32%, rgba(23,24,26,0.05) 62%, transparent 100%);
 }
 .shadow__contact {
-  width: calc(var(--lap-w) * 0.96); height: 42px;
-  translate: -50% 0; top: calc(var(--lap-d) * 0.155);
-  background: radial-gradient(50% 50% at 50% 50%, rgba(10,11,12,0.55), rgba(10,11,12,0.2) 60%, transparent 80%);
-  filter: blur(9px);
+  width: calc(var(--lap-w) * 1.0); height: 64px;
+  translate: -50% 0; top: calc(var(--lap-d) * 0.14);
+  background: radial-gradient(50% 50% at 50% 50%, rgba(10,11,12,0.5) 0%, rgba(10,11,12,0.26) 38%, rgba(10,11,12,0.06) 72%, transparent 100%);
 }
 
 /* ------------------------------------------------ phone: the flat window */

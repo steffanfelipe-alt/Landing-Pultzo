@@ -37,7 +37,7 @@
   // Boxes are measured at scale 1 with the scene at the viewport centre, so a
   // point q in scene space lands at centre + t + k * q. Measured, not assumed:
   // the projected size of a 3D pose depends on perspective and tilt.
-  var vw = 0, vh = 0, phone = false;
+  var vw = 0, vh = 0, phone = false, closeTopDoc = Infinity;
   var closed = null, open = null, full = null;   // {cx, cy, w, h} in scene space
   var copyEl = $(".tour__copy");
   var kH = 1, kT = 1, kF = 1, tH = { x: 0, y: 0 }, tT = { x: 0, y: 0 }, tF = { x: 0, y: 0 };
@@ -98,7 +98,9 @@
     if (prevTrans) device.classList.add("is-reduced");
     if (wasHidden) device.classList.add("is-hidden");
     if (!phone && app.parentNode !== bezel) hostApp(false);
+    if (closeAct) closeTopDoc = closeAct.getBoundingClientRect().top + scrollY;
     placeCursorAtRest();
+    wake();
   }
 
   // On a phone the app node moves between the lid and the flat window. Same
@@ -235,9 +237,28 @@
   }
 
   // ------------------------------------------------------------- the frame
+  // The loop runs only while something moves: the page, the cursor, a press.
+  // After ~45 still frames it stops, and any scroll, wheel, touch, key or
+  // resize wakes it. No work on an idle page.
   var lastIdx = -2, lastLid = -1, lastOpacity = -1, chromeOn = null, hiddenNow = false;
+  var lastScene = "", lastShadow = "", lastShadowOp = "", lastDeck = "";
+  var running = false, lastY = -1, still = 0;
+
+  function wake() {
+    still = 0;
+    if (!running) { running = true; requestAnimationFrame(frame); }
+  }
+  ["scroll", "wheel", "touchmove", "keydown", "pointerdown"].forEach(function (ev) {
+    addEventListener(ev, wake, { passive: true });
+  });
 
   function frame(now) {
+    var y = scrollY;
+    var cursorBusy = cur.pending || cur.pressAt || Math.abs(cur.tx - cur.x) > 0.2 || Math.abs(cur.ty - cur.y) > 0.2;
+    if (y === lastY && !cursorBusy) still++; else still = 0;
+    lastY = y;
+    if (still > 45) { running = false; return; }
+
     var ph = P(hero);
     var last = tours[tours.length - 1];
     var pl = P(last);
@@ -263,20 +284,25 @@
       // rect; the window's dark frame has already faded in BEHIND the
       // growing screen (the scene paints above it), so when the app moves
       // over at eFlat 0.5 the emptied lid vanishes black-on-black: no cut
-      device.style.setProperty("--deck", (1 - smooth(eFlat, 0, 0.5)).toFixed(3));
+      var deck = (1 - smooth(eFlat, 0, 0.5)).toFixed(3);
+      if (deck !== lastDeck) { device.style.setProperty("--deck", deck); lastDeck = deck; }
       opacity *= eFlat > 0.5 ? 0 : 1;
     }
     var hidden = opacity <= 0.001 || pc > 0.02 && pl >= 1;
 
+    // every style write is guarded: an unchanged string is not written, so a
+    // still page costs no style recalculation
     if (lidDeg !== lastLid) { setLid(lidDeg); lastLid = lidDeg; }
-    scene.style.transform = "translate3d(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px,0) scale(" + k.toFixed(4) + ")";
+    var sceneT = "translate3d(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px,0) scale(" + k.toFixed(4) + ")";
+    if (sceneT !== lastScene) { scene.style.transform = sceneT; lastScene = sceneT; }
     if (opacity !== lastOpacity) { scene.style.opacity = opacity.toFixed(3); lastOpacity = opacity; }
     if (hidden !== hiddenNow) { device.classList.toggle("is-hidden", hidden); hiddenNow = hidden; }
 
     // the ground shadow is its own plane: it softens and drifts as the lid rises
-    var sh = lerp(0.9, 0.55, eLid) * opacity * (1 - smooth(eFlat, 0, 0.5));
-    shadow.style.opacity = sh.toFixed(3);
-    shadow.style.transform = "translate3d(0," + (eLid * 26).toFixed(1) + "px,0) scale(" + lerp(1, 1.12, eLid).toFixed(3) + ")";
+    var sh = (lerp(0.9, 0.55, eLid) * opacity * (1 - smooth(eFlat, 0, 0.5))).toFixed(3);
+    if (sh !== lastShadowOp) { shadow.style.opacity = sh; lastShadowOp = sh; }
+    var shT = "translate3d(0," + (eLid * 26).toFixed(1) + "px,0) scale(" + lerp(1, 1.12, eLid).toFixed(3) + ")";
+    if (shT !== lastShadow) { shadow.style.transform = shT; lastShadow = shT; }
 
     if (phone) {
       hostApp(eFlat > 0.5);
@@ -288,7 +314,7 @@
     }
 
     // chrome: arrives as the word leaves, leaves as the dark close slides in
-    var closeTop = closeAct ? closeAct.getBoundingClientRect().top : Infinity;
+    var closeTop = closeTopDoc - y;   // cached document offset: no layout read per frame
     var wantChrome = ph > 0.2 && closeTop > vh * 0.55;
     if (wantChrome !== chromeOn) { chrome.classList.toggle("is-on", wantChrome); chromeOn = wantChrome; }
 
@@ -317,6 +343,11 @@
   }
 
   // ---------------------------------------------------------------- boot
+  // the entrance plays only on a fresh load at the top of the page
+  if (scrollY < 40) {
+    document.documentElement.classList.add("is-entering");
+    setTimeout(function () { document.documentElement.classList.remove("is-entering"); }, 2000);
+  }
   measure();
   showView(HOME);
   addEventListener("resize", function () {
@@ -325,5 +356,7 @@
     measure();
   }, { passive: true });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
-  requestAnimationFrame(frame);
+  wake();
+  // read-only hook for the verification scripts in lab/
+  Object.defineProperty(window, "__pultzo", { value: { get running() { return running; } } });
 })();
