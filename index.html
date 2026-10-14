@@ -2,351 +2,507 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pultzo Admin</title>
-<meta name="description" content="Pultzo: un asistente de WhatsApp que atiende y reserva turnos, agenda, seguimiento de pacientes y panel para clínicas odontológicas. Nosotros dejamos la cuenta lista.">
-<meta name="theme-color" content="#f7f6f2">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2317181a'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-weight='700' font-size='18' fill='%23f7f6f2' text-anchor='middle'>P</text></svg>">
-<link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="scrollcraft.css">
-<link rel="stylesheet" href="pultzo.css">
+<title>La revolución ya está acá</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Pultzo: gestión odontológica con inteligencia artificial. Agenda, WhatsApp, historia clínica y stock en un solo lugar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,700;100,900&amp;family=Geist:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF7A55}a:hover{color:#FFA183}
+.pg{
+  --ink:#F4F1EA;--soft:#C9C2B4;--acc:#FF7A55;--ground:#0E0D0B;
+  --d:"Archivo",system-ui,sans-serif;--t:"Geist",system-ui,sans-serif;
+  font-family:var(--t);background:var(--ground);color:var(--ink);
+  font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased;position:relative;overflow:clip;
+}
+.pg *{box-sizing:border-box}
+.pg h1,.pg h2,.pg h3{font-family:var(--d);font-weight:900;letter-spacing:-0.03em;line-height:0.94;margin:0;text-wrap:balance}
+.pg p{margin:0;text-wrap:pretty}
+.pg img{display:block}
+.wrap{max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,80px);width:100%}
+
+/* folio */
+.folio{position:fixed;left:clamp(12px,2.2vw,32px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;font-family:var(--d);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;z-index:5;pointer-events:none;color:var(--ink);text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.folio-num{font-size:40px;font-weight:900;letter-spacing:-0.04em;line-height:1;font-variant-numeric:tabular-nums}
+.folio-year{font-variant-numeric:tabular-nums;font-size:13px;letter-spacing:0.08em}
+.folio-rule{width:1px;height:48px;background:currentColor;opacity:.35;margin:4px 0}
+.folio.now .folio-year{color:var(--acc);font-weight:500}
+
+/* full-screen scenes */
+.scene{position:relative;min-height:100vh;display:grid;align-items:end;overflow:hidden;background:#0E0D0B}
+.scene .photo{position:absolute;inset:-8% 0;will-change:transform}
+.scene .photo img{width:100%;height:100%;object-fit:cover}
+.scene .scrim{position:absolute;left:0;right:0;bottom:0;height:70%;background:linear-gradient(to top,rgba(14,13,11,.94) 0%,rgba(14,13,11,.7) 40%,rgba(14,13,11,0) 100%);pointer-events:none}
+.scene .wrap{position:relative;z-index:2;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:18px;padding-bottom:clamp(40px,7vh,88px);padding-top:16vh}
+.scene .eyebrow{grid-column:1/13;display:flex;align-items:baseline;gap:18px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.scene .eyebrow b{font-family:var(--d);font-weight:900;font-size:clamp(40px,5vw,72px);letter-spacing:-0.05em;line-height:.8;color:var(--acc)}
+.scene h2{grid-column:1/11;font-size:clamp(3rem,8vw,7.6rem)}
+.scene .line{grid-column:1/9;font-family:var(--d);font-weight:700;font-size:clamp(20px,2vw,30px);line-height:1.22;letter-spacing:-0.02em;max-width:34ch;color:var(--ink)}
+.scene .sub{grid-column:1/9;font-size:clamp(16px,1.25vw,19px);color:var(--soft);max-width:60ch}
+.scene .credit{grid-column:9/13;justify-self:end;align-self:end;text-align:right;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8E877A}
+
+/* hero */
+.hero .photo img{object-position:60% 40%;filter:grayscale(1) contrast(1.05) brightness(.8)}
+.hero .mark{grid-column:1/13;display:flex;flex-direction:column;gap:6px;margin-bottom:6vh}
+.hero .mark span{font-family:var(--d);font-weight:900;font-size:clamp(40px,4.6vw,64px);letter-spacing:-0.045em;line-height:.9}
+.hero .mark small{font-size:clamp(15px,1.3vw,19px);letter-spacing:.16em;text-transform:uppercase;color:var(--soft);font-weight:500}
+.hero h1{grid-column:1/12;font-size:clamp(3rem,8.6vw,8.4rem);letter-spacing:-0.035em}
+.hero h1 em{font-style:normal;color:var(--acc)}
+.hero .credit{grid-column:1/13;justify-self:start;text-align:left;margin-top:10px}
+
+.sc--papel .photo img{object-position:50% 40%;filter:grayscale(1) contrast(1.05)}
+.sc--planilla .photo img{object-position:50% 22%;filter:grayscale(1) contrast(1.08) brightness(.95)}
+.sc--software .photo img{object-position:60% 40%;filter:saturate(.8)}
+.sc--ahora .photo img{object-position:50% 42%;filter:grayscale(1) contrast(1.12) brightness(.82)}
+.sc--ahora .scrim{height:92%}
+.sc--juntos .photo img{object-position:50% 30%}
+
+/* ahora: clock */
+.clock{grid-column:1/13;font-family:var(--d);font-weight:900;font-size:clamp(72px,13vw,210px);line-height:.88;letter-spacing:-0.06em;font-variant-numeric:tabular-nums;margin-bottom:10px}
+.clock .sec{color:var(--acc)}
+.clock-date{grid-column:1/13;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+.pulse{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--acc);margin-right:10px;vertical-align:middle;animation:pulse 1s steps(2,end) infinite}
+@keyframes pulse{50%{opacity:.25}}
+
+/* juntos: three short promises */
+.people{grid-column:1/13;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:12px;border-top:1px solid rgba(244,241,234,.25);padding-top:18px}
+.person{display:flex;flex-direction:column;gap:4px}
+.person b{font-family:var(--d);font-weight:700;font-size:19px;letter-spacing:-0.02em}
+.person span{color:var(--soft);font-size:15px;line-height:1.45}
+
+/* reveals */
+.r{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.r.in{opacity:1;transform:none}
+.r2{transition-delay:.1s}.r3{transition-delay:.2s}
+
+/* ADENTRO: fixed panel + laptop, scroll-paced (same distance per function) */
+.tour{position:relative;height:calc(100vh * 12)}
+.stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#121110;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;column-gap:clamp(32px,4vw,72px);padding:0 clamp(32px,4vw,80px) 0 clamp(96px,10vw,160px)}
+.panel{position:relative;z-index:3;display:flex;flex-direction:column;gap:clamp(16px,2.4vh,28px);max-width:500px}
+.panel .eyebrow{display:flex;align-items:baseline;gap:14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.panel .eyebrow b{font-family:var(--d);font-weight:900;font-size:34px;letter-spacing:-0.05em;line-height:.8;color:var(--acc)}
+.panel h2{font-size:clamp(1.8rem,3vw,2.8rem)}
+.idx{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.idx li{display:flex;flex-direction:column;gap:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,234,.4);transition:color .3s;white-space:nowrap}
+.idx .bar{display:block;height:3px;background:rgba(244,241,234,.16);border-radius:2px;overflow:hidden}
+.idx .bar i{display:block;height:100%;background:var(--acc);transform-origin:0 50%;transform:scaleX(var(--f,0));transition:transform .15s linear}
+@media (max-width:1280px){.idx{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:12px}}
+.idx li.done{color:var(--soft)}
+.idx li.cur{color:var(--ink);font-weight:500}
+.fns{display:grid;min-height:min(48vh,400px)}
+.fn{grid-area:1/1;display:flex;flex-direction:column;gap:14px;opacity:0;transform:translateY(12px);transition:opacity .45s,transform .45s;pointer-events:none}
+.fn.on{opacity:1;transform:none}
+.fn .tag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:500;font-variant-numeric:tabular-nums}
+.fn h3{font-size:clamp(28px,2.6vw,42px);font-weight:900;letter-spacing:-0.03em;line-height:1.02;color:#FFFFFF}
+.fn .intro{font-size:clamp(17px,1.3vw,20px);color:#E6E0D4;line-height:1.5;max-width:38ch}
+.fn ul{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;border-top:1px solid rgba(244,241,234,.14)}
+.fn li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start;padding:14px 0;border-bottom:1px solid rgba(244,241,234,.14);font-size:clamp(16px,1.2vw,19px);line-height:1.4;color:#E6E0D4;opacity:.22;transform:translateX(-6px);transition:opacity .4s,transform .4s}
+.fn li.on{opacity:1;transform:none}
+.fn li .n{font-family:var(--d);font-weight:700;font-size:13px;color:var(--soft);padding-top:3px;font-variant-numeric:tabular-nums}
+.fn li.on .n{color:var(--acc)}
+.tfoot{display:grid;min-height:2.6em}
+.tfoot>*{grid-area:1/1}
+.hint{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);transition:opacity .4s}
+.hint svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateY(4px)}}
+.hint.off{opacity:0}
+.tour-end{font-family:var(--d);font-weight:900;font-size:clamp(1.3rem,2vw,1.9rem);letter-spacing:-0.03em;line-height:1.1;opacity:0;transition:opacity .5s}
+.tour-end.on{opacity:1}
+.stage .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(244,241,234,.14) 1px,transparent 1.2px);background-size:28px 28px;mask-image:radial-gradient(ellipse at 50% 50%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 50%,#000 20%,transparent 75%);pointer-events:none}
+.stage .floor{position:absolute;left:0;right:0;bottom:0;height:34vh;background:linear-gradient(to top,#0B0A09,rgba(11,10,9,0));pointer-events:none}
+.laptop{position:relative;z-index:2;width:100%;max-width:880px;justify-self:center;perspective:1800px;transform-style:preserve-3d}
+.lid{position:relative;width:100%;aspect-ratio:16/10;background:#1C1A17;border-radius:14px 14px 4px 4px;padding:2.2%;transform-origin:50% 100%;transform:rotateX(calc(-92deg + 92deg * var(--open,0)));box-shadow:0 30px 80px rgba(0,0,0,.6);backface-visibility:hidden}
+.screen{position:relative;width:100%;height:100%;background:#0E0D0B;border-radius:6px;overflow:hidden}
+.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:0;transition:opacity .45s ease}
+.screen img.on{opacity:1}
+.screen .glare{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,0) 38%);opacity:calc(1 - var(--open,0));pointer-events:none}
+.base{position:relative;width:106%;left:-3%;height:16px;background:#2A2824;border-radius:0 0 14px 14px;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.base:before{content:"";position:absolute;left:50%;top:0;width:14%;height:5px;transform:translateX(-50%);background:#17150F;border-radius:0 0 6px 6px}
+.cursor{position:absolute;width:18px;height:18px;z-index:3;opacity:0;transition:opacity .3s,left .7s cubic-bezier(.3,.7,.2,1),top .7s cubic-bezier(.3,.7,.2,1);pointer-events:none}
+.cursor.on{opacity:1}
+.cursor:after{content:"";position:absolute;inset:-10px;border:2px solid var(--acc);border-radius:50%;opacity:0}
+.cursor.click:after{animation:ring .7s ease-out 1}
+@keyframes ring{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.4);opacity:0}}
+
+.mobile-tour{display:none}
+
+/* juntos without photo: typographic ground */
+.sc--juntos{background:#24201B;align-items:center}
+.sc--juntos .wrap{padding-top:14vh}
+.sc--juntos h2{font-size:clamp(3.4rem,10vw,9.4rem)}
+.sc--juntos .line{font-size:clamp(22px,2.2vw,34px);max-width:30ch}
+.sc--juntos .people{margin-top:28px;gap:32px}
+.sc--juntos .person b{font-size:clamp(20px,1.7vw,26px)}
+.sc--juntos .person span{font-size:17px}
+.sc--juntos .ghost{position:absolute;right:-2vw;top:8vh;font-family:var(--d);font-weight:900;font-size:clamp(200px,34vw,520px);line-height:.8;letter-spacing:-0.06em;color:transparent;-webkit-text-stroke:1px rgba(244,241,234,.14);pointer-events:none}
+
+/* colophon */
+.colofon{padding:clamp(56px,10vh,120px) 0 clamp(40px,6vh,72px);background:#0E0D0B}
+.colofon .wrap{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:36px}
+.colofon h2{grid-column:1/10;font-size:clamp(2.2rem,5vw,4.6rem)}
+.colofon .cta{grid-column:1/9;display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px}
+.colofon .cta p{font-size:clamp(17px,1.4vw,22px);line-height:1.45;max-width:30ch;color:var(--soft)}
+.colofon .btn{display:inline-flex;align-items:center;gap:12px;min-height:60px;padding:0 30px;background:var(--acc);color:#17150F;font-family:var(--d);font-weight:700;font-size:clamp(18px,1.5vw,22px);letter-spacing:-0.01em;text-decoration:none;border-radius:999px;transition:background .2s}
+.colofon .btn:hover{background:#FFA183;color:#17150F}
+.colofon .btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2}
+.colofon .more{grid-column:8/13;align-self:end;font-size:15px;color:var(--soft)}
+.colofon .more a{text-decoration:none}
+.colofon .credits{grid-column:1/13;font-size:11px;line-height:1.7;color:#8E877A;border-top:1px solid rgba(244,241,234,.2);padding-top:14px;letter-spacing:.02em}
+.colofon .mast{grid-column:1/13;display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.colofon .mast b{font-family:var(--d);font-weight:900;font-size:22px;letter-spacing:-0.04em;color:var(--ink);text-transform:none}
+
+/* keep chapter text clear of the fixed folio */
+@media (min-width:901px){
+  .scene .wrap,.colofon .wrap{padding-left:clamp(110px,11vw,170px)}
+}
+@media (max-width:900px){
+  .folio{display:none}
+  .scene .wrap{padding-top:40vh}
+  .scene h2,.hero h1,.scene .line,.scene .sub,.scene .credit{grid-column:1/13}
+  .scene .credit{justify-self:start;text-align:left}
+  .hero h1{font-size:clamp(2.4rem,11vw,4rem)}
+  .scene h2{font-size:clamp(2.4rem,11vw,4rem)}
+  .sc--planilla .photo img{object-position:50% 15%}
+  .people{grid-template-columns:1fr;gap:14px}
+  .tour{display:none}
+  .mobile-tour{display:flex;flex-direction:column;gap:40px;padding:12vh 0;background:#0A0A0B}
+  .mobile-tour .eyebrow{display:flex;align-items:baseline;gap:14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+  .mobile-tour .eyebrow b{font-family:var(--d);font-weight:900;font-size:34px;letter-spacing:-0.05em;line-height:.8;color:var(--acc)}
+  .mobile-tour h2{font-size:clamp(2rem,9vw,3rem)}
+  .mobile-tour .mstep{display:flex;flex-direction:column;gap:10px}
+  .mobile-tour .mframe{background:#1C1A17;padding:3%;border-radius:10px}
+  .mobile-tour .mframe img{width:100%;height:auto;border-radius:4px}
+  .mobile-tour h3{font-size:22px;font-weight:700;letter-spacing:-0.02em}
+  .mobile-tour ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .mobile-tour li{color:var(--soft);font-size:16px;line-height:1.45;padding-left:20px;position:relative}
+  .mobile-tour li:before{content:"";position:absolute;left:0;top:.7em;width:10px;height:2px;background:var(--acc)}
+  .mobile-tour .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:500}
+  .colofon h2,.colofon .cta,.colofon .more{grid-column:1/13}
+}
+@media (prefers-reduced-motion:reduce){
+  .r{opacity:1;transform:none;transition:none}
+  .scene .photo{transform:none !important}
+  .pulse{animation:none}
+  .lid{transform:none !important}
+  .fn,.fn li{transition:none}
+  .hint svg{animation:none}
+}
+</style>
 </head>
 <body>
 
-<a class="skip" href="#contacto">Ir al contacto</a>
+<article class="pg" id="pg">
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-grid" viewBox="0 0 16 16"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
-  <symbol id="i-users" viewBox="0 0 16 16"><circle cx="6" cy="5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.8 13.5c.4-2.6 2.2-4 4.2-4s3.8 1.4 4.2 4M11 5.2a2 2 0 010 3.8M12.5 9.6c1.2.5 2 1.6 2.2 3.4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
-  <symbol id="i-cal" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
-  <symbol id="i-chat" viewBox="0 0 16 16"><path d="M2.5 3.5h9a1 1 0 011 1v5a1 1 0 01-1 1H6l-3.5 2.6V4.5a1 1 0 011-1z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M14 6.5v4.8a1 1 0 01-1 1h-.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
-  <symbol id="i-clock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5V8l2.4 1.6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
-  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.2 10.2L14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
-  <symbol id="i-out" viewBox="0 0 16 16"><path d="M6 2.5H3.5a1 1 0 00-1 1v9a1 1 0 001 1H6M10 5l3 3-3 3M13 8H6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="i-check" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6.2 10.3l2.5 2.5 5.1-5.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-</svg>
+  <aside class="folio" id="folio" aria-hidden="true">
+    <span class="folio-num" id="folio-num">0</span>
+    <span class="folio-rule"></span>
+    <span id="folio-title">Portada</span>
+    <span class="folio-year" id="folio-year">1937</span>
+  </aside>
 
-<header class="chrome" id="chrome">
-  <a class="chrome__mark" href="#top" aria-label="Pultzo, volver al inicio">Pultzo</a>
-  <a class="chrome__cta" href="#contacto">Hablemos</a>
-</header>
+  <!-- Portada -->
+  <header class="scene hero" id="portada" data-ch="" data-title="Portada" data-year="1937">
+    <div class="photo" data-par="0.16" aria-hidden="true"><img src="assets/portada-1937.jpg" width="1900" height="1460" alt=""></div>
+    <div class="scrim" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="mark r"><span>Pultzo</span><small>Gestión odontológica con inteligencia artificial</small></div>
+      <h1 class="r r2">Toda gestión fue, alguna vez, una revolución. <em>Esta es la tuya.</em></h1>
+      <p class="credit r r3">Oficina de registros, Baltimore, 1937</p>
+    </div>
+  </header>
 
-<!-- The laptop. One object, fixed to the viewport, posed from the acts'
-     scroll progress by pultzo.js. On a phone the app leaves the lid after the
-     hero and runs 1:1 inside #flat, a plain window at the top of the screen.
-     Decorative for assistive tech: every word on the screen is repeated as
-     real copy beside it. -->
-<div class="device" id="device" aria-hidden="true">
-  <div class="scene" id="scene">
-    <div class="shadow" id="shadow"><i class="shadow__ambient"></i><i class="shadow__contact"></i></div>
-    <div class="laptop" id="laptop">
-      <div class="base" id="base">
-        <div class="base__deck">
-          <div class="base__well"><div class="base__keys"></div><div class="base__fnrow"></div></div>
-          <div class="base__pad"></div>
-          <div class="base__lip"></div>
-        </div>
-        <div class="base__front"></div>
-        <div class="hinge"></div>
-        <div class="lid" id="lid">
-          <div class="lid__cover"><span class="lid__mark">P</span></div>
-          <div class="lid__edge"></div>
-          <div class="lid__screen" id="screen">
-            <div class="bezel" id="bezel">
-              <div class="app" id="app">
+  <!-- I -->
+  <section class="scene sc--papel" data-ch="I" data-title="El papel" data-year="1946">
+    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/papel-1946.jpg" width="2400" height="1516" alt=""></div>
+    <div class="scrim" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="eyebrow r"><b>I</b><span>1946 · Mostrador de trámites, Toronto</span></div>
+      <h2 class="r r2">El papel</h2>
+      <p class="line r r3">Durante casi un siglo, administrar un consultorio fue una habilidad manual.</p>
+      <p class="credit r r3">Toronto Telegram · York University · dominio público</p>
+    </div>
+  </section>
 
-                <nav class="app__nav">
-                  <div class="app__brand"><span class="app__logo">P</span><span class="app__brand-name">Pultzo</span></div>
-                  <ul class="app__menu">
-                    <li><button type="button" tabindex="-1" data-view="panel" data-act="a-panel" class="is-active"><svg><use href="#i-grid"/></svg>Panel</button></li>
-                    <li><button type="button" tabindex="-1" data-view="cartera"><svg><use href="#i-users"/></svg>Cartera</button></li>
-                    <li><button type="button" tabindex="-1" data-view="agenda" data-act="a-agenda"><svg><use href="#i-cal"/></svg>Agenda</button></li>
-                    <li><button type="button" tabindex="-1" data-view="conversaciones" data-act="a-bot"><svg><use href="#i-chat"/></svg>Conversaciones</button></li>
-                    <li><button type="button" tabindex="-1" data-view="campanas"><svg><use href="#i-chat"/></svg>Campañas</button></li>
-                    <li><button type="button" tabindex="-1" data-view="seguimiento" data-act="a-seguimiento"><svg><use href="#i-chat"/></svg>Seguimiento</button></li>
-                    <li><button type="button" tabindex="-1" data-view="sesiones"><svg><use href="#i-clock"/></svg>Sesiones pendientes</button></li>
-                  </ul>
-                  <div class="app__menu-foot">
-                    <div class="app__user"><span class="app__avatar">N</span><span>Clínica de ejemplo</span></div>
-                    <button type="button" tabindex="-1" data-view="salir"><svg><use href="#i-out"/></svg>Cerrar sesión</button>
-                  </div>
-                </nav>
+  <!-- II -->
+  <section class="scene sc--planilla" data-ch="II" data-title="La planilla" data-year="1984">
+    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/planilla-1984.jpg" width="2400" height="3534" alt=""></div>
+    <div class="scrim" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="eyebrow r"><b>II</b><span>1984 · Steve Jobs y la Macintosh</span></div>
+      <h2 class="r r2">La planilla</h2>
+      <p class="line r r3">La Macintosh puso una computadora con ventanas y mouse sobre un escritorio común. Con la planilla de cálculo, cada paciente pasó a ser una fila y cada cobro, una celda.</p>
+      <p class="sub r r3">Nada más se perdía. Pero nada se entendía: la planilla sólo espera que alguien la cargue.</p>
+      <p class="credit r r3">Bernard Gotfryd · Biblioteca del Congreso</p>
+    </div>
+  </section>
 
-                <div class="app__main">
-                  <div class="app__top">
-                    <span class="app__focus"><svg><use href="#i-grid"/></svg></span>
-                    <span class="app__demo">Datos ficticios</span>
-                    <span class="app__search"><svg><use href="#i-search"/></svg><span>Buscar pacientes...</span></span>
-                  </div>
+  <!-- III -->
+  <section class="scene sc--software" data-ch="III" data-title="El software" data-year="1987">
+    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/software-1987.jpg" width="2400" height="1600" alt=""></div>
+    <div class="scrim" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="eyebrow r"><b>III</b><span>1987 · Puesto de enfermería con terminal, Estados Unidos</span></div>
+      <h2 class="r r2">El software</h2>
+      <p class="line r r3">El sistema llegó a la clínica. Ordenó la información, pero no la entendió: seguía esperando que alguien cargara el turno, confirmara el pago y recordara al paciente.</p>
+      <p class="credit r r3">Bill Branson · National Cancer Institute · dominio público</p>
+    </div>
+  </section>
 
-                  <!-- PANEL (home) -->
-                  <section class="app__view is-on" data-view-id="panel">
-                    <header class="pg__head">
-                      <div>
-                        <h3 class="pg__title">Martes 22 de septiembre</h3>
-                        <p class="pg__meta">Cartera de 408 pacientes · últimos 30 días · datos al mar, 22 sept · 06:37</p>
-                      </div>
-                    </header>
-                    <div class="sg__label"><small>A QUIÉN CONTACTAR</small><span>Cada número abre la lista exacta que lo produce.</span></div>
-                    <div class="pn">
-                      <div class="tile"><span>Necesitan atención</span><b>3</b><small>El bot las derivó al equipo: una urgencia, una consulta de precios, o algo que no pudo resolver.</small><em>Atender →</em></div>
-                      <div class="tile"><span>Riesgo alto</span><b>8</b><small>Acumulan ausencias y cancelaciones tardías. Es una marca interna: no se les dice.</small><em>Ver lista →</em></div>
-                      <div class="tile" data-at="0.49" data-cursor="self"><span>Inactivos</span><b>23</b><small>Pasó más tiempo del esperable desde su última visita, según la configuración de la clínica.</small><em>Ver lista →</em></div>
-                      <div class="tile"><span>Sin turno futuro</span><b>112</b><small>No tienen nada agendado por delante. De acá sale una campaña de recontacto.</small><em>Armar campaña →</em></div>
-                      <div class="tile tile--5"><span>Tratamientos abandonados</span><b>11</b><small>Aceptaron el tratamiento y hace más de 60 días que no vuelven, con sesiones por delante.</small><em>Ver los tratamientos →</em></div>
-                    </div>
-                    <div class="sg__label"><small>DEL MENSAJE AL TURNO · ÚLTIMOS 30 DÍAS</small></div>
-                    <div class="funnel">
-                      <div class="funnel__stats">
-                        <span><small>CONVERSACIONES</small><b>190</b><em>Entraron por cualquier canal</em></span>
-                        <span><small>TERMINARON EN TURNO</small><b>69%</b><em>132 de 190</em></span>
-                        <span><small>TURNOS RESERVADOS</small><b>132</b><em>2 todavía por delante</em></span>
-                        <span><small>ASISTENCIA</small><b>77%</b><em>100 de 130 ya pasados</em></span>
-                      </div>
-                      <div class="funnel__bar"><i style="--w:44%"></i><i style="--w:30%"></i><i style="--w:1%"></i><i style="--w:25%"></i></div>
-                      <div class="funnel__legend"><span>190 conversaciones</span><span>132 con turno</span><span>2 pendientes</span><span>100 asistieron</span></div>
-                    </div>
-                  </section>
+  <!-- IV: peak -->
+  <section class="scene sc--ahora" data-ch="IV" data-title="Los primeros" data-year="1903">
+    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/primer-vuelo-1903.jpg" width="2400" height="1555" alt=""></div>
+    <div class="scrim" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="eyebrow r"><b>IV</b><span>17 de diciembre de 1903 · Kitty Hawk, Carolina del Norte</span></div>
+      <h2 class="r r2">Toda revolución empezó con pocos.</h2>
+      <p class="line r r3">Doce segundos en el aire y cinco testigos. Los primeros nunca fueron mayoría: fueron los que llegaron antes, aprendieron antes y se quedaron con la ventaja.</p>
+      <p class="sub r r3">En los consultorios está pasando hoy. Mientras unos siguen atendiendo el teléfono, en otros el paciente ya sacó turno por WhatsApp. Sumarse primero es la diferencia.</p>
+      <p class="credit r r3">John T. Daniels · Biblioteca del Congreso · dominio público</p>
+    </div>
+  </section>
 
-                  <!-- CONVERSACIONES -->
-                  <section class="app__view" data-view-id="conversaciones">
-                    <header class="pg__head">
-                      <div>
-                        <h3 class="pg__title">Conversaciones</h3>
-                        <p class="pg__meta">Todo lo que pacientes y clínica se dijeron, por cualquier canal.</p>
-                      </div>
-                      <span class="seg seg--filters"><b>Todas</b><i>Necesitan atención</i><i>Esperan respuesta</i></span>
-                    </header>
-                    <div class="cv">
-                      <ul class="cv__list">
-                        <li class="is-active"><b>Carla Méndez</b><time>hoy</time><span>Bot: Listo. Te agendé el jueves 24 a las 10:30…</span><em><i class="dot dot--wa"></i>WhatsApp</em></li>
-                        <li><b>Martín Sosa</b><time>ayer</time><span>Gracias, ahí voy</span><em><i class="dot dot--wa"></i>WhatsApp</em></li>
-                        <li><b>Sofía Bianchi</b><time>lun</time><span>Bot: Te recuerdo tu turno de mañana a las 9:30.</span><em><i class="dot dot--wa"></i>WhatsApp</em></li>
-                        <li><b>Hugo Benítez</b><time>vie</time><span>Bot: Te paso el presupuesto por acá.</span><em><i class="dot dot--wa"></i>WhatsApp</em></li>
-                      </ul>
-                      <div class="cv__thread">
-                        <div class="cv__head"><b>Carla Méndez</b><span><i class="dot dot--wa"></i>WhatsApp · asistente activo</span></div>
-                        <div class="cv__msgs">
-                          <div class="msg msg--in" data-at="0.08"><p>Hola, quería sacar turno para una limpieza. ¿Tienen algo esta semana?</p><time>23:14</time></div>
-                          <div class="msg msg--typing" data-at="0.14" data-until="0.24"><span></span><span></span><span></span></div>
-                          <div class="msg msg--out" data-at="0.24"><small>Bot</small><p>Hola Carla. Sí: tengo lugar el jueves 24 a las 10:30 o el viernes 25 a las 16:00. ¿Cuál te queda mejor?</p><time>23:14</time></div>
-                          <div class="msg msg--in" data-at="0.36"><p>Jueves 10:30</p><time>23:16</time></div>
-                          <div class="msg msg--typing" data-at="0.40" data-until="0.46"><span></span><span></span><span></span></div>
-                          <div class="msg msg--out" data-at="0.46"><small>Bot</small><p>Listo. Te agendé el jueves 24 a las 10:30 con la Dra. Giménez. Un día antes te mando un recordatorio.</p><time>23:16</time></div>
-                        </div>
-                        <div class="cv__toast" data-at="0.5"><i class="check"></i><b>Turno reservado</b><span>Jue 24 sep · 10:30 · Dra. Carla Giménez</span></div>
-                      </div>
-                    </div>
-                  </section>
-
-                  <!-- AGENDA -->
-                  <section class="app__view" data-view-id="agenda">
-                    <header class="pg__head">
-                      <div>
-                        <h3 class="pg__title">Martes 22 de septiembre</h3>
-                        <p class="pg__meta">9 turnos · 5 agendados · 4 confirmados · 0 completados · 0 ausentes</p>
-                      </div>
-                      <div class="ag__controls">
-                        <span class="seg"><i>‹</i><b>Hoy</b><i>›</i></span>
-                        <span class="seg seg--date"><i>22/09/2026</i><i>Ir</i></span>
-                        <span class="btn-dark" id="btn-reservar">+ Reservar un turno</span>
-                      </div>
-                    </header>
-                    <div class="chips">
-                      <span class="chip is-active">Todos <small>9</small></span>
-                      <span class="chip">Dr. Martín Suárez <small>3</small></span>
-                      <span class="chip">Dra. Carla Giménez <small>3</small></span>
-                      <span class="chip">Dra. Fernanda López <small>3</small></span>
-                    </div>
-                    <div class="ag" data-at="0.37" data-until="0.53">
-                      <div class="ag__cols-head">
-                        <span></span>
-                        <span><b>Dr. Martín Suárez</b><small>3 · 2.5 h</small></span>
-                        <span class="ag__c2"><b>Dra. Carla Giménez</b><small>3 · 1.8 h</small></span>
-                        <span class="ag__c3"><b>Dra. Fernanda López</b><small>3 · 2.3 h</small></span>
-                      </div>
-                      <div class="ag__grid">
-                        <div class="ag__hours"><span>08:00</span><span>09:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span></div>
-                        <div class="ag__col">
-                          <div class="ag__now" style="--h:3.33"><span>11:20</span></div>
-                          <div class="turno turno--ok" style="--s:0;--d:1"><small>08:00–09:00</small><b>Daniela Molina Medina</b><span>Endodoncia</span></div>
-                          <div class="turno turno--ok" style="--s:1.25;--d:0.75"><small>09:15–10:00</small><b>Gustavo Torres Molina</b></div>
-                          <div class="turno" style="--s:4.5;--d:0.75"><small>12:30–13:15</small><b>Franco Domínguez Acosta</b></div>
-                        </div>
-                        <div class="ag__col ag__c2">
-                          <div class="turno" style="--s:2;--d:0.75"><small>10:00–10:45</small><b>Ana Belén Ferreyra</b></div>
-                          <div class="turno" style="--s:5.5;--d:0.75"><small>13:30–14:15</small><b>Jorge Ruiz Ibáñez</b></div>
-                          <div class="turno turno--ok turno--short" style="--s:6.25;--d:0.4"><small>14:15</small><b>Daniela Castro Fernández</b></div>
-                        </div>
-                        <div class="ag__col ag__c3">
-                          <div class="turno turno--ok" style="--s:0;--d:1"><small>08:00–09:00</small><b>Ezequiel López Aguirre</b><span>Endodoncia</span></div>
-                          <div class="turno turno--short" style="--s:3;--d:0.4"><small>11:00</small><b>Carolina Acosta Rodríguez</b></div>
-                          <div class="turno" style="--s:5;--d:1"><small>13:00–14:00</small><b>Marina Ledesma</b><span>Conducto · 2ª sesión</span></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="ag__new" data-at="0.55" data-cursor="#btn-reservar">
-                      <b>Nuevo turno</b>
-                      <div class="ag__new-row"><small>Paciente</small><span>Lucía Ferreyra</span></div>
-                      <div class="ag__new-row"><small>Profesional</small><span>Dra. Carla Giménez</span></div>
-                      <div class="ag__new-row"><small>Cuándo</small><span>Mié 23 sep · 15:00 a 15:45</span></div>
-                      <div class="ag__new-row"><small>Tratamiento</small><span>Limpieza</span></div>
-                      <span class="btn-dark">Reservar</span>
-                    </div>
-                  </section>
-
-                  <!-- SEGUIMIENTO -->
-                  <section class="app__view" data-view-id="seguimiento">
-                    <header class="pg__head">
-                      <div>
-                        <h3 class="pg__title">Seguimiento</h3>
-                        <p class="pg__meta">Las conversaciones que quedaron sin respuesta, a quiénes se les volvió a escribir, y qué pasó con cada uno.</p>
-                      </div>
-                      <div class="sg__counters">
-                        <span><b data-at="0.38" data-to="4">3</b><small>les escribimos</small></span>
-                        <span><b data-at="0.58" data-to="1">0</b><small>sacaron turno</small></span>
-                        <span class="is-warn"><b>5</b><small>por hacer</small></span>
-                      </div>
-                    </header>
-                    <div class="sg__bar"><small>SEGUIMIENTO AUTOMÁTICO</small><span class="pill pill--ok"><i class="dot dot--wa"></i>Activo · escribe solo después de 24 h</span></div>
-                    <div class="sg__label"><small>LO QUE ESTÁ POR HACERSE</small><span>Más de 24 h sin respuesta. Mirar esta lista no le escribe a nadie.</span></div>
-                    <table class="sg">
-                      <thead><tr><th>A quién</th><th>De qué se trata</th><th class="num">Sin responder</th><th>Cómo saldría</th><th>Qué pasó</th></tr></thead>
-                      <tbody>
-                        <tr><td><b>Nora Castro</b><small>canceló el martes y no dijo cuándo</small></td><td><i class="dot"></i>Canceló y no reprogramó</td><td class="num">31 h</td><td>Reprogramación</td><td><span class="st st--sent">Enviado</span></td></tr>
-                        <tr><td><b>Diego Pardo</b><small>faltó a la 2ª sesión del conducto</small></td><td><i class="dot"></i>Sesión pendiente</td><td class="num">52 h</td><td>Sesión pendiente</td><td><span class="st st--sent" data-at="0.55" data-to="Respondió" data-cls="st--reply">Enviado</span></td></tr>
-                        <tr><td><b>Valeria Ortiz</b><small>última visita hace 11 meses</small></td><td><i class="dot"></i>Reactivación</td><td class="num">—</td><td>Mensaje de reactivación</td><td><span class="st st--todo" data-at="0.38" data-to="Enviado" data-cls="st--sent">Por enviar</span></td></tr>
-                        <tr><td><b>Hugo Benítez</b><small>hola, cuánto sale un implante?</small></td><td><i class="dot"></i>Pregunta abierta</td><td class="num">27 h</td><td>Presupuesto</td><td><span class="st st--sent" data-at="0.58" data-to="Sacó turno" data-cls="st--booked">Enviado</span></td></tr>
-                        <tr><td><b>Marina Ledesma</b><small>dejó el tratamiento a la mitad</small></td><td><i class="dot"></i>Tratamiento abandonado</td><td class="num">—</td><td>Tratamiento abandonado</td><td><span class="st st--sent">Enviado</span></td></tr>
-                      </tbody>
-                    </table>
-                  </section>
-
-                </div>
-
-                <div class="cursor" id="cursor">
-                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5 3l14 9.2-6.1 1.1 3.6 6.6-2.5 1.4-3.6-6.6L5 19z" fill="#17181a" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
-                </div>
-
-              </div>
-            </div>
-            <div class="lid__glass"></div>
+  <!-- V: laptop over servers -->
+  <section data-ch="V" data-title="Adentro" data-year="now">
+    <div class="tour" id="tour">
+      <div class="stage">
+        <div class="dots" aria-hidden="true"></div>
+        <div class="floor" aria-hidden="true"></div>
+        <div class="panel">
+          <div class="eyebrow"><b>V</b><span>Pantallas reales de Pultzo · datos ficticios</span></div>
+          <h2>Así se ve desde adentro</h2>
+          <ol class="idx" aria-label="Recorrido">
+            <li><span class="bar"><i></i></span>Inicio</li>
+            <li><span class="bar"><i></i></span>Agenda</li>
+            <li><span class="bar"><i></i></span>WhatsApp</li>
+            <li><span class="bar"><i></i></span>Ficha</li>
+            <li><span class="bar"><i></i></span>Sesiones</li>
+            <li><span class="bar"><i></i></span>Stock</li>
+          </ol>
+          <div class="fns">
+            <div class="fn on" data-fn="open"><span class="tag">Seis pantallas</span><h3>De la recepción al depósito.</h3><p class="intro">Bajá despacio: cada pantalla se abre por partes. La barra de arriba te dice cuánto falta.</p></div>
+            <div class="fn" data-fn="0"><span class="tag">01 · Inicio</span><h3>Tu consultorio, en una sola mirada</h3><ul><li><span class="n">01</span><span>Trece pacientes hoy, con su horario y su sillón.</span></li><li><span class="n">02</span><span>Tres insumos para reponer antes de que falten.</span></li><li><span class="n">03</span><span>Una corona que volvió del laboratorio. Cada etiqueta abre la lista exacta.</span></li></ul></div>
+            <div class="fn" data-fn="1"><span class="tag">02 · Agenda</span><h3>El día, medido contra el horario real</h3><ul><li><span class="n">01</span><span>La línea roja marca la hora actual.</span></li><li><span class="n">02</span><span>Al costado, cuánto sillón libre le queda a cada profesional.</span></li><li><span class="n">03</span><span>Recordatorios automáticos veinticuatro y tres horas antes del turno.</span></li></ul></div>
+            <div class="fn" data-fn="2"><span class="tag">03 · WhatsApp · IA</span><h3>El turno se reservó solo</h3><ul><li><span class="n">01</span><span>El paciente escribe a la hora que quiere.</span></li><li><span class="n">02</span><span>El asistente ofrece un hueco real de la agenda y lo confirma.</span></li><li><span class="n">03</span><span>Lo que no resuelve pasa a una persona, con la charla completa.</span></li></ul></div>
+            <div class="fn" data-fn="3"><span class="tag">04 · Historia clínica</span><h3>Una boca, tres cosas por hacer</h3><ul><li><span class="n">01</span><span>El odontograma en arcada marca lo que hay y lo que falta.</span></li><li><span class="n">02</span><span>Se dicta por voz, sin que la voz salga del consultorio.</span></li><li><span class="n">03</span><span>Lo escrito no se borra: se corrige con una entrada nueva.</span></li></ul></div>
+            <div class="fn" data-fn="4"><span class="tag">05 · Sesiones pendientes</span><h3>Diez horas de sillón sin agendar</h3><ul><li><span class="n">01</span><span>Tratamientos en curso que todavía esperan turno.</span></li><li><span class="n">02</span><span>Ordenados por profesional y por quién espera más.</span></li><li><span class="n">03</span><span>Un clic y pasan a la agenda.</span></li></ul></div>
+            <div class="fn" data-fn="5"><span class="tag">06 · Stock</span><h3>Cuántos días de cobertura quedan</h3><ul><li><span class="n">01</span><span>Cada práctica hecha descuenta sola los insumos.</span></li><li><span class="n">02</span><span>Lo que se termina esta semana aparece arriba.</span></li><li><span class="n">03</span><span>El pedido sale ya armado.</span></li></ul></div>
+          </div>
+          <div class="tfoot">
+            <div class="hint" id="hint"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v11M2.5 7.5 7 12l4.5-4.5"/></svg>Seguí bajando</div>
+            <p class="tour-end" id="tour-end">Eso es estar adentro. Un mostrador en silencio.</p>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <!-- phone only: the app moves here after the hero and runs at 1:1 -->
-  <div class="flat" id="flat">
-    <div class="flat__bar"><i></i><i></i><i></i><span>Pultzo · Clínica de ejemplo</span></div>
-    <div class="flat__host" id="flat-host"></div>
-  </div>
-</div>
-
-<main id="top">
-
-  <!-- HERO. The wordmark is the far plane; the laptop (fixed layer) is the
-       subject; its lid rises and occludes the word as the act progresses. -->
-  <!-- HERO + FIRST FUNCTION, one act. The lid opens in the first third; the
-       assistant's copy arrives as soon as the machine settles, with no empty
-       slide between the two. Beats and the view switch are keyed to this
-       act's progress from data-tour-at / data-beat-from onward. -->
-  <section id="hero" class="hero tour tour--peak" data-sc-act="pin" data-sc-span="4.6" data-sc-drift="#f7f6f2"
-           data-tour-view="conversaciones" data-tour-at="0.34" data-tour-at-phone="0.42" data-beat-from="0.42" data-beat-to="0.965">
-    <div data-sc-stage class="hero__stage">
-      <div class="hero__word">
-        <h1 class="hero__h1"><span class="sr">Pultzo</span><span class="hero__letters" aria-hidden="true"><i style="--i:0">P</i><i style="--i:1">u</i><i style="--i:2">l</i><i style="--i:3">t</i><i style="--i:4">z</i><i style="--i:5">o</i></span></h1>
-      </div>
-      <p class="hero__line" data-sc-cue="0 0.12 0">Un asistente que atiende WhatsApp, la agenda y el seguimiento de pacientes, en un solo lugar.</p>
-      <p class="hero__hint" data-sc-cue="0 0.06 0"><span>Deslizá para ver cómo funciona</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
-      <div class="tour__copy">
-        <h2 class="tour__h2" data-sc-cue="0.33 0.965 0.07 0.04">Un asistente que atiende WhatsApp por vos.</h2>
-        <ul class="feat">
-          <li data-sc-cue="0.42 0.965 0.08 0.04"><svg><use href="#i-check"/></svg><span>Responde instantáneamente a la demanda de cada paciente, a cualquier hora. Son las once de la noche y una paciente escribe.</span></li>
-          <li data-sc-cue="0.53 0.965 0.10 0.04"><svg><use href="#i-check"/></svg><span>Ofrece únicamente los horarios disponibles en tu agenda, actualizados al momento.</span></li>
-          <li data-sc-cue="0.64 0.965 0.13 0.04"><svg><use href="#i-check"/></svg><span>Reserva el turno y lo deja en tu agenda. Nadie de tu equipo tocó el teléfono.</span></li>
-          <li data-sc-cue="0.75 0.965 0.20 0.04"><svg><use href="#i-check"/></svg><span>Habla como vos le digas: las instrucciones las escribís en tus palabras y las cambiás cuando quieras.</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- TOUR. Three more pinned acts. The laptop holds; the copy crosses, item by item. -->
-
-  <section id="a-agenda" class="tour" data-sc-act="pin" data-sc-span="3.0" data-tour-view="agenda" data-sc-drift="#f5f4ef">
-    <div data-sc-stage class="tour__stage">
-      <div class="tour__copy">
-        <h2 class="tour__h2" data-sc-cue="0.07 0.9 0.08 0.06">Tu día, en una sola pantalla.</h2>
-        <ul class="feat">
-          <li data-sc-cue="0.20 0.9 0.10 0.06"><svg><use href="#i-check"/></svg><span>Todos los profesionales, el mismo día, una sola agenda.</span></li>
-          <li data-sc-cue="0.37 0.9 0.13 0.06"><svg><use href="#i-check"/></svg><span>Quién confirmó y quién todavía no, a simple vista.</span></li>
-          <li data-sc-cue="0.53 0.9 0.18 0.06"><svg><use href="#i-check"/></svg><span>Un turno nuevo en dos clics. Para moverlo, lo arrastrás.</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="a-seguimiento" class="tour" data-sc-act="pin" data-sc-span="3.0" data-tour-view="seguimiento" data-sc-drift="#f2f1ec">
-    <div data-sc-stage class="tour__stage">
-      <div class="tour__copy">
-        <h2 class="tour__h2" data-sc-cue="0.07 0.9 0.08 0.06">Nadie se pierde en el camino.</h2>
-        <ul class="feat">
-          <li data-sc-cue="0.20 0.9 0.10 0.06"><svg><use href="#i-check"/></svg><span>Junta a los que cancelaron, dejaron un tratamiento a la mitad o preguntaron y nadie les contestó.</span></li>
-          <li data-sc-cue="0.37 0.9 0.13 0.06"><svg><use href="#i-check"/></svg><span>Les escribe por vos, con el mensaje que vos aprobaste.</span></li>
-          <li data-sc-cue="0.53 0.9 0.18 0.06"><svg><use href="#i-check"/></svg><span>Cuando responden o sacan turno, se marca solo.</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="a-panel" class="tour" data-sc-act="pin" data-sc-span="3.4" data-tour-view="panel" data-sc-drift="#efeee9">
-    <div data-sc-stage class="tour__stage">
-      <div class="tour__copy">
-        <h2 class="tour__h2" data-sc-cue="0.06 0.79 0.08 0.08">Sabés a quién llamar antes de que sea tarde.</h2>
-        <ul class="feat">
-          <li data-sc-cue="0.18 0.79 0.10 0.08"><svg><use href="#i-check"/></svg><span>Quién hace meses que no viene.</span></li>
-          <li data-sc-cue="0.32 0.79 0.13 0.08"><svg><use href="#i-check"/></svg><span>Quién no tiene ningún turno por delante.</span></li>
-          <li data-sc-cue="0.47 0.79 0.18 0.08"><svg><use href="#i-check"/></svg><span>Cada número abre la lista exacta. Vos decidís a quién llamar hoy.</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ONBOARDING. The machine has left. The column narrows: the funnel. -->
-  <section id="onboarding" class="onb" data-sc-act="flow" data-sc-drift="#eeede8">
-    <div class="onb__head" data-sc-in data-sc-stagger="70">
-      <p class="onb__kicker">Puesta en marcha</p>
-      <h2 class="onb__h2">Vos no configurás nada.</h2>
-      <p class="onb__p">Nosotros dejamos la cuenta lista para usar. La clínica arranca con Pultzo un lunes a la mañana, sin frenar la atención.</p>
-    </div>
-    <ol class="steps" data-sc-reveal="left" data-sc-reveal-at="0.36 0.6">
-      <li><span class="steps__n">1</span><b>Nos contás cómo trabajan hoy</b><p>Una charla de media hora: profesionales, horarios, tratamientos y duraciones.</p></li>
-      <li><span class="steps__n">2</span><b>Cargamos y migramos</b><p>Tus pacientes y los turnos que ya tenés, desde una planilla, otro sistema o una agenda de papel.</p></li>
-      <li><span class="steps__n">3</span><b>Escribimos el asistente con vos</b><p>Sus instrucciones, en tus palabras. Lo probamos juntos antes de que hable con un paciente.</p></li>
-      <li><span class="steps__n">4</span><b>Arrancan un lunes</b><p>Con la agenda cargada y el asistente atendiendo. Nosotros seguimos del otro lado.</p></li>
-    </ol>
-  </section>
-
-  <!-- CLOSE. Hard cut to the rail colour. Holds. -->
-  <section id="contacto" class="close" data-sc-act="pin" data-sc-span="1.4">
-    <div data-sc-stage class="close__stage">
-      <div class="close__copy" data-sc-cue="0 1 0 0">
-        <h2 class="close__h2">Hablemos de tu clínica.</h2>
-        <p class="close__p">Contanos cómo trabajan hoy y te mostramos Pultzo con tus propios turnos.</p>
-        <div class="close__actions">
-          <a class="btn btn--primary" data-sc-magnet="0.24" data-sc-rise="0" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20ver%20Pultzo%20para%20mi%20cl%C3%ADnica.">Escribir por WhatsApp</a>
-          <a class="btn btn--ghost" href="mailto:steffanfelipe@gmail.com?subject=Quiero%20ver%20Pultzo%20para%20mi%20cl%C3%ADnica">Mandar un mail</a>
+        <div class="laptop" id="laptop">
+          <div class="lid" id="lid">
+            <div class="screen" id="screen">
+              <img src="assets/pantalla-inicio.png" width="2880" height="1800" alt="Inicio 3D de Pultzo: el consultorio en isométrico con etiquetas de lo que pasa hoy" data-s="0" class="on">
+              <img src="assets/pantalla-agenda.png" width="2880" height="1800" alt="Agenda de Pultzo con la línea de ahora, tres profesionales y el panel Cómo viene el día" data-s="1">
+              <img src="assets/pantalla-whatsapp.png" width="2880" height="1800" alt="Conversaciones de WhatsApp: el asistente confirma un turno" data-s="2">
+              <img src="assets/pantalla-ficha.png" width="2880" height="1800" alt="Ficha de un paciente con el odontograma en arcada y la pieza 27 abierta" data-s="3">
+              <img src="assets/pantalla-sesiones.png" width="2880" height="1800" alt="Sesiones pendientes: horas de sillón sin agendar, por profesional y quién espera más" data-s="4">
+              <img src="assets/pantalla-stock.png" width="2880" height="1800" alt="Stock con días de cobertura por insumo y el pedido armado" data-s="5">
+              <div class="glare"></div>
+              <svg class="cursor" id="cursor" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 1 L2 15 L6 11 L9 17 L11 16 L8 10 L13 10 Z" fill="#F4F1EA" stroke="#17150F" stroke-width="1"/></svg>
+            </div>
+          </div>
+          <div class="base"></div>
         </div>
-        <p class="close__meta"><span>+54 9 223 541 2083</span><span>steffanfelipe@gmail.com</span></p>
       </div>
-      <p class="close__foot">Pultzo Admin · 2026</p>
+    </div>
+
+    <div class="mobile-tour">
+      <div class="wrap" style="display:flex;flex-direction:column;gap:40px">
+        <div><div class="eyebrow"><b>V</b><span>Pantallas reales · datos ficticios</span></div><h2>Así se ve desde adentro</h2></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-inicio-movil.png" width="780" height="1688" alt="Inicio de Pultzo en el teléfono" style="max-width:56%;margin:0 auto"></div><span class="tag">01 · Inicio</span><h3>Tu consultorio, en una sola mirada</h3><ul><li>Trece pacientes hoy, con su horario y su sillón.</li><li>Tres insumos para reponer antes de que falten.</li><li>Una corona que volvió del laboratorio.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-agenda.png" width="2880" height="1800" alt="Agenda de Pultzo"></div><span class="tag">02 · Agenda</span><h3>El día, medido contra el horario real</h3><ul><li>La línea roja marca la hora actual.</li><li>Cuánto sillón libre le queda a cada profesional.</li><li>Recordatorios automáticos veinticuatro y tres horas antes.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-whatsapp.png" width="2880" height="1800" alt="Conversaciones de WhatsApp"></div><span class="tag">03 · WhatsApp · IA</span><h3>El turno se reservó solo</h3><ul><li>El paciente escribe a la hora que quiere.</li><li>El asistente ofrece un hueco real y lo confirma.</li><li>Lo que no resuelve pasa a una persona.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-ficha.png" width="2880" height="1800" alt="Odontograma en arcada"></div><span class="tag">04 · Historia clínica</span><h3>Una boca, tres cosas por hacer</h3><ul><li>El odontograma marca lo que hay y lo que falta.</li><li>Se dicta por voz, sin que la voz salga del consultorio.</li><li>Lo escrito se corrige con una entrada nueva.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-sesiones.png" width="2880" height="1800" alt="Sesiones pendientes"></div><span class="tag">05 · Sesiones pendientes</span><h3>Diez horas de sillón sin agendar</h3><ul><li>Tratamientos en curso que esperan turno.</li><li>Ordenados por quién espera más.</li><li>Un clic y pasan a la agenda.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-stock.png" width="2880" height="1800" alt="Stock"></div><span class="tag">06 · Stock</span><h3>Cuántos días de cobertura quedan</h3><ul><li>Cada práctica hecha descuenta sola.</li><li>Lo que se termina esta semana aparece arriba.</li><li>El pedido sale ya armado.</li></ul></div>
+      </div>
     </div>
   </section>
 
-</main>
+  <!-- VI -->
+  <section class="scene sc--juntos" data-ch="VI" data-title="Con vos" data-year="now">
+    <div class="ghost" aria-hidden="true">VI</div>
+    <div class="wrap">
+      <div class="eyebrow r"><b>VI</b><span>Un servicio acompañado, no un login</span></div>
+      <h2 class="r r2">Lo ponemos en marcha con vos.</h2>
+      <p class="line r r3">No te damos un usuario y una contraseña para que te arregles. Configuramos tu clínica juntos y seguimos al lado cuando algo no cierra.</p>
+      <div class="people r r3">
+        <div class="person"><b>Alta acompañada</b><span>Configuramos tu clínica con vos, en una sesión.</span></div>
+        <div class="person"><b>Un contacto directo</b><span>La misma persona desde el primer día.</span></div>
+        <div class="person"><b>Mejoras desde tu mostrador</b><span>Lo que tu equipo pide se convierte en producto.</span></div>
+      </div>
+    </div>
+  </section>
 
-<script src="scrollcraft.js"></script>
-<script>ScrollCraft.mount(document.body);</script>
-<script src="pultzo.js"></script>
+  <!-- Colofón -->
+  <section class="colofon" id="contacto" data-ch="" data-title="Colofón" data-year="now">
+    <div class="wrap">
+      <h2 class="r">Si llegaste hasta acá, ya estás un paso adentro.</h2>
+      <div class="cta r r2"><a class="btn" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20pedir%20una%20demo%20de%20Pultzo%20para%20mi%20cl%C3%ADnica.">Pedí una demo<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a><p>Veinte minutos sobre tu consultorio. Te lo mostramos funcionando.</p></div>
+      <p class="more r r2"><a href="funciones.html">Ver todo lo que hace Pultzo, módulo por módulo</a></p>
+      <p class="credits r r3">Fotografías: oficina de registros de la Social Security Board, Baltimore, 1937, Harris &amp; Ewing, Biblioteca del Congreso, dominio público · mostrador de trámites, Toronto, 1946, Toronto Telegram, York University Libraries, dominio público · Steve Jobs y la Macintosh, enero de 1984, Bernard Gotfryd, Biblioteca del Congreso, sin restricciones de copyright conocidas · puesto de enfermería, 1987, Bill Branson, National Cancer Institute, dominio público · primer vuelo de los hermanos Wright, Kitty Hawk, 17 de diciembre de 1903, John T. Daniels, Biblioteca del Congreso, dominio público. Las pantallas de Pultzo muestran datos ficticios.</p>
+      <div class="mast r r3"><b>Pultzo</b><span>Gestión odontológica · Argentina · <span id="year">2026</span></span></div>
+    </div>
+  </section>
+
+</article>
+<script>
+(function () {
+    var self = { props: { parallax: 1 } };
+    var root = document.getElementById('pg');
+    if (!root) return;
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Reveals
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+    root.querySelectorAll('.r').forEach(function (el) { io.observe(el); });
+
+    // Folio
+    var folio = document.getElementById('folio');
+    var fNum = document.getElementById('folio-num');
+    var fTitle = document.getElementById('folio-title');
+    var fYear = document.getElementById('folio-year');
+    var chapters = Array.prototype.slice.call(root.querySelectorAll('[data-ch]'));
+    var mode = 'year';
+    var chIo = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        var ch = el.getAttribute('data-ch');
+        fNum.textContent = ch || '∞';
+        if (el.id === 'portada') fNum.textContent = '0';
+        fTitle.textContent = el.getAttribute('data-title') || '';
+        var y = el.getAttribute('data-year');
+        if (y === 'now') { mode = 'clock'; folio.classList.add('now'); }
+        else { mode = 'year'; folio.classList.remove('now'); fYear.textContent = y || ''; }
+      });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    chapters.forEach(function (c) { chIo.observe(c); });
+
+    // Clock
+    var hm = document.getElementById('clk-hm'), sec = document.getElementById('clk-s'), date = document.getElementById('clk-date');
+    var fmtDate = new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function tick() {
+      var d = new Date();
+      var t = pad(d.getHours()) + ':' + pad(d.getMinutes());
+      if (hm) hm.textContent = t;
+      if (sec) sec.textContent = ':' + pad(d.getSeconds());
+      if (date) date.textContent = fmtDate.format(d);
+      if (mode === 'clock' && fYear) fYear.textContent = t + ':' + pad(d.getSeconds());
+    }
+    tick();
+    self._clock = setInterval(tick, 1000);
+
+    // Laptop tour: every function gets the same scroll distance, split in four beats
+    // (title, then one item per beat), so progress is visible and never rushed.
+    var tour = document.getElementById('tour');
+    var lid = document.getElementById('lid');
+    var screen = document.getElementById('screen');
+    var cursor = document.getElementById('cursor');
+    var hint = document.getElementById('hint');
+    var tourEnd = document.getElementById('tour-end');
+    var shots = screen ? Array.prototype.slice.call(screen.querySelectorAll('img[data-s]')) : [];
+    var fns = Array.prototype.slice.call(root.querySelectorAll('.fn'));
+    var idxItems = Array.prototype.slice.call(root.querySelectorAll('.idx li'));
+    var cursorSpots = { '0': [56, 46], '1': [30, 70], '2': [82, 56], '3': [58, 66], '4': [26, 20], '5': [92, 20] };
+    var OPEN = 0.9, FN = 1.6, BEATS = 4, COUNT = 6;
+    var current = null, currentSub = -1;
+    function pulseCursor() {
+      if (!cursor) return;
+      cursor.classList.remove('click');
+      void cursor.offsetWidth;
+      cursor.classList.add('click');
+    }
+    function render(idx, sub, frac, end) {
+      var key = idx < 0 ? 'open' : String(idx);
+      // Classes are re-applied every frame: a re-render resets them to the markup.
+      fns.forEach(function (f) { f.classList.toggle('on', f.getAttribute('data-fn') === key); });
+      var shot = idx < 0 ? '0' : key;
+      shots.forEach(function (img) { img.classList.toggle('on', img.getAttribute('data-s') === shot); });
+      if (idx >= 0 && fns[idx + 1]) {
+        Array.prototype.forEach.call(fns[idx + 1].querySelectorAll('li'), function (li, i) { li.classList.toggle('on', i < sub); });
+      }
+      if (key !== current) {
+        current = key;
+        currentSub = -1;
+        if (cursor) {
+          if (idx < 0) cursor.classList.remove('on');
+          else {
+            var spot = cursorSpots[key] || [50, 50];
+            cursor.classList.add('on');
+            cursor.style.left = spot[0] + '%';
+            cursor.style.top = spot[1] + '%';
+          }
+        }
+      }
+      if (idx >= 0 && sub !== currentSub) {
+        currentSub = sub;
+        if (sub > 0) pulseCursor();
+      }
+      idxItems.forEach(function (li, i) {
+        var f = i < idx ? 1 : (i === idx ? frac : 0);
+        li.querySelector('i').style.setProperty('--f', f.toFixed(3));
+        li.classList.toggle('done', i < idx || (i === idx && end));
+        li.classList.toggle('cur', i === idx && !end);
+      });
+      if (hint) hint.classList.toggle('off', end);
+      if (tourEnd) tourEnd.classList.toggle('on', end);
+    }
+    function tourFrame(vh) {
+      if (!tour) return;
+      var s = Math.max(0, -tour.getBoundingClientRect().top / vh);
+      if (lid) lid.style.setProperty('--open', reduced ? 1 : Math.min(1, s / 0.6).toFixed(3));
+      var t = s - OPEN;
+      if (t < 0) { render(-1, 0, 0, false); return; }
+      var end = t >= COUNT * FN;
+      var idx = Math.min(COUNT - 1, Math.floor(t / FN));
+      var within = Math.min(FN, t - idx * FN);
+      var sub = Math.min(BEATS - 1, Math.floor(within / (FN / BEATS)));
+      render(idx, sub, within / FN, end);
+    }
+
+    // Scroll-driven: photo parallax, lid opening
+    var pars = Array.prototype.slice.call(root.querySelectorAll('[data-par]'));
+    var ticking = false;
+    function frame() {
+      ticking = false;
+      var vh = window.innerHeight || 800;
+      var k = Number(self.props.parallax == null ? 1 : self.props.parallax);
+      if (!reduced) {
+        pars.forEach(function (p) {
+          var r = p.parentElement.getBoundingClientRect();
+          var prog = (vh - r.top) / (vh + r.height);
+          prog = Math.min(1, Math.max(0, prog));
+          var f = parseFloat(p.getAttribute('data-par')) * k;
+          p.style.transform = 'translate3d(0,' + ((prog - 0.5) * f * vh).toFixed(1) + 'px,0)';
+        });
+      }
+      // Safety net for reveals: anything already on screen is shown, even after a re-render.
+      root.querySelectorAll('.r:not(.in)').forEach(function (el) {
+        if (el.getBoundingClientRect().top < vh * 0.95) el.classList.add('in');
+      });
+      tourFrame(vh);
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+    self._onScroll = onScroll;
+    window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('scroll', onScroll, { passive: true, capture: true });
+    window.addEventListener('resize', onScroll);
+    // A re-render rewrites class attributes; re-run the frame so state comes back at once.
+    self._mo = new MutationObserver(onScroll);
+    self._mo.observe(root, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    frame();
+    var yr = document.getElementById('year');
+    if (yr) yr.textContent = String(new Date().getFullYear());
+})();
+</script>
 </body>
 </html>
