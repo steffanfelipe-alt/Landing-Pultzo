@@ -6,6 +6,6 @@ Static page, no build step. Open `index.html` in a browser, or serve the folder:
 npx serve .
 ```
 
-Files: `index.html`, `pultzo.css`, `pultzo.js` are the page. `scrollcraft.css` and `scrollcraft.js` are the scroll engine (do not edit). `BRIEF.md` is the design brief. `lab/` holds the verification contact sheets.
+Files: `index.html` is the scroll story (chapters I to VI and the call to action), `funciones.html` lists every module. Styles and scripts are inline in each page; images live in `assets/`.
 
-Contact links point to the WhatsApp number and email given in the brief. Sample data on the screens is fictional and labelled as such on the surface.
+The "Pedí una demo" button opens WhatsApp with a prefilled message. Sample data on the product screens is fictional and labelled as such on the page.

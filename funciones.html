@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pultzo, módulo por módulo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Todo lo que hace Pultzo, módulo por módulo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,700;100,900&amp;family=Geist:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#C8401F}a:hover{color:#8F2B12}
+.fx{--paper:#F3EEE4;--ink:#17150F;--soft:#5B5546;--acc:#C8401F;--d:"Archivo",system-ui,sans-serif;--t:"Geist",system-ui,sans-serif;
+  font-family:var(--t);background:var(--paper);color:var(--ink);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.fx *{box-sizing:border-box}
+.fx h1,.fx h2,.fx h3{font-family:var(--d);font-weight:900;letter-spacing:-0.03em;line-height:.98;margin:0;text-wrap:balance}
+.fx p{margin:0;text-wrap:pretty}
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,80px)}
+.head{padding:clamp(56px,10vh,120px) 0 clamp(40px,6vh,72px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:28px;align-items:end}
+.back{grid-column:1/13;font-size:13px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
+.head h1{grid-column:1/9;font-size:clamp(2.8rem,6.5vw,6rem)}
+.head p{grid-column:9/13;color:var(--soft);font-size:17px}
+.toc{display:flex;flex-wrap:wrap;gap:10px 22px;padding:18px 0;border-top:1px solid rgba(23,21,15,.25);border-bottom:1px solid rgba(23,21,15,.25);font-size:14px}
+.toc a{text-decoration:none;color:var(--ink)}
+.toc a:hover{color:var(--acc)}
+.grp{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;padding:clamp(40px,7vh,88px) 0;border-bottom:1px solid rgba(23,21,15,.18)}
+.grp h2{grid-column:1/4;font-size:clamp(1.6rem,2.4vw,2.2rem);position:sticky;top:24px;align-self:start}
+.grp .k{grid-column:1/4;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-top:14px}
+.list{grid-column:4/13;display:flex;flex-direction:column}
+.it{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:24px;padding:22px 0;border-top:1px solid rgba(23,21,15,.14)}
+.it:first-child{border-top:0;padding-top:0}
+.it h3{font-size:21px;font-weight:700;letter-spacing:-0.02em;line-height:1.2}
+.it p{color:var(--soft);font-size:17px}
+.it .ia{display:inline-block;margin-left:10px;font-family:var(--t);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-weight:500;vertical-align:middle}
+.foot{padding:clamp(48px,8vh,96px) 0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:24px}
+.foot p{grid-column:1/8;font-size:clamp(19px,1.6vw,24px);line-height:1.5;max-width:40ch}
+.foot p a{font-weight:500;text-decoration:none;border-bottom:1px solid currentColor}
+.foot .fine{grid-column:8/13;font-size:14px;color:var(--soft);font-weight:400;max-width:none;line-height:1.55}
+@media (max-width:900px){
+  .head h1,.head p,.grp h2,.grp .k,.list,.foot p,.foot .fine{grid-column:1/13}
+  .grp h2{position:static;margin-bottom:8px}
+  .it{grid-template-columns:1fr;row-gap:6px}
+}
+</style>
+</head>
+<body>
+
+<main class="fx">
+  <div class="wrap">
+    <header class="head">
+      <a class="back" href="index.html">Volver al relato</a>
+      <h1>Todo lo que hace Pultzo, módulo por módulo.</h1>
+      <p>Lo que figura acá existe en el sistema hoy. Lo marcado con <span style="color:#C8401F;font-weight:500;letter-spacing:.1em;font-size:12px;text-transform:uppercase">IA</span> usa inteligencia artificial con una regla fija: propone, nunca decide.</p>
+    </header>
+
+    <nav class="toc" aria-label="Secciones">
+      <a href="#agenda">Agenda y pacientes</a>
+      <a href="#conversaciones">WhatsApp y campañas</a>
+      <a href="#clinica">Historia clínica</a>
+      <a href="#dinero">Presupuestos y cobros</a>
+      <a href="#operacion">Operación del consultorio</a>
+      <a href="#metricas">Panel y seguimiento</a>
+    </nav>
+
+    <section class="grp" id="agenda">
+      <h2>Agenda y pacientes</h2>
+      <div class="list">
+        <div class="it"><h3>Agenda sincronizada con Google Calendar</h3><p>Los turnos viven en Pultzo y se reflejan en el calendario de cada profesional. Una pantalla de diferencias muestra qué cambió de un lado y no del otro.</p></div>
+        <div class="it"><h3>Recordatorios automáticos</h3><p>Dos por defecto, veinticuatro y tres horas antes del turno, configurables por clínica. Cada cambio de horario reabre los recordatorios para la nueva hora.</p></div>
+        <div class="it"><h3>Reprogramaciones con historia</h3><p>Cada movimiento de un turno queda registrado: cuántas veces se corrió y desde qué horario venía.</p></div>
+        <div class="it"><h3>Turnos online</h3><p>Una página pública por clínica. Horizonte de treinta días, dos horas de anticipación y dos turnos por paciente, por defecto. Enlaces personales que vencen a los siete días y se bloquean tras cinco intentos fallidos.</p></div>
+        <div class="it"><h3>Cartera de pacientes</h3><p>Ficha, contactos, obra social, cuenta corriente y consentimientos en un solo lugar.</p></div>
+      </div>
+    </section>
+
+    <section class="grp" id="conversaciones">
+      <h2>WhatsApp y campañas</h2>
+      <div class="list">
+        <div class="it"><h3>Asistente de WhatsApp <span class="ia">IA</span></h3><p>Conectado a la API oficial de Meta. Entiende qué quiere el paciente y reserva en un hueco real de la agenda. Por WhatsApp sólo se tratan turnos, nunca datos de salud.</p></div>
+        <div class="it"><h3>Bandeja de conversaciones</h3><p>Todo lo que el asistente no resuelve pasa a una persona, con el contexto completo de la charla.</p></div>
+        <div class="it"><h3>Campañas con aprobación</h3><p>Audiencia, mensaje y política de envío. Nada sale sin que alguien de la clínica lo apruebe.</p></div>
+        <div class="it"><h3>Recordatorio de tratamiento</h3><p>Para pacientes con un plan a medio hacer, con una espera mínima de siete días entre un envío y el siguiente.</p></div>
+      </div>
+    </section>
+
+    <section class="grp" id="clinica">
+      <h2>Historia clínica</h2>
+      <div class="list">
+        <div class="it"><h3>Historia clínica inmutable</h3><p>Cada entrada queda encadenada a la anterior con una firma criptográfica. Lo escrito no se edita: se corrige con una nueva entrada.</p></div>
+        <div class="it"><h3>Odontograma y periodontograma</h3><p>Con estadio y grado sugeridos según la clasificación AAP/EFP 2017.</p></div>
+        <div class="it"><h3>Dictado por voz <span class="ia">IA</span></h3><p>Se activa diciendo "Pultzo". El reconocimiento corre en el navegador, sin que la voz salga del consultorio. Para lo que la gramática no entiende, se puede habilitar una interpretación asistida.</p></div>
+        <div class="it"><h3>Importación de historias previas <span class="ia">IA</span></h3><p>PDFs y escaneos de otros sistemas se leen y se vuelcan a la ficha para que nadie empiece de cero.</p></div>
+        <div class="it"><h3>Consentimientos informados</h3><p>Se firman por enlace desde el teléfono del paciente y quedan adjuntos a la historia.</p></div>
+      </div>
+    </section>
+
+    <section class="grp" id="dinero">
+      <h2>Presupuestos y cobros</h2>
+      <div class="list">
+        <div class="it"><h3>Nomenclador y presupuestos</h3><p>Se arman desde el catálogo de prácticas y se aceptan por enlace. Los que quedan sin respuesta entran en una cola de seguimiento.</p></div>
+        <div class="it"><h3>Cuenta corriente y cuotas</h3><p>Saldo por paciente, planes en cuotas y una bandeja de pagos a confirmar.</p></div>
+        <div class="it"><h3>Lectura de comprobantes <span class="ia">IA</span></h3><p>La foto de la transferencia se interpreta y se asocia a la cuenta. Una persona confirma con un clic.</p></div>
+        <div class="it"><h3>Honorarios del Colegio</h3><p>La publicación de aranceles se importa y se aplica con un botón. Hoy, Provincia de Buenos Aires.</p></div>
+        <div class="it"><h3>Obras sociales</h3><p>Aranceles con copago y presentación mensual. Sin integración directa con las obras sociales por ahora.</p></div>
+      </div>
+    </section>
+
+    <section class="grp" id="operacion">
+      <h2>Operación del consultorio</h2>
+      <div class="list">
+        <div class="it"><h3>Stock con lotes y vencimientos</h3><p>Descuento automático al marcar una práctica como hecha, alertas, conteo físico y reportes. El pronóstico semanal de consumo es una guía, no una alarma.</p></div>
+        <div class="it"><h3>Laboratorio <span class="ia">IA</span></h3><p>Órdenes de trabajo con un enlace que vence para el laboratorio. Sus mensajes se interpretan sin enviarles datos del paciente.</p></div>
+        <div class="it"><h3>Roles por clínica</h3><p>Lo que ve cada persona depende de su rol. Laboratorio y obras sociales aparecen sólo para quien los necesita.</p></div>
+      </div>
+    </section>
+
+    <section class="grp" id="metricas">
+      <h2>Panel y seguimiento</h2>
+      <div class="list">
+        <div class="it"><h3>Embudos de turnos y conversaciones</h3><p>Cuántos pidieron, cuántos confirmaron, cuántos vinieron. Y lo mismo para las charlas de WhatsApp.</p></div>
+        <div class="it"><h3>Colas de recontacto y abandono</h3><p>Pacientes que dejaron de venir y sesiones pendientes, listas para que la próxima acción sea obvia.</p></div>
+        <div class="it"><h3>Sin dato, pista</h3><p>Cuando falta información, el panel dice qué cargar y dónde. Nunca inventa un número.</p></div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>¿Querés verlo con tu agenda y no con una de ejemplo? <a href="index.html#contacto">Pedí una conversación de veinte minutos</a>.</p>
+      <p class="fine">Pultzo lo opera una agencia que da de alta cada clínica y la acompaña. Los datos se guardan en infraestructura propia y las integraciones de inteligencia artificial se usan con el mínimo necesario, sin entrenamiento sobre tus datos.</p>
+    </footer>
+  </div>
+</main>
+
+</body>
+</html>

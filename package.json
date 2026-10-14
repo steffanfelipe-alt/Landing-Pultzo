@@ -1,8 +1,0 @@
-{
-  "name": "pultzo-landing",
-  "private": true,
-  "description": "Static scroll-driven landing for Pultzo. No build step: open index.html or serve the folder.",
-  "devDependencies": {
-    "playwright-core": "^1.63.0"
-  }
-}
