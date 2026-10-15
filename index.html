@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>La revolución ya está acá</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0E0D0B">
 <meta name="description" content="Pultzo: gestión odontológica con inteligencia artificial. Agenda, WhatsApp, historia clínica y stock en un solo lugar.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,700;100,900&amp;family=Geist:wght@400;500&amp;display=swap">
@@ -235,6 +236,23 @@ a{color:#FF7A55}a:hover{color:#FFA183}
   .mobile-tour li:before{content:"";position:absolute;left:0;top:.7em;width:10px;height:2px;background:var(--acc)}
   .mobile-tour .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:500}
   .colofon h2,.colofon .cta,.colofon .all{grid-column:1/13}
+  /* phone: product screens are shown at a readable size and panned sideways instead of shrunk */
+  .mobile-tour .pan-hint{margin-top:12px;font-size:14px;color:var(--soft)}
+  .mobile-tour .mstep + .mstep .mframe{margin:0 calc(-1 * clamp(20px,5vw,80px));padding:0;border-radius:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:#1C1A17;overscroll-behavior-x:contain}
+  .mobile-tour .mstep + .mstep .mframe::-webkit-scrollbar{display:none}
+  .mobile-tour .mstep + .mstep .mframe img{height:min(62vh,500px);width:auto;max-width:none;border-radius:0}
+  .mobile-tour .mstep{gap:14px}
+  .mobile-tour h3{font-size:26px}
+  .prog-marks li.cur{background:rgba(14,13,11,.82);border-radius:0 0 6px 6px;padding:6px 10px 6px 12px}
+  .prog-marks li.cur:last-child{padding:6px 12px 6px 10px}
+  .sc--juntos{align-items:start}
+  .sc--juntos .wrap{padding-top:clamp(96px,16vh,140px)}
+  .sc--juntos .ghost{top:4vh;font-size:52vw}
+  .colofon .all{flex-wrap:nowrap;padding:24px 20px;gap:16px}
+  .colofon .all-t{font-size:clamp(26px,8vw,34px)}
+  .colofon .all-go{width:56px;height:56px}
+  .colofon .btn{width:100%;justify-content:center}
+  .scene .sub{font-size:16px}
 }
 @media (prefers-reduced-motion:reduce){
   .r{opacity:1;transform:none;transition:none}
@@ -269,7 +287,7 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 
   <!-- Portada -->
   <header class="scene hero" id="portada" data-ch="" data-title="Portada" data-year="1937">
-    <div class="photo" data-par="0.16" aria-hidden="true"><img src="assets/portada-1937.jpg" width="1900" height="1460" alt=""></div>
+    <div class="photo" data-par="0.16" aria-hidden="true"><img src="assets/portada-1937.jpg" srcset="assets/portada-1937-1200.jpg 1200w, assets/portada-1937.jpg 1900w" sizes="100vw" width="1900" height="1460" alt="" fetchpriority="high"></div>
     <div class="scrim" aria-hidden="true"></div>
     <div class="wrap">
       <div class="mark r"><span>Pultzo</span><small>Gestión odontológica con inteligencia artificial</small></div>
@@ -281,9 +299,9 @@ a{color:#FF7A55}a:hover{color:#FFA183}
   <!-- I: three eras, one pinned stage -->
   <section class="eras" id="eras" data-ch="I" data-title="Antes" data-year="1946">
     <div class="eras-stage">
-      <div class="era-ph era-ph--papel" data-era="0" aria-hidden="true"><img src="assets/papel-1946.jpg" width="2400" height="1516" alt=""></div>
-      <div class="era-ph era-ph--planilla" data-era="1" aria-hidden="true"><img src="assets/planilla-1984.jpg" width="2400" height="3534" alt=""></div>
-      <div class="era-ph era-ph--software" data-era="2" aria-hidden="true"><img src="assets/software-1987.jpg" width="2400" height="1600" alt=""></div>
+      <div class="era-ph era-ph--papel" data-era="0" aria-hidden="true"><img src="assets/papel-1946.jpg" srcset="assets/papel-1946-1200.jpg 1200w, assets/papel-1946.jpg 2400w" sizes="100vw" loading="lazy" decoding="async" width="2400" height="1516" alt=""></div>
+      <div class="era-ph era-ph--planilla" data-era="1" aria-hidden="true"><img src="assets/planilla-1984.jpg" srcset="assets/planilla-1984-1200.jpg 1200w, assets/planilla-1984.jpg 2400w" sizes="100vw" loading="lazy" decoding="async" width="2400" height="3534" alt=""></div>
+      <div class="era-ph era-ph--software" data-era="2" aria-hidden="true"><img src="assets/software-1987.jpg" srcset="assets/software-1987-1200.jpg 1200w, assets/software-1987.jpg 2400w" sizes="100vw" loading="lazy" decoding="async" width="2400" height="1600" alt=""></div>
       <span class="seam" id="era-seam" aria-hidden="true"></span>
       <div class="era-dim" id="era-dim" aria-hidden="true"></div>
       <div class="scrim" aria-hidden="true"></div>
@@ -330,7 +348,7 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 
   <!-- II: peak -->
   <section class="scene sc--ahora" id="primeros" data-ch="II" data-title="Los primeros" data-year="1903">
-    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/primer-vuelo-1903.jpg" width="2400" height="1555" alt=""></div>
+    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/primer-vuelo-1903.jpg" srcset="assets/primer-vuelo-1903-1200.jpg 1200w, assets/primer-vuelo-1903.jpg 2400w" sizes="100vw" loading="lazy" decoding="async" width="2400" height="1555" alt=""></div>
     <div class="scrim" aria-hidden="true"></div>
     <div class="wrap">
       <div class="eyebrow r"><b>II</b><span>17 de diciembre de 1903 · Kitty Hawk, Carolina del Norte</span></div>
@@ -375,12 +393,12 @@ a{color:#FF7A55}a:hover{color:#FFA183}
         <div class="laptop" id="laptop">
           <div class="lid" id="lid">
             <div class="screen" id="screen">
-              <img src="assets/pantalla-inicio.png" width="2880" height="1800" alt="Inicio 3D de Pultzo: el consultorio en isométrico con etiquetas de lo que pasa hoy" data-s="0" class="on">
-              <img src="assets/pantalla-agenda.png" width="2880" height="1800" alt="Agenda de Pultzo con la línea de ahora, tres profesionales y el panel Cómo viene el día" data-s="1">
-              <img src="assets/pantalla-whatsapp.png" width="2880" height="1800" alt="Conversaciones de WhatsApp: el asistente confirma un turno" data-s="2">
-              <img src="assets/pantalla-ficha.png" width="2880" height="1800" alt="Ficha de un paciente con el odontograma en arcada y la pieza 27 abierta" data-s="3">
-              <img src="assets/pantalla-sesiones.png" width="2880" height="1800" alt="Sesiones pendientes: horas de sillón sin agendar, por profesional y quién espera más" data-s="4">
-              <img src="assets/pantalla-stock.png" width="2880" height="1800" alt="Stock con días de cobertura por insumo y el pedido armado" data-s="5">
+              <img src="assets/pantalla-inicio.png" srcset="assets/pantalla-inicio-1600.jpg 1600w, assets/pantalla-inicio.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Inicio 3D de Pultzo: el consultorio en isométrico con etiquetas de lo que pasa hoy" data-s="0" class="on">
+              <img src="assets/pantalla-agenda.png" srcset="assets/pantalla-agenda-1600.jpg 1600w, assets/pantalla-agenda.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Agenda de Pultzo con la línea de ahora, tres profesionales y el panel Cómo viene el día" data-s="1">
+              <img src="assets/pantalla-whatsapp.png" srcset="assets/pantalla-whatsapp-1600.jpg 1600w, assets/pantalla-whatsapp.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Conversaciones de WhatsApp: el asistente confirma un turno" data-s="2">
+              <img src="assets/pantalla-ficha.png" srcset="assets/pantalla-ficha-1600.jpg 1600w, assets/pantalla-ficha.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Ficha de un paciente con el odontograma en arcada y la pieza 27 abierta" data-s="3">
+              <img src="assets/pantalla-sesiones.png" srcset="assets/pantalla-sesiones-1600.jpg 1600w, assets/pantalla-sesiones.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Sesiones pendientes: horas de sillón sin agendar, por profesional y quién espera más" data-s="4">
+              <img src="assets/pantalla-stock.png" srcset="assets/pantalla-stock-1600.jpg 1600w, assets/pantalla-stock.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Stock con días de cobertura por insumo y el pedido armado" data-s="5">
               <div class="glare"></div>
               <svg class="cursor" id="cursor" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 1 L2 15 L6 11 L9 17 L11 16 L8 10 L13 10 Z" fill="#F4F1EA" stroke="#17150F" stroke-width="1"/></svg>
             </div>
@@ -392,13 +410,13 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 
     <div class="mobile-tour">
       <div class="wrap" style="display:flex;flex-direction:column;gap:40px">
-        <div><div class="eyebrow"><b>III</b><span>Pantallas reales · datos ficticios</span></div><h2>Así se ve desde adentro</h2></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-inicio-movil.png" width="780" height="1688" alt="Inicio de Pultzo en el teléfono" style="max-width:56%;margin:0 auto"></div><span class="tag">01 · Inicio</span><h3>Tu consultorio, en una sola mirada</h3><ul><li>Trece pacientes hoy, con su horario y su sillón.</li><li>Tres insumos para reponer antes de que falten.</li><li>Una corona que volvió del laboratorio.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-agenda.png" width="2880" height="1800" alt="Agenda de Pultzo"></div><span class="tag">02 · Agenda</span><h3>El día, medido contra el horario real</h3><ul><li>La línea roja marca la hora actual.</li><li>Cuánto sillón libre le queda a cada profesional.</li><li>Recordatorios automáticos veinticuatro y tres horas antes.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-whatsapp.png" width="2880" height="1800" alt="Conversaciones de WhatsApp"></div><span class="tag">03 · WhatsApp · IA</span><h3>El turno se reservó solo</h3><ul><li>El paciente escribe a la hora que quiere.</li><li>El asistente ofrece un hueco real y lo confirma.</li><li>Lo que no resuelve pasa a una persona.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-ficha.png" width="2880" height="1800" alt="Odontograma en arcada"></div><span class="tag">04 · Historia clínica</span><h3>Una boca, tres cosas por hacer</h3><ul><li>El odontograma marca lo que hay y lo que falta.</li><li>Se dicta por voz, sin que la voz salga del consultorio.</li><li>Lo escrito se corrige con una entrada nueva.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-sesiones.png" width="2880" height="1800" alt="Sesiones pendientes"></div><span class="tag">05 · Sesiones pendientes</span><h3>Diez horas de sillón sin agendar</h3><ul><li>Tratamientos en curso que esperan turno.</li><li>Ordenados por quién espera más.</li><li>Un clic y pasan a la agenda.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-stock.png" width="2880" height="1800" alt="Stock"></div><span class="tag">06 · Stock</span><h3>Cuántos días de cobertura quedan</h3><ul><li>Cada práctica hecha descuenta sola.</li><li>Lo que se termina esta semana aparece arriba.</li><li>El pedido sale ya armado.</li></ul></div>
+        <div><div class="eyebrow"><b>III</b><span>Pantallas reales · datos ficticios</span></div><h2>Así se ve desde adentro</h2><p class="pan-hint">Deslizá cada pantalla de costado para recorrerla completa.</p></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-inicio-movil.png" loading="lazy" decoding="async" width="780" height="1688" alt="Inicio de Pultzo en el teléfono" style="max-width:56%;margin:0 auto"></div><span class="tag">01 · Inicio</span><h3>Tu consultorio, en una sola mirada</h3><ul><li>Trece pacientes hoy, con su horario y su sillón.</li><li>Tres insumos para reponer antes de que falten.</li><li>Una corona que volvió del laboratorio.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-agenda.png" srcset="assets/pantalla-agenda-1600.jpg 1600w, assets/pantalla-agenda.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Agenda de Pultzo"></div><span class="tag">02 · Agenda</span><h3>El día, medido contra el horario real</h3><ul><li>La línea roja marca la hora actual.</li><li>Cuánto sillón libre le queda a cada profesional.</li><li>Recordatorios automáticos veinticuatro y tres horas antes.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-whatsapp.png" srcset="assets/pantalla-whatsapp-1600.jpg 1600w, assets/pantalla-whatsapp.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Conversaciones de WhatsApp"></div><span class="tag">03 · WhatsApp · IA</span><h3>El turno se reservó solo</h3><ul><li>El paciente escribe a la hora que quiere.</li><li>El asistente ofrece un hueco real y lo confirma.</li><li>Lo que no resuelve pasa a una persona.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-ficha.png" srcset="assets/pantalla-ficha-1600.jpg 1600w, assets/pantalla-ficha.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Odontograma en arcada"></div><span class="tag">04 · Historia clínica</span><h3>Una boca, tres cosas por hacer</h3><ul><li>El odontograma marca lo que hay y lo que falta.</li><li>Se dicta por voz, sin que la voz salga del consultorio.</li><li>Lo escrito se corrige con una entrada nueva.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-sesiones.png" srcset="assets/pantalla-sesiones-1600.jpg 1600w, assets/pantalla-sesiones.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Sesiones pendientes"></div><span class="tag">05 · Sesiones pendientes</span><h3>Diez horas de sillón sin agendar</h3><ul><li>Tratamientos en curso que esperan turno.</li><li>Ordenados por quién espera más.</li><li>Un clic y pasan a la agenda.</li></ul></div>
+        <div class="mstep"><div class="mframe"><img src="assets/pantalla-stock.png" srcset="assets/pantalla-stock-1600.jpg 1600w, assets/pantalla-stock.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Stock"></div><span class="tag">06 · Stock</span><h3>Cuántos días de cobertura quedan</h3><ul><li>Cada práctica hecha descuenta sola.</li><li>Lo que se termina esta semana aparece arriba.</li><li>El pedido sale ya armado.</li></ul></div>
       </div>
     </div>
   </section>
@@ -604,6 +622,17 @@ a{color:#FF7A55}a:hover{color:#FFA183}
       var r = eras.getBoundingClientRect();
       if (r.top < vh * 0.5 && r.bottom > vh * 0.5 && fYear) fYear.textContent = String(year);
     }
+
+    // Phone tour: each wide screen opens already panned to the part its copy talks about.
+    var panAt = [null, 0.08, 0.55, 0.5, 0.1, 0.15];
+    Array.prototype.forEach.call(root.querySelectorAll('.mobile-tour .mframe'), function (f, i) {
+      var x = panAt[i];
+      if (x == null) return;
+      var img = f.querySelector('img');
+      function place() { f.scrollLeft = Math.max(0, f.scrollWidth - f.clientWidth) * x; }
+      if (img && !img.complete) img.addEventListener('load', place, { once: true });
+      place();
+    });
 
     // Scroll-driven: photo parallax, lid opening
     var pars = Array.prototype.slice.call(root.querySelectorAll('[data-par]'));
