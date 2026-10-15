@@ -33,18 +33,23 @@ a{color:#C8401F}a:hover{color:#8F2B12}
 .it p{color:var(--soft);font-size:17px}
 .it .ia{display:inline-block;margin-left:10px;font-family:var(--t);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-weight:500;vertical-align:middle}
 .foot{padding:clamp(48px,8vh,96px) 0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:24px}
-.foot p{grid-column:1/8;font-size:clamp(19px,1.6vw,24px);line-height:1.5;max-width:40ch}
-.foot p a{font-weight:500;text-decoration:none;border-bottom:1px solid currentColor}
-.foot .fine{grid-column:8/13;font-size:14px;color:var(--soft);font-weight:400;max-width:none;line-height:1.55}
+.foot .ask{grid-column:1/13;display:flex;flex-direction:column;gap:24px}
+.foot .ask p{font-family:var(--d);font-weight:700;font-size:clamp(22px,2.2vw,32px);line-height:1.2;letter-spacing:-0.02em;max-width:32ch}
+.foot .go{display:inline-flex;align-self:flex-start;align-items:center;gap:20px;min-height:84px;padding:0 20px 0 clamp(28px,3vw,44px);border-radius:999px;background:var(--acc);color:#FFF8F0;font-family:var(--d);font-weight:900;font-size:clamp(22px,2.4vw,34px);letter-spacing:-0.025em;text-decoration:none;transition:background .2s}
+.foot .go:hover{background:#8F2B12;color:#FFF8F0}
+.foot .go span{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:#FFF8F0;color:var(--acc)}
+.foot .go svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.4}
+.foot .fine{grid-column:1/9;margin-top:clamp(16px,3vh,32px);font-size:14px;color:var(--soft);font-weight:400;max-width:none;line-height:1.55}
 @media (max-width:900px){
-  .head h1,.head p,.grp h2,.grp .k,.list,.foot p,.foot .fine{grid-column:1/13}
+  .head h1,.head p,.grp h2,.grp .k,.list,.foot .fine{grid-column:1/13}
+  .foot .go{min-height:72px;font-size:20px;gap:14px}
+  .foot .go span{width:44px;height:44px}
   .grp h2{position:static;margin-bottom:8px}
   .it{grid-template-columns:1fr;row-gap:6px}
 }
 </style>
 </head>
 <body>
-
 <main class="fx">
   <div class="wrap">
     <header class="head">
@@ -124,7 +129,10 @@ a{color:#C8401F}a:hover{color:#8F2B12}
     </section>
 
     <footer class="foot">
-      <p>¿Querés verlo con tu agenda y no con una de ejemplo? <a href="index.html#contacto">Pedí una conversación de veinte minutos</a>.</p>
+      <div class="ask">
+        <p>¿Querés verlo con tu agenda y no con una de ejemplo?</p>
+        <a class="go" href="index.html#contacto">Pedí una conversación de veinte minutos<span aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M3 9h12M10 4l5 5-5 5"/></svg></span></a>
+      </div>
       <p class="fine">Pultzo lo opera una agencia que da de alta cada clínica y la acompaña. Los datos se guardan en infraestructura propia y las integraciones de inteligencia artificial se usan con el mínimo necesario, sin entrenamiento sobre tus datos.</p>
     </footer>
   </div>

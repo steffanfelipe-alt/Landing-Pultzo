@@ -29,6 +29,20 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 .folio-rule{width:1px;height:48px;background:currentColor;opacity:.35;margin:4px 0}
 .folio.now .folio-year{color:var(--acc);font-weight:500}
 
+/* reading rail: a thin bar across the top that fills with the page, with a mark per chapter */
+.prog{position:fixed;top:0;left:0;right:0;height:30px;z-index:6;pointer-events:none}
+.prog:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:rgba(244,241,234,.16)}
+.prog-fill{position:absolute;left:0;top:0;width:100%;height:3px;background:var(--acc);transform-origin:0 50%;transform:scaleX(var(--p,0))}
+.prog-marks{list-style:none;margin:0;padding:0}
+.prog-marks li{position:absolute;top:0;padding:10px 0 0 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,234,.45);white-space:nowrap;text-shadow:0 1px 8px rgba(0,0,0,.7);transition:color .3s}
+.prog-marks li:before{content:"";position:absolute;left:0;top:0;width:2px;height:9px;background:currentColor}
+.prog-marks li:last-child{transform:translateX(-100%);padding:10px 8px 0 0}
+.prog-marks li:last-child:before{left:auto;right:0}
+.prog-marks li.done{color:var(--soft)}
+.prog-marks li:not(.cur){font-size:0;padding:0}
+.prog-marks li.cur{color:var(--ink);font-weight:500}
+.prog-marks li.cur:before{background:var(--acc)}
+
 /* full-screen scenes */
 .scene{position:relative;min-height:100vh;display:grid;align-items:end;overflow:hidden;background:#0E0D0B}
 .scene .photo{position:absolute;inset:-8% 0;will-change:transform}
@@ -51,9 +65,41 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 .hero h1 em{font-style:normal;color:var(--acc)}
 .hero .credit{grid-column:1/13;justify-self:start;text-align:left;margin-top:10px}
 
-.sc--papel .photo img{object-position:50% 40%;filter:grayscale(1) contrast(1.05)}
-.sc--planilla .photo img{object-position:50% 22%;filter:grayscale(1) contrast(1.08) brightness(.95)}
-.sc--software .photo img{object-position:60% 40%;filter:saturate(.8)}
+/* I: three eras on one pinned stage. Each photo wipes over the last while the year rolls,
+   then the three settle side by side as a triptych. */
+.eras{position:relative;height:600vh;background:#0E0D0B}
+.eras-stage{position:sticky;top:0;height:100vh;overflow:hidden}
+.era-ph{position:absolute;inset:0;will-change:clip-path}
+.era-ph img{width:100%;height:100%;object-fit:cover;transform:scale(var(--z,1.06));transition:transform .2s linear}
+.era-ph[data-era="1"],.era-ph[data-era="2"]{clip-path:inset(0 0 0 100%)}
+.era-ph--papel img{object-position:50% 40%;filter:grayscale(1) contrast(1.05)}
+.era-ph--planilla img{object-position:50% 22%;filter:grayscale(1) contrast(1.08) brightness(.95)}
+.era-ph--software img{object-position:60% 40%;filter:saturate(.7) brightness(.62)}
+/* triptych: the three photos step back so the closing line reads alone */
+.era-dim{position:absolute;inset:0;z-index:2;background:#0E0D0B;opacity:0;pointer-events:none}
+.era-t[data-t="3"] h2{font-size:clamp(2.6rem,5.6vw,5.4rem);max-width:16ch}
+.era-t h2,.era-t .line,.era-t .sub{text-shadow:0 2px 18px rgba(0,0,0,.55)}
+.seam{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--acc);z-index:2;opacity:0;pointer-events:none}
+.eras .scrim{position:absolute;left:0;right:0;bottom:0;height:72%;background:linear-gradient(to top,rgba(14,13,11,.95) 0%,rgba(14,13,11,.7) 42%,rgba(14,13,11,0) 100%);z-index:2;pointer-events:none}
+.era-year{position:absolute;right:clamp(20px,5vw,80px);top:clamp(24px,8vh,96px);z-index:3;margin:0;font-family:var(--d);font-weight:900;font-size:clamp(96px,15vw,240px);line-height:.8;letter-spacing:-0.06em;font-variant-numeric:tabular-nums;color:var(--ink);text-shadow:0 4px 40px rgba(0,0,0,.5)}
+.tri{position:absolute;top:clamp(48px,7vh,72px);left:0;right:0;z-index:3;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));opacity:0;pointer-events:none}
+.tri li{padding:0 clamp(14px,1.6vw,24px);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-shadow:0 1px 10px rgba(0,0,0,.7)}
+.tri li b{display:block;font-family:var(--d);font-weight:900;font-size:clamp(28px,3vw,44px);letter-spacing:-0.04em;line-height:1;margin-bottom:6px;text-transform:none}
+.eras-copy{position:absolute;left:0;right:0;bottom:0;z-index:3;padding-bottom:clamp(32px,6vh,72px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:clamp(20px,3vh,32px)}
+.era-txts{grid-column:1/12;display:grid}
+.era-t{grid-area:1/1;display:flex;flex-direction:column;gap:16px;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s;pointer-events:none}
+.era-t.on{opacity:1;transform:none}
+.era-t .eyebrow{display:flex;align-items:baseline;gap:18px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.era-t .eyebrow b{font-family:var(--d);font-weight:900;font-size:clamp(40px,5vw,72px);letter-spacing:-0.05em;line-height:.8;color:var(--acc)}
+.era-t h2{font-size:clamp(3rem,8vw,7.6rem)}
+.era-t .line{font-family:var(--d);font-weight:700;font-size:clamp(20px,2vw,30px);line-height:1.22;letter-spacing:-0.02em;max-width:36ch}
+.era-t .sub{font-size:clamp(16px,1.25vw,19px);color:var(--soft);max-width:60ch}
+.era-t .credit{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8E877A}
+.era-line{grid-column:1/13;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.era-line li{display:flex;flex-direction:column;gap:8px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,234,.5);transition:color .3s}
+.era-line li.cur{color:var(--ink);font-weight:500}
+.era-line .bar{display:block;height:3px;background:rgba(244,241,234,.2);border-radius:2px;overflow:hidden}
+.era-line .bar i{display:block;height:100%;background:var(--acc);transform-origin:0 50%;transform:scaleX(var(--f,0))}
 .sc--ahora .photo img{object-position:50% 42%;filter:grayscale(1) contrast(1.12) brightness(.82)}
 .sc--ahora .scrim{height:92%}
 .sc--juntos .photo img{object-position:50% 30%}
@@ -78,8 +124,8 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 
 /* ADENTRO: fixed panel + laptop, scroll-paced (same distance per function) */
 .tour{position:relative;height:calc(100vh * 12)}
-.stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#121110;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;column-gap:clamp(32px,4vw,72px);padding:0 clamp(32px,4vw,80px) 0 clamp(96px,10vw,160px)}
-.panel{position:relative;z-index:3;display:flex;flex-direction:column;gap:clamp(16px,2.4vh,28px);max-width:500px}
+.stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#121110;display:grid;grid-template-columns:minmax(300px,4fr) minmax(0,9fr);align-items:center;column-gap:clamp(28px,3vw,56px);padding:0 clamp(20px,2.5vw,48px) 0 clamp(96px,9vw,150px)}
+.panel{position:relative;z-index:3;display:flex;flex-direction:column;gap:clamp(16px,2.4vh,28px);max-width:420px}
 .panel .eyebrow{display:flex;align-items:baseline;gap:14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
 .panel .eyebrow b{font-family:var(--d);font-weight:900;font-size:34px;letter-spacing:-0.05em;line-height:.8;color:var(--acc)}
 .panel h2{font-size:clamp(1.8rem,3vw,2.8rem)}
@@ -111,10 +157,10 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 .tour-end.on{opacity:1}
 .stage .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(244,241,234,.14) 1px,transparent 1.2px);background-size:28px 28px;mask-image:radial-gradient(ellipse at 50% 50%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 50%,#000 20%,transparent 75%);pointer-events:none}
 .stage .floor{position:absolute;left:0;right:0;bottom:0;height:34vh;background:linear-gradient(to top,#0B0A09,rgba(11,10,9,0));pointer-events:none}
-.laptop{position:relative;z-index:2;width:100%;max-width:880px;justify-self:center;perspective:1800px;transform-style:preserve-3d}
+.laptop{position:relative;z-index:2;width:100%;max-width:min(1240px,calc((100vh - 120px) * 1.6));justify-self:center;perspective:1800px;transform-style:preserve-3d}
 .lid{position:relative;width:100%;aspect-ratio:16/10;background:#1C1A17;border-radius:14px 14px 4px 4px;padding:2.2%;transform-origin:50% 100%;transform:rotateX(calc(-92deg + 92deg * var(--open,0)));box-shadow:0 30px 80px rgba(0,0,0,.6);backface-visibility:hidden}
 .screen{position:relative;width:100%;height:100%;background:#0E0D0B;border-radius:6px;overflow:hidden}
-.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:0;transition:opacity .45s ease}
+.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:0;transition:opacity .45s ease,transform .9s cubic-bezier(.3,.7,.2,1)}
 .screen img.on{opacity:1}
 .screen .glare{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,0) 38%);opacity:calc(1 - var(--open,0));pointer-events:none}
 .base{position:relative;width:106%;left:-3%;height:16px;background:#2A2824;border-radius:0 0 14px 14px;box-shadow:0 18px 40px rgba(0,0,0,.5)}
@@ -146,24 +192,34 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 .colofon .btn{display:inline-flex;align-items:center;gap:12px;min-height:60px;padding:0 30px;background:var(--acc);color:#17150F;font-family:var(--d);font-weight:700;font-size:clamp(18px,1.5vw,22px);letter-spacing:-0.01em;text-decoration:none;border-radius:999px;transition:background .2s}
 .colofon .btn:hover{background:#FFA183;color:#17150F}
 .colofon .btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2}
-.colofon .more{grid-column:8/13;align-self:end;font-size:15px;color:var(--soft)}
-.colofon .more a{text-decoration:none}
+.colofon .all{grid-column:1/13;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px;padding:clamp(28px,4.5vh,52px) clamp(24px,3.2vw,52px);border:1px solid rgba(244,241,234,.35);border-radius:22px;text-decoration:none;color:var(--ink);transition:background .25s,border-color .25s,color .25s}
+.colofon .all:hover{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.colofon .all-k{display:block;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:500;margin-bottom:12px}
+.colofon .all-t{display:block;font-family:var(--d);font-weight:900;font-size:clamp(30px,4vw,60px);letter-spacing:-0.035em;line-height:1;max-width:20ch}
+.colofon .all-go{flex:none;display:grid;place-items:center;width:clamp(64px,6vw,92px);height:clamp(64px,6vw,92px);border-radius:50%;background:var(--acc);color:#17150F}
+.colofon .all-go svg{width:40%;height:40%;stroke:currentColor;fill:none;stroke-width:2.2}
 .colofon .credits{grid-column:1/13;font-size:11px;line-height:1.7;color:#8E877A;border-top:1px solid rgba(244,241,234,.2);padding-top:14px;letter-spacing:.02em}
 .colofon .mast{grid-column:1/13;display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
 .colofon .mast b{font-family:var(--d);font-weight:900;font-size:22px;letter-spacing:-0.04em;color:var(--ink);text-transform:none}
 
 /* keep chapter text clear of the fixed folio */
 @media (min-width:901px){
-  .scene .wrap,.colofon .wrap{padding-left:clamp(110px,11vw,170px)}
+  .scene .wrap,.colofon .wrap,.eras-copy{padding-left:clamp(110px,11vw,170px)}
 }
 @media (max-width:900px){
   .folio{display:none}
+  .prog-marks li.cur{font-size:10px}
   .scene .wrap{padding-top:40vh}
   .scene h2,.hero h1,.scene .line,.scene .sub,.scene .credit{grid-column:1/13}
   .scene .credit{justify-self:start;text-align:left}
   .hero h1{font-size:clamp(2.4rem,11vw,4rem)}
   .scene h2{font-size:clamp(2.4rem,11vw,4rem)}
-  .sc--planilla .photo img{object-position:50% 15%}
+  .era-ph--planilla img{object-position:50% 15%}
+  .era-txts{grid-column:1/13}
+  .era-t h2{font-size:clamp(2.4rem,11vw,4rem)}
+  .era-year{font-size:clamp(72px,24vw,120px);top:clamp(64px,12vh,110px)}
+  .tri li{font-size:10px;letter-spacing:.08em}
+  .tri li b{font-size:22px}
   .people{grid-template-columns:1fr;gap:14px}
   .tour{display:none}
   .mobile-tour{display:flex;flex-direction:column;gap:40px;padding:12vh 0;background:#0A0A0B}
@@ -178,7 +234,7 @@ a{color:#FF7A55}a:hover{color:#FFA183}
   .mobile-tour li{color:var(--soft);font-size:16px;line-height:1.45;padding-left:20px;position:relative}
   .mobile-tour li:before{content:"";position:absolute;left:0;top:.7em;width:10px;height:2px;background:var(--acc)}
   .mobile-tour .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:500}
-  .colofon h2,.colofon .cta,.colofon .more{grid-column:1/13}
+  .colofon h2,.colofon .cta,.colofon .all{grid-column:1/13}
 }
 @media (prefers-reduced-motion:reduce){
   .r{opacity:1;transform:none;transition:none}
@@ -191,7 +247,6 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 </style>
 </head>
 <body>
-
 <article class="pg" id="pg">
 
   <aside class="folio" id="folio" aria-hidden="true">
@@ -200,6 +255,17 @@ a{color:#FF7A55}a:hover{color:#FFA183}
     <span id="folio-title">Portada</span>
     <span class="folio-year" id="folio-year">1937</span>
   </aside>
+
+  <nav class="prog" aria-hidden="true">
+    <span class="prog-fill" id="prog-fill"></span>
+    <ol class="prog-marks" id="prog-marks">
+      <li data-to="eras">Antes</li>
+      <li data-to="primeros">Los primeros</li>
+      <li data-to="adentro">Adentro</li>
+      <li data-to="juntos">Con vos</li>
+      <li data-to="contacto">Contacto</li>
+    </ol>
+  </nav>
 
   <!-- Portada -->
   <header class="scene hero" id="portada" data-ch="" data-title="Portada" data-year="1937">
@@ -212,49 +278,62 @@ a{color:#FF7A55}a:hover{color:#FFA183}
     </div>
   </header>
 
-  <!-- I -->
-  <section class="scene sc--papel" data-ch="I" data-title="El papel" data-year="1946">
-    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/papel-1946.jpg" width="2400" height="1516" alt=""></div>
-    <div class="scrim" aria-hidden="true"></div>
-    <div class="wrap">
-      <div class="eyebrow r"><b>I</b><span>1946 · Mostrador de trámites, Toronto</span></div>
-      <h2 class="r r2">El papel</h2>
-      <p class="line r r3">Durante casi un siglo, administrar un consultorio fue una habilidad manual.</p>
-      <p class="credit r r3">Toronto Telegram · York University · dominio público</p>
+  <!-- I: three eras, one pinned stage -->
+  <section class="eras" id="eras" data-ch="I" data-title="Antes" data-year="1946">
+    <div class="eras-stage">
+      <div class="era-ph era-ph--papel" data-era="0" aria-hidden="true"><img src="assets/papel-1946.jpg" width="2400" height="1516" alt=""></div>
+      <div class="era-ph era-ph--planilla" data-era="1" aria-hidden="true"><img src="assets/planilla-1984.jpg" width="2400" height="3534" alt=""></div>
+      <div class="era-ph era-ph--software" data-era="2" aria-hidden="true"><img src="assets/software-1987.jpg" width="2400" height="1600" alt=""></div>
+      <span class="seam" id="era-seam" aria-hidden="true"></span>
+      <div class="era-dim" id="era-dim" aria-hidden="true"></div>
+      <div class="scrim" aria-hidden="true"></div>
+      <ol class="tri" id="era-tri" aria-hidden="true">
+        <li><b>1946</b>El papel</li>
+        <li><b>1984</b>La planilla</li>
+        <li><b>1987</b>El software</li>
+      </ol>
+      <p class="era-year" id="era-year" aria-hidden="true">1946</p>
+      <div class="wrap eras-copy">
+        <div class="era-txts">
+          <div class="era-t on" data-t="0">
+            <div class="eyebrow"><b>I</b><span>1946 · Mostrador de trámites, Toronto</span></div>
+            <h2>El papel</h2>
+            <p class="line">Durante casi un siglo, administrar un consultorio fue una habilidad manual.</p>
+            <p class="credit">Toronto Telegram · York University · dominio público</p>
+          </div>
+          <div class="era-t" data-t="1">
+            <div class="eyebrow"><b>I</b><span>1984 · Steve Jobs y la Macintosh</span></div>
+            <h2>La planilla</h2>
+            <p class="line">La Macintosh puso una computadora con ventanas y mouse sobre un escritorio común. Cada paciente pasó a ser una fila y cada cobro, una celda.</p>
+            <p class="sub">Nada más se perdía. Pero nada se entendía: la planilla sólo espera que alguien la cargue.</p>
+            <p class="credit">Bernard Gotfryd · Biblioteca del Congreso</p>
+          </div>
+          <div class="era-t" data-t="2">
+            <div class="eyebrow"><b>I</b><span>1987 · Puesto de enfermería con terminal, Estados Unidos</span></div>
+            <h2>El software</h2>
+            <p class="line">El sistema llegó a la clínica. Ordenó la información, pero no la entendió.</p>
+            <p class="credit">Bill Branson · National Cancer Institute · dominio público</p>
+          </div>
+          <div class="era-t" data-t="3">
+            <div class="eyebrow"><b>I</b><span>1946 · 1984 · 1987</span></div>
+            <h2>Cambió la herramienta. El trabajo siguió siendo tuyo.</h2>
+          </div>
+        </div>
+        <ol class="era-line" aria-label="Tres épocas">
+          <li class="cur"><span class="bar"><i></i></span>1946 · El papel</li>
+          <li><span class="bar"><i></i></span>1984 · La planilla</li>
+          <li><span class="bar"><i></i></span>1987 · El software</li>
+        </ol>
+      </div>
     </div>
   </section>
 
-  <!-- II -->
-  <section class="scene sc--planilla" data-ch="II" data-title="La planilla" data-year="1984">
-    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/planilla-1984.jpg" width="2400" height="3534" alt=""></div>
-    <div class="scrim" aria-hidden="true"></div>
-    <div class="wrap">
-      <div class="eyebrow r"><b>II</b><span>1984 · Steve Jobs y la Macintosh</span></div>
-      <h2 class="r r2">La planilla</h2>
-      <p class="line r r3">La Macintosh puso una computadora con ventanas y mouse sobre un escritorio común. Con la planilla de cálculo, cada paciente pasó a ser una fila y cada cobro, una celda.</p>
-      <p class="sub r r3">Nada más se perdía. Pero nada se entendía: la planilla sólo espera que alguien la cargue.</p>
-      <p class="credit r r3">Bernard Gotfryd · Biblioteca del Congreso</p>
-    </div>
-  </section>
-
-  <!-- III -->
-  <section class="scene sc--software" data-ch="III" data-title="El software" data-year="1987">
-    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/software-1987.jpg" width="2400" height="1600" alt=""></div>
-    <div class="scrim" aria-hidden="true"></div>
-    <div class="wrap">
-      <div class="eyebrow r"><b>III</b><span>1987 · Puesto de enfermería con terminal, Estados Unidos</span></div>
-      <h2 class="r r2">El software</h2>
-      <p class="line r r3">El sistema llegó a la clínica. Ordenó la información, pero no la entendió: seguía esperando que alguien cargara el turno, confirmara el pago y recordara al paciente.</p>
-      <p class="credit r r3">Bill Branson · National Cancer Institute · dominio público</p>
-    </div>
-  </section>
-
-  <!-- IV: peak -->
-  <section class="scene sc--ahora" data-ch="IV" data-title="Los primeros" data-year="1903">
+  <!-- II: peak -->
+  <section class="scene sc--ahora" id="primeros" data-ch="II" data-title="Los primeros" data-year="1903">
     <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/primer-vuelo-1903.jpg" width="2400" height="1555" alt=""></div>
     <div class="scrim" aria-hidden="true"></div>
     <div class="wrap">
-      <div class="eyebrow r"><b>IV</b><span>17 de diciembre de 1903 · Kitty Hawk, Carolina del Norte</span></div>
+      <div class="eyebrow r"><b>II</b><span>17 de diciembre de 1903 · Kitty Hawk, Carolina del Norte</span></div>
       <h2 class="r r2">Toda revolución empezó con pocos.</h2>
       <p class="line r r3">Doce segundos en el aire y cinco testigos. Los primeros nunca fueron mayoría: fueron los que llegaron antes, aprendieron antes y se quedaron con la ventaja.</p>
       <p class="sub r r3">En los consultorios está pasando hoy. Mientras unos siguen atendiendo el teléfono, en otros el paciente ya sacó turno por WhatsApp. Sumarse primero es la diferencia.</p>
@@ -263,13 +342,13 @@ a{color:#FF7A55}a:hover{color:#FFA183}
   </section>
 
   <!-- V: laptop over servers -->
-  <section data-ch="V" data-title="Adentro" data-year="now">
+  <section id="adentro" data-ch="III" data-title="Adentro" data-year="now">
     <div class="tour" id="tour">
       <div class="stage">
         <div class="dots" aria-hidden="true"></div>
         <div class="floor" aria-hidden="true"></div>
         <div class="panel">
-          <div class="eyebrow"><b>V</b><span>Pantallas reales de Pultzo · datos ficticios</span></div>
+          <div class="eyebrow"><b>III</b><span>Pantallas reales de Pultzo · datos ficticios</span></div>
           <h2>Así se ve desde adentro</h2>
           <ol class="idx" aria-label="Recorrido">
             <li><span class="bar"><i></i></span>Inicio</li>
@@ -290,7 +369,7 @@ a{color:#FF7A55}a:hover{color:#FFA183}
           </div>
           <div class="tfoot">
             <div class="hint" id="hint"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v11M2.5 7.5 7 12l4.5-4.5"/></svg>Seguí bajando</div>
-            <p class="tour-end" id="tour-end">Eso es estar adentro. Un mostrador en silencio.</p>
+            <p class="tour-end" id="tour-end">Eso es estar adentro. El trabajo ya no te espera.</p>
           </div>
         </div>
         <div class="laptop" id="laptop">
@@ -313,7 +392,7 @@ a{color:#FF7A55}a:hover{color:#FFA183}
 
     <div class="mobile-tour">
       <div class="wrap" style="display:flex;flex-direction:column;gap:40px">
-        <div><div class="eyebrow"><b>V</b><span>Pantallas reales · datos ficticios</span></div><h2>Así se ve desde adentro</h2></div>
+        <div><div class="eyebrow"><b>III</b><span>Pantallas reales · datos ficticios</span></div><h2>Así se ve desde adentro</h2></div>
         <div class="mstep"><div class="mframe"><img src="assets/pantalla-inicio-movil.png" width="780" height="1688" alt="Inicio de Pultzo en el teléfono" style="max-width:56%;margin:0 auto"></div><span class="tag">01 · Inicio</span><h3>Tu consultorio, en una sola mirada</h3><ul><li>Trece pacientes hoy, con su horario y su sillón.</li><li>Tres insumos para reponer antes de que falten.</li><li>Una corona que volvió del laboratorio.</li></ul></div>
         <div class="mstep"><div class="mframe"><img src="assets/pantalla-agenda.png" width="2880" height="1800" alt="Agenda de Pultzo"></div><span class="tag">02 · Agenda</span><h3>El día, medido contra el horario real</h3><ul><li>La línea roja marca la hora actual.</li><li>Cuánto sillón libre le queda a cada profesional.</li><li>Recordatorios automáticos veinticuatro y tres horas antes.</li></ul></div>
         <div class="mstep"><div class="mframe"><img src="assets/pantalla-whatsapp.png" width="2880" height="1800" alt="Conversaciones de WhatsApp"></div><span class="tag">03 · WhatsApp · IA</span><h3>El turno se reservó solo</h3><ul><li>El paciente escribe a la hora que quiere.</li><li>El asistente ofrece un hueco real y lo confirma.</li><li>Lo que no resuelve pasa a una persona.</li></ul></div>
@@ -325,16 +404,16 @@ a{color:#FF7A55}a:hover{color:#FFA183}
   </section>
 
   <!-- VI -->
-  <section class="scene sc--juntos" data-ch="VI" data-title="Con vos" data-year="now">
-    <div class="ghost" aria-hidden="true">VI</div>
+  <section class="scene sc--juntos" id="juntos" data-ch="IV" data-title="Con vos" data-year="now">
+    <div class="ghost" aria-hidden="true">IV</div>
     <div class="wrap">
-      <div class="eyebrow r"><b>VI</b><span>Un servicio acompañado, no un login</span></div>
+      <div class="eyebrow r"><b>IV</b><span>Un servicio acompañado, no un login</span></div>
       <h2 class="r r2">Lo ponemos en marcha con vos.</h2>
       <p class="line r r3">No te damos un usuario y una contraseña para que te arregles. Configuramos tu clínica juntos y seguimos al lado cuando algo no cierra.</p>
       <div class="people r r3">
         <div class="person"><b>Alta acompañada</b><span>Configuramos tu clínica con vos, en una sesión.</span></div>
         <div class="person"><b>Un contacto directo</b><span>La misma persona desde el primer día.</span></div>
-        <div class="person"><b>Mejoras desde tu mostrador</b><span>Lo que tu equipo pide se convierte en producto.</span></div>
+        <div class="person"><b>Mejoras que pide tu equipo</b><span>Lo que tu equipo pide se convierte en producto.</span></div>
       </div>
     </div>
   </section>
@@ -344,7 +423,7 @@ a{color:#FF7A55}a:hover{color:#FFA183}
     <div class="wrap">
       <h2 class="r">Si llegaste hasta acá, ya estás un paso adentro.</h2>
       <div class="cta r r2"><a class="btn" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20pedir%20una%20demo%20de%20Pultzo%20para%20mi%20cl%C3%ADnica.">Pedí una demo<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a><p>Veinte minutos sobre tu consultorio. Te lo mostramos funcionando.</p></div>
-      <p class="more r r2"><a href="funciones.html">Ver todo lo que hace Pultzo, módulo por módulo</a></p>
+      <a class="all r r2" href="funciones.html"><span><span class="all-k">Todo Pultzo, módulo por módulo</span><span class="all-t">Ver todas las funciones</span></span><span class="all-go" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M3 9h12M10 4l5 5-5 5"/></svg></span></a>
       <p class="credits r r3">Fotografías: oficina de registros de la Social Security Board, Baltimore, 1937, Harris &amp; Ewing, Biblioteca del Congreso, dominio público · mostrador de trámites, Toronto, 1946, Toronto Telegram, York University Libraries, dominio público · Steve Jobs y la Macintosh, enero de 1984, Bernard Gotfryd, Biblioteca del Congreso, sin restricciones de copyright conocidas · puesto de enfermería, 1987, Bill Branson, National Cancer Institute, dominio público · primer vuelo de los hermanos Wright, Kitty Hawk, 17 de diciembre de 1903, John T. Daniels, Biblioteca del Congreso, dominio público. Las pantallas de Pultzo muestran datos ficticios.</p>
       <div class="mast r r3"><b>Pultzo</b><span>Gestión odontológica · Argentina · <span id="year">2026</span></span></div>
     </div>
@@ -427,6 +506,15 @@ a{color:#FF7A55}a:hover{color:#FFA183}
       fns.forEach(function (f) { f.classList.toggle('on', f.getAttribute('data-fn') === key); });
       var shot = idx < 0 ? '0' : key;
       shots.forEach(function (img) { img.classList.toggle('on', img.getAttribute('data-s') === shot); });
+      // Push into the part of the screen each item talks about; the cursor spot is the zoom origin,
+      // so the cursor stays on the same pixel while the screen grows around it.
+      var zoom = (idx < 0 || end) ? 1 : [1, 1.14, 1.26, 1.36][sub];
+      shots.forEach(function (img) {
+        var k = img.getAttribute('data-s');
+        var sp = cursorSpots[k] || [50, 50];
+        img.style.transformOrigin = sp[0] + '% ' + sp[1] + '%';
+        img.style.transform = 'scale(' + (k === shot ? zoom : 1) + ')';
+      });
       if (idx >= 0 && fns[idx + 1]) {
         Array.prototype.forEach.call(fns[idx + 1].querySelectorAll('li'), function (li, i) { li.classList.toggle('on', i < sub); });
       }
@@ -469,6 +557,54 @@ a{color:#FF7A55}a:hover{color:#FFA183}
       render(idx, sub, within / FN, end);
     }
 
+    // Eras: one pinned stage, scroll position s in viewport-heights (0 to 5).
+    // 0-0.9 paper holds, 0.9-1.5 the spreadsheet wipes in, 2.4-3.0 the software wipes in,
+    // 3.7-4.4 the three settle into a triptych, then a viewport of reading.
+    var eras = document.getElementById('eras');
+    var eraPh = eras ? Array.prototype.slice.call(eras.querySelectorAll('.era-ph')) : [];
+    var eraTs = eras ? Array.prototype.slice.call(eras.querySelectorAll('.era-t')) : [];
+    var eraLis = eras ? Array.prototype.slice.call(eras.querySelectorAll('.era-line li')) : [];
+    var eraYear = document.getElementById('era-year');
+    var seam = document.getElementById('era-seam');
+    var tri = document.getElementById('era-tri');
+    function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+    function ease(v) { v = clamp01(v); return v * v * (3 - 2 * v); }
+    function seg(s, a, b) { return clamp01((s - a) / (b - a)); }
+    function clip(r, l, g) { return 'inset(0 calc(' + r.toFixed(3) + '% + ' + g + 'px) 0 calc(' + l.toFixed(3) + '% + ' + g + 'px))'; }
+    function erasFrame(vh) {
+      if (!eras || eraPh.length < 3) return;
+      var s = Math.max(0, -eras.getBoundingClientRect().top / vh);
+      var w1 = reduced ? (s >= 1.2 ? 1 : 0) : ease(seg(s, 0.9, 1.5));
+      var w2 = reduced ? (s >= 2.7 ? 1 : 0) : ease(seg(s, 2.4, 3.0));
+      var t = reduced ? (s >= 4.0 ? 1 : 0) : ease(seg(s, 3.7, 4.4));
+      var g = (t * 5).toFixed(1);
+      eraPh[0].style.clipPath = clip(66.667 * t, 0, g);
+      eraPh[1].style.clipPath = clip(33.333 * t, (1 - t) * 100 * (1 - w1) + t * 33.333, g);
+      eraPh[2].style.clipPath = clip(0, (1 - t) * 100 * (1 - w2) + t * 66.667, g);
+      eraPh.forEach(function (p, i) { p.style.setProperty('--z', (1.08 - 0.06 * clamp01(s / 5) - 0.02 * i * t).toFixed(4)); });
+      var edge = (w1 > 0 && w1 < 1) ? 1 - w1 : ((w2 > 0 && w2 < 1) ? 1 - w2 : -1);
+      if (seam) {
+        seam.style.opacity = edge < 0 ? '0' : '1';
+        seam.style.transform = 'translateX(' + (Math.max(0, edge) * eras.clientWidth).toFixed(1) + 'px)';
+      }
+      var year = Math.round(s < 1.95 ? 1946 + 38 * w1 : 1984 + 3 * w2);
+      if (eraYear) { eraYear.textContent = String(year); eraYear.style.opacity = (1 - t).toFixed(3); }
+      if (tri) tri.style.opacity = (t * 0.85).toFixed(3);
+      var dim = document.getElementById('era-dim');
+      if (dim) dim.style.opacity = (t * 0.5).toFixed(3);
+      var eraLine = eras.querySelector('.era-line');
+      if (eraLine) eraLine.style.opacity = (1 - t).toFixed(3);
+      var active = s < 1.2 ? 0 : (s < 2.7 ? 1 : (s < 4.0 ? 2 : 3));
+      eraTs.forEach(function (el, i) { el.classList.toggle('on', i === active); });
+      var fills = [seg(s, 0, 1.5), seg(s, 1.5, 3.0), seg(s, 3.0, 4.4)];
+      eraLis.forEach(function (li, i) {
+        li.querySelector('i').style.setProperty('--f', fills[i].toFixed(3));
+        li.classList.toggle('cur', active === i || (active === 3));
+      });
+      var r = eras.getBoundingClientRect();
+      if (r.top < vh * 0.5 && r.bottom > vh * 0.5 && fYear) fYear.textContent = String(year);
+    }
+
     // Scroll-driven: photo parallax, lid opening
     var pars = Array.prototype.slice.call(root.querySelectorAll('[data-par]'));
     var ticking = false;
@@ -489,7 +625,30 @@ a{color:#FF7A55}a:hover{color:#FFA183}
       root.querySelectorAll('.r:not(.in)').forEach(function (el) {
         if (el.getBoundingClientRect().top < vh * 0.95) el.classList.add('in');
       });
+      erasFrame(vh);
       tourFrame(vh);
+      progFrame(vh);
+    }
+    // Reading rail: fill follows the whole page; each mark sits where its chapter starts.
+    var progFill = document.getElementById('prog-fill');
+    var progMarks = Array.prototype.slice.call(root.querySelectorAll('#prog-marks li'));
+    function progFrame(vh) {
+      var rr = root.getBoundingClientRect();
+      var span = Math.max(1, rr.height - vh);
+      var p = clamp01(-rr.top / span);
+      if (progFill) progFill.style.setProperty('--p', p.toFixed(4));
+      var cur = -1;
+      var at = progMarks.map(function (li, i) {
+        var el = document.getElementById(li.getAttribute('data-to'));
+        var f = el ? clamp01((el.getBoundingClientRect().top - rr.top) / span) : 1;
+        if (f <= p + 0.002) cur = i;
+        return f;
+      });
+      progMarks.forEach(function (li, i) {
+        li.style.left = (at[i] * 100).toFixed(2) + '%';
+        li.classList.toggle('cur', i === cur);
+        li.classList.toggle('done', i < cur);
+      });
     }
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
     self._onScroll = onScroll;
