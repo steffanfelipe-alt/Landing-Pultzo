@@ -2,694 +2,2268 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>La revolución ya está acá</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pultzo · Gestión odontológica con IA</title>
+<meta name="description" content="Pultzo contesta WhatsApp, confirma turnos y te avisa lo que falta en tu clínica odontológica. Pedí una demo de 20 minutos.">
 <meta name="theme-color" content="#0E0D0B">
-<meta name="description" content="Pultzo: gestión odontológica con inteligencia artificial. Agenda, WhatsApp, historia clínica y stock en un solo lugar.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,700;100,900&amp;family=Geist:wght@400;500&amp;display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,700;100,900&amp;family=Geist:wght@400;500&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
 <style>
-body{margin:0}
-a{color:#FF7A55}a:hover{color:#FFA183}
-.pg{
-  --ink:#F4F1EA;--soft:#C9C2B4;--acc:#FF7A55;--ground:#0E0D0B;
-  --d:"Archivo",system-ui,sans-serif;--t:"Geist",system-ui,sans-serif;
-  font-family:var(--t);background:var(--ground);color:var(--ink);
-  font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased;position:relative;overflow:clip;
+/* ============================================================================
+   scrollcraft.css: the taste floor
+   ----------------------------------------------------------------------------
+   Two layers, and the split matters:
+
+     TOKENS   what you override per brand. Colour roles, the type ramp, the
+              spacing scale, elevation, motion. A brand is ~12 values.
+     DEVICES  what the engine drives. Do not restyle these to taste; they are
+              the mechanism. Style your own markup instead.
+
+   Nothing here draws a "component". There are no card, badge, or pill classes,
+   because a stylesheet that ships those is how every page built on it ends up
+   with the same shapes. You get a floor and a vocabulary; the composition is
+   yours.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- tokens -- */
+:root {
+  /* --- colour roles. Override these six and the page is rebranded. -------- */
+  --sc-canvas:      #08090b;   /* the page ground. Drift interpolates this.   */
+  --sc-surface:     #101217;   /* anything raised off the ground             */
+  --sc-ink:         #f4f2ef;   /* primary text                               */
+  --sc-ink-soft:    #9a9ba1;   /* secondary text. Tinted, never flat gray.   */
+  --sc-accent:      #d8ff3e;   /* ONE accent. It owns a region, not confetti. */
+  --sc-accent-ink:  #08090b;   /* text that sits on the accent               */
+
+  --sc-hairline:    color-mix(in oklab, var(--sc-ink) 12%, transparent);
+  --sc-hairline-strong: color-mix(in oklab, var(--sc-ink) 22%, transparent);
+
+  /* --- type. Two families max. Display carries voice, text carries prose. - */
+  --sc-font-display: "Instrument Sans", "Geist", system-ui, sans-serif;
+  --sc-font-text:    "Geist", system-ui, sans-serif;
+  --sc-font-mono:    "Geist Mono", ui-monospace, monospace;
+
+  /* Fluid ramp. Tracking tightens as size grows because a face set at 6rem
+     with 0 tracking reads loose; this is optical correction, not decoration. */
+  --sc-t-xs:   clamp(0.75rem, 0.72rem + 0.15vw, 0.82rem);
+  --sc-t-sm:   clamp(0.875rem, 0.84rem + 0.18vw, 0.95rem);
+  --sc-t-base: clamp(1rem, 0.96rem + 0.22vw, 1.125rem);
+  --sc-t-lg:   clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem);
+  --sc-t-xl:   clamp(1.6rem, 1.35rem + 1.2vw, 2.25rem);
+  --sc-t-2xl:  clamp(2.1rem, 1.6rem + 2.4vw, 3.4rem);
+  --sc-t-3xl:  clamp(2.8rem, 1.9rem + 4.2vw, 5rem);
+  --sc-t-4xl:  clamp(3.4rem, 1.9rem + 6.6vw, 7.5rem);
+
+  --sc-track-tight:  -0.035em;
+  --sc-track-snug:   -0.02em;
+  --sc-track-normal: -0.005em;
+  --sc-track-wide:    0.08em;
+
+  --sc-leading-none: 0.94;
+  --sc-leading-tight: 1.06;
+  --sc-leading-body: 1.62;
+
+  --sc-measure: 62ch;
+
+  /* --- space. 4px base: the useful middle steps an 8-only scale misses. --- */
+  --sc-1: 0.25rem;  --sc-2: 0.5rem;   --sc-3: 0.75rem;  --sc-4: 1rem;
+  --sc-5: 1.5rem;   --sc-6: 2rem;     --sc-7: 3rem;     --sc-8: 4rem;
+  --sc-9: 6rem;     --sc-10: 8rem;    --sc-11: 12rem;
+
+  /* Section rhythm is fluid so a phone doesn't inherit desktop air. */
+  --sc-section: clamp(4.5rem, 9vw, 11rem);
+  --sc-gutter:  clamp(1.25rem, 5vw, 5.5rem);
+  --sc-maxw:    82rem;
+
+  /* --- radius. Pick one scale for the page and hold it. ------------------- */
+  --sc-r-sm: 6px;  --sc-r-md: 12px;  --sc-r-lg: 20px;  --sc-r-pill: 999px;
+
+  /* --- elevation. Every shadow has an offset AND a soft blur, and is tinted
+         to the canvas hue. A zero-offset coloured halo is decoration, not
+         depth, so there isn't one here. ---------------------------------- */
+  --sc-shadow-color: 220 40% 2%;
+  --sc-e1: 0 1px 2px hsl(var(--sc-shadow-color) / 0.28),
+           0 2px 6px -1px hsl(var(--sc-shadow-color) / 0.20);
+  --sc-e2: 0 2px 4px hsl(var(--sc-shadow-color) / 0.24),
+           0 8px 18px -4px hsl(var(--sc-shadow-color) / 0.30);
+  --sc-e3: 0 4px 8px hsl(var(--sc-shadow-color) / 0.22),
+           0 18px 40px -8px hsl(var(--sc-shadow-color) / 0.38),
+           0 48px 90px -24px hsl(var(--sc-shadow-color) / 0.30);
+
+  /* Edge light: a 1px top highlight sells a raised surface better than any
+     amount of blur, because real raised things catch light on their lip. */
+  --sc-edge: inset 0 1px 0 color-mix(in oklab, var(--sc-ink) 10%, transparent);
+
+  /* --- motion. Built-in CSS easings are too weak for UI. ------------------ */
+  --sc-ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+  --sc-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --sc-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --sc-d-fast: 160ms;  --sc-d-base: 240ms;  --sc-d-slow: 420ms;
+
+  --sc-z-stage: 1; --sc-z-copy: 20; --sc-z-chrome: 60;
 }
-.pg *{box-sizing:border-box}
-.pg h1,.pg h2,.pg h3{font-family:var(--d);font-weight:900;letter-spacing:-0.03em;line-height:0.94;margin:0;text-wrap:balance}
-.pg p{margin:0;text-wrap:pretty}
-.pg img{display:block}
-.wrap{max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,80px);width:100%}
 
-/* folio */
-.folio{position:fixed;left:clamp(12px,2.2vw,32px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;font-family:var(--d);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;z-index:5;pointer-events:none;color:var(--ink);text-shadow:0 1px 8px rgba(0,0,0,.5)}
-.folio-num{font-size:40px;font-weight:900;letter-spacing:-0.04em;line-height:1;font-variant-numeric:tabular-nums}
-.folio-year{font-variant-numeric:tabular-nums;font-size:13px;letter-spacing:0.08em}
-.folio-rule{width:1px;height:48px;background:currentColor;opacity:.35;margin:4px 0}
-.folio.now .folio-year{color:var(--acc);font-weight:500}
+/* --------------------------------------------------------------- reset -- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
-/* reading rail: a thin bar across the top that fills with the page, with a mark per chapter */
-.prog{position:fixed;top:0;left:0;right:0;height:30px;z-index:6;pointer-events:none}
-.prog:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:rgba(244,241,234,.16)}
-.prog-fill{position:absolute;left:0;top:0;width:100%;height:3px;background:var(--acc);transform-origin:0 50%;transform:scaleX(var(--p,0))}
-.prog-marks{list-style:none;margin:0;padding:0}
-.prog-marks li{position:absolute;top:0;padding:10px 0 0 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,234,.45);white-space:nowrap;text-shadow:0 1px 8px rgba(0,0,0,.7);transition:color .3s}
-.prog-marks li:before{content:"";position:absolute;left:0;top:0;width:2px;height:9px;background:currentColor}
-.prog-marks li:last-child{transform:translateX(-100%);padding:10px 8px 0 0}
-.prog-marks li:last-child:before{left:auto;right:0}
-.prog-marks li.done{color:var(--soft)}
-.prog-marks li:not(.cur){font-size:0;padding:0}
-.prog-marks li.cur{color:var(--ink);font-weight:500}
-.prog-marks li.cur:before{background:var(--acc)}
+body {
+  margin: 0;
+  background: var(--sc-canvas);
+  color: var(--sc-ink);
+  font-family: var(--sc-font-text);
+  font-size: var(--sc-t-base);
+  line-height: var(--sc-leading-body);
+  letter-spacing: var(--sc-track-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-synthesis-weight: none;
+  overflow-x: clip;
+}
+img, video, canvas, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; }
 
-/* full-screen scenes */
-.scene{position:relative;min-height:100vh;display:grid;align-items:end;overflow:hidden;background:#0E0D0B}
-.scene .photo{position:absolute;inset:-8% 0;will-change:transform}
-.scene .photo img{width:100%;height:100%;object-fit:cover}
-.scene .scrim{position:absolute;left:0;right:0;bottom:0;height:70%;background:linear-gradient(to top,rgba(14,13,11,.94) 0%,rgba(14,13,11,.7) 40%,rgba(14,13,11,0) 100%);pointer-events:none}
-.scene .wrap{position:relative;z-index:2;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:18px;padding-bottom:clamp(40px,7vh,88px);padding-top:16vh}
-.scene .eyebrow{grid-column:1/13;display:flex;align-items:baseline;gap:18px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
-.scene .eyebrow b{font-family:var(--d);font-weight:900;font-size:clamp(40px,5vw,72px);letter-spacing:-0.05em;line-height:.8;color:var(--acc)}
-.scene h2{grid-column:1/11;font-size:clamp(3rem,8vw,7.6rem)}
-.scene .line{grid-column:1/9;font-family:var(--d);font-weight:700;font-size:clamp(20px,2vw,30px);line-height:1.22;letter-spacing:-0.02em;max-width:34ch;color:var(--ink)}
-.scene .sub{grid-column:1/9;font-size:clamp(16px,1.25vw,19px);color:var(--soft);max-width:60ch}
-.scene .credit{grid-column:9/13;justify-self:end;align-self:end;text-align:right;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8E877A}
+/* ------------------------------------------------- the browser surfaces --
+   The parts you did not draw still carry the design. Selection, caret, focus
+   ring, scrollbar and tabular numerals all ship with defaults that belong to no
+   design system. Theming them is the cheapest signal that a page was built
+   rather than assembled, and it is the step that gets skipped most reliably. */
+::selection { background: var(--sc-accent); color: var(--sc-accent-ink); }
+:root { caret-color: var(--sc-accent); accent-color: var(--sc-accent); }
+:focus-visible {
+  outline: 2px solid var(--sc-accent);
+  outline-offset: 3px;
+  border-radius: var(--sc-r-sm);
+}
+:where(a) { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
+@supports (scrollbar-color: auto) {
+  html { scrollbar-color: color-mix(in oklab, var(--sc-ink) 26%, transparent) transparent; scrollbar-width: thin; }
+}
+:where(table, .sc-nums, [data-sc-count]) { font-variant-numeric: tabular-nums; }
 
-/* hero */
-.hero .photo img{object-position:60% 40%;filter:grayscale(1) contrast(1.05) brightness(.8)}
-.hero .mark{grid-column:1/13;display:flex;flex-direction:column;gap:6px;margin-bottom:6vh}
-.hero .mark span{font-family:var(--d);font-weight:900;font-size:clamp(40px,4.6vw,64px);letter-spacing:-0.045em;line-height:.9}
-.hero .mark small{font-size:clamp(15px,1.3vw,19px);letter-spacing:.16em;text-transform:uppercase;color:var(--soft);font-weight:500}
-.hero h1{grid-column:1/12;font-size:clamp(3rem,8.6vw,8.4rem);letter-spacing:-0.035em}
-.hero h1 em{font-style:normal;color:var(--acc)}
-.hero .credit{grid-column:1/13;justify-self:start;text-align:left;margin-top:10px}
+/* ----------------------------------------------------------- typography -- */
+.sc-display {
+  font-family: var(--sc-font-display);
+  font-weight: 500;
+  line-height: var(--sc-leading-none);
+  letter-spacing: var(--sc-track-tight);
+  text-wrap: balance;
+  margin: 0;
+}
+.sc-display--xl { font-size: var(--sc-t-4xl); }
+.sc-display--lg { font-size: var(--sc-t-3xl); }
+.sc-display--md { font-size: var(--sc-t-2xl); letter-spacing: var(--sc-track-snug); }
+.sc-lede {
+  font-size: var(--sc-t-lg);
+  line-height: 1.44;
+  letter-spacing: var(--sc-track-snug);
+  color: var(--sc-ink);
+  max-width: 46ch;
+  text-wrap: pretty;
+  margin: 0;
+}
+.sc-body { max-width: var(--sc-measure); color: var(--sc-ink-soft); text-wrap: pretty; margin: 0; }
+.sc-label {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-t-xs);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-ink-soft);
+}
 
-/* I: three eras on one pinned stage. Each photo wipes over the last while the year rolls,
-   then the three settle side by side as a triptych. */
-.eras{position:relative;height:600vh;background:#0E0D0B}
-.eras-stage{position:sticky;top:0;height:100vh;overflow:hidden}
-.era-ph{position:absolute;inset:0;will-change:clip-path}
-.era-ph img{width:100%;height:100%;object-fit:cover;transform:scale(var(--z,1.06));transition:transform .2s linear}
-.era-ph[data-era="1"],.era-ph[data-era="2"]{clip-path:inset(0 0 0 100%)}
-.era-ph--papel img{object-position:50% 40%;filter:grayscale(1) contrast(1.05)}
-.era-ph--planilla img{object-position:50% 22%;filter:grayscale(1) contrast(1.08) brightness(.95)}
-.era-ph--software img{object-position:60% 40%;filter:saturate(.7) brightness(.62)}
-/* triptych: the three photos step back so the closing line reads alone */
-.era-dim{position:absolute;inset:0;z-index:2;background:#0E0D0B;opacity:0;pointer-events:none}
-.era-t[data-t="3"] h2{font-size:clamp(2.6rem,5.6vw,5.4rem);max-width:16ch}
-.era-t h2,.era-t .line,.era-t .sub{text-shadow:0 2px 18px rgba(0,0,0,.55)}
-.seam{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--acc);z-index:2;opacity:0;pointer-events:none}
-.eras .scrim{position:absolute;left:0;right:0;bottom:0;height:72%;background:linear-gradient(to top,rgba(14,13,11,.95) 0%,rgba(14,13,11,.7) 42%,rgba(14,13,11,0) 100%);z-index:2;pointer-events:none}
-.era-year{position:absolute;right:clamp(20px,5vw,80px);top:clamp(24px,8vh,96px);z-index:3;margin:0;font-family:var(--d);font-weight:900;font-size:clamp(96px,15vw,240px);line-height:.8;letter-spacing:-0.06em;font-variant-numeric:tabular-nums;color:var(--ink);text-shadow:0 4px 40px rgba(0,0,0,.5)}
-.tri{position:absolute;top:clamp(48px,7vh,72px);left:0;right:0;z-index:3;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));opacity:0;pointer-events:none}
-.tri li{padding:0 clamp(14px,1.6vw,24px);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-shadow:0 1px 10px rgba(0,0,0,.7)}
-.tri li b{display:block;font-family:var(--d);font-weight:900;font-size:clamp(28px,3vw,44px);letter-spacing:-0.04em;line-height:1;margin-bottom:6px;text-transform:none}
-.eras-copy{position:absolute;left:0;right:0;bottom:0;z-index:3;padding-bottom:clamp(32px,6vh,72px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:clamp(20px,3vh,32px)}
-.era-txts{grid-column:1/12;display:grid}
-.era-t{grid-area:1/1;display:flex;flex-direction:column;gap:16px;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s;pointer-events:none}
-.era-t.on{opacity:1;transform:none}
-.era-t .eyebrow{display:flex;align-items:baseline;gap:18px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
-.era-t .eyebrow b{font-family:var(--d);font-weight:900;font-size:clamp(40px,5vw,72px);letter-spacing:-0.05em;line-height:.8;color:var(--acc)}
-.era-t h2{font-size:clamp(3rem,8vw,7.6rem)}
-.era-t .line{font-family:var(--d);font-weight:700;font-size:clamp(20px,2vw,30px);line-height:1.22;letter-spacing:-0.02em;max-width:36ch}
-.era-t .sub{font-size:clamp(16px,1.25vw,19px);color:var(--soft);max-width:60ch}
-.era-t .credit{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8E877A}
-.era-line{grid-column:1/13;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.era-line li{display:flex;flex-direction:column;gap:8px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,234,.5);transition:color .3s}
-.era-line li.cur{color:var(--ink);font-weight:500}
-.era-line .bar{display:block;height:3px;background:rgba(244,241,234,.2);border-radius:2px;overflow:hidden}
-.era-line .bar i{display:block;height:100%;background:var(--acc);transform-origin:0 50%;transform:scaleX(var(--f,0))}
-.sc--ahora .photo img{object-position:50% 42%;filter:grayscale(1) contrast(1.12) brightness(.82)}
-.sc--ahora .scrim{height:92%}
-.sc--juntos .photo img{object-position:50% 30%}
+/* ---------------------------------------------------------------- layout -- */
+.sc-wrap { width: 100%; max-width: var(--sc-maxw); margin-inline: auto; padding-inline: var(--sc-gutter); }
+.sc-section { padding-block: var(--sc-section); }
+/* More space above a heading than below it: the gap belongs to the boundary,
+   not to the pair. */
+.sc-stack > * + * { margin-top: var(--sc-4); }
+.sc-stack > :is(h1,h2,h3) { margin-top: var(--sc-7); }
+.sc-stack > :is(h1,h2,h3):first-child { margin-top: 0; }
+.sc-rule { height: 1px; border: 0; background: var(--sc-hairline); margin: 0; }
 
-/* ahora: clock */
-.clock{grid-column:1/13;font-family:var(--d);font-weight:900;font-size:clamp(72px,13vw,210px);line-height:.88;letter-spacing:-0.06em;font-variant-numeric:tabular-nums;margin-bottom:10px}
-.clock .sec{color:var(--acc)}
-.clock-date{grid-column:1/13;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
-.pulse{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--acc);margin-right:10px;vertical-align:middle;animation:pulse 1s steps(2,end) infinite}
-@keyframes pulse{50%{opacity:.25}}
+/* =============================================================== DEVICES ==
+   Driven by the engine. Restyle your own markup, not these.                */
 
-/* juntos: three short promises */
-.people{grid-column:1/13;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:12px;border-top:1px solid rgba(244,241,234,.25);padding-top:18px}
-.person{display:flex;flex-direction:column;gap:4px}
-.person b{font-family:var(--d);font-weight:700;font-size:19px;letter-spacing:-0.02em}
-.person span{color:var(--soft);font-size:15px;line-height:1.45}
+.sc-act--pinned { position: relative; }
+.sc-stage {
+  position: sticky; top: 0;
+  height: 100vh; height: 100svh;
+  overflow: clip;
+  z-index: var(--sc-z-stage);
+}
 
-/* reveals */
-.r{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
-.r.in{opacity:1;transform:none}
-.r2{transition-delay:.1s}.r3{transition-delay:.2s}
+/* scrub / sequence media */
+.sc-stage :is(video[data-sc-scrub], canvas[data-sc-sequence], .sc-stage__poster) {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+video[data-sc-scrub] { opacity: 0; transition: opacity 380ms var(--sc-ease-out); }
+.sc-has-clip video[data-sc-scrub] { opacity: 1; }
+/* The poster is a live frame-holder, not a placeholder: it stays up until a
+   real video frame has painted, which is what stops the blank-stage flash. */
+.sc-stage__poster { z-index: 0; transition: opacity 380ms var(--sc-ease-out); }
+.sc-has-clip .sc-stage__poster { opacity: 0; }
 
-/* ADENTRO: fixed panel + laptop, scroll-paced (same distance per function) */
-.tour{position:relative;height:calc(100vh * 12)}
-.stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#121110;display:grid;grid-template-columns:minmax(300px,4fr) minmax(0,9fr);align-items:center;column-gap:clamp(28px,3vw,56px);padding:0 clamp(20px,2.5vw,48px) 0 clamp(96px,9vw,150px)}
-.panel{position:relative;z-index:3;display:flex;flex-direction:column;gap:clamp(16px,2.4vh,28px);max-width:420px}
-.panel .eyebrow{display:flex;align-items:baseline;gap:14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
-.panel .eyebrow b{font-family:var(--d);font-weight:900;font-size:34px;letter-spacing:-0.05em;line-height:.8;color:var(--acc)}
-.panel h2{font-size:clamp(1.8rem,3vw,2.8rem)}
-.idx{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
-.idx li{display:flex;flex-direction:column;gap:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,234,.4);transition:color .3s;white-space:nowrap}
-.idx .bar{display:block;height:3px;background:rgba(244,241,234,.16);border-radius:2px;overflow:hidden}
-.idx .bar i{display:block;height:100%;background:var(--acc);transform-origin:0 50%;transform:scaleX(var(--f,0));transition:transform .15s linear}
-@media (max-width:1280px){.idx{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:12px}}
-.idx li.done{color:var(--soft)}
-.idx li.cur{color:var(--ink);font-weight:500}
-.fns{display:grid;min-height:min(48vh,400px)}
-.fn{grid-area:1/1;display:flex;flex-direction:column;gap:14px;opacity:0;transform:translateY(12px);transition:opacity .45s,transform .45s;pointer-events:none}
-.fn.on{opacity:1;transform:none}
-.fn .tag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:500;font-variant-numeric:tabular-nums}
-.fn h3{font-size:clamp(28px,2.6vw,42px);font-weight:900;letter-spacing:-0.03em;line-height:1.02;color:#FFFFFF}
-.fn .intro{font-size:clamp(17px,1.3vw,20px);color:#E6E0D4;line-height:1.5;max-width:38ch}
-.fn ul{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;border-top:1px solid rgba(244,241,234,.14)}
-.fn li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start;padding:14px 0;border-bottom:1px solid rgba(244,241,234,.14);font-size:clamp(16px,1.2vw,19px);line-height:1.4;color:#E6E0D4;opacity:.22;transform:translateX(-6px);transition:opacity .4s,transform .4s}
-.fn li.on{opacity:1;transform:none}
-.fn li .n{font-family:var(--d);font-weight:700;font-size:13px;color:var(--soft);padding-top:3px;font-variant-numeric:tabular-nums}
-.fn li.on .n{color:var(--acc)}
-.tfoot{display:grid;min-height:2.6em}
-.tfoot>*{grid-area:1/1}
-.hint{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);transition:opacity .4s}
-.hint svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;animation:nudge 1.6s ease-in-out infinite}
-@keyframes nudge{50%{transform:translateY(4px)}}
-.hint.off{opacity:0}
-.tour-end{font-family:var(--d);font-weight:900;font-size:clamp(1.3rem,2vw,1.9rem);letter-spacing:-0.03em;line-height:1.1;opacity:0;transition:opacity .5s}
-.tour-end.on{opacity:1}
-.stage .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(244,241,234,.14) 1px,transparent 1.2px);background-size:28px 28px;mask-image:radial-gradient(ellipse at 50% 50%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 50%,#000 20%,transparent 75%);pointer-events:none}
-.stage .floor{position:absolute;left:0;right:0;bottom:0;height:34vh;background:linear-gradient(to top,#0B0A09,rgba(11,10,9,0));pointer-events:none}
-.laptop{position:relative;z-index:2;width:100%;max-width:min(1240px,calc((100vh - 120px) * 1.6));justify-self:center;perspective:1800px;transform-style:preserve-3d}
-.lid{position:relative;width:100%;aspect-ratio:16/10;background:#1C1A17;border-radius:14px 14px 4px 4px;padding:2.2%;transform-origin:50% 100%;transform:rotateX(calc(-92deg + 92deg * var(--open,0)));box-shadow:0 30px 80px rgba(0,0,0,.6);backface-visibility:hidden}
-.screen{position:relative;width:100%;height:100%;background:#0E0D0B;border-radius:6px;overflow:hidden}
-.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:0;transition:opacity .45s ease,transform .9s cubic-bezier(.3,.7,.2,1)}
-.screen img.on{opacity:1}
-.screen .glare{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,0) 38%);opacity:calc(1 - var(--open,0));pointer-events:none}
-.base{position:relative;width:106%;left:-3%;height:16px;background:#2A2824;border-radius:0 0 14px 14px;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+/* A scrim only where text sits. A full-frame darkening layer flattens the
+   image everywhere to fix contrast in one corner. */
+.sc-scrim {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: linear-gradient(
+    var(--sc-scrim-angle, 180deg),
+    color-mix(in oklab, var(--sc-canvas) var(--sc-scrim-a, 78%), transparent) 0%,
+    color-mix(in oklab, var(--sc-canvas) 30%, transparent) 42%,
+    transparent 68%);
+}
+/* Point the scrim at the copy. A scrim gradient that darkens the top while the
+   copy sits at the bottom fixes contrast nowhere and flattens the image
+   everywhere, which is the most common way text-over-video goes wrong. */
+.sc-scrim--bottom { --sc-scrim-angle: 0deg; }
+.sc-scrim--left   { --sc-scrim-angle: 90deg; }
+.sc-scrim--right  { --sc-scrim-angle: 270deg; }
+
+/* Corner scrims, for copy anchored to a corner. An edge gradient has to darken
+   a whole band across the frame to cover one corner; a corner gradient puts the
+   density where the text is and leaves the rest of the image alone. Pair with
+   .sc-copy--lead / .sc-copy--trail. */
+.sc-scrim--lead {
+  background: linear-gradient(to top right,
+    color-mix(in oklab, var(--sc-canvas) 94%, transparent) 0%,
+    color-mix(in oklab, var(--sc-canvas) 72%, transparent) 30%,
+    color-mix(in oklab, var(--sc-canvas) 30%, transparent) 52%,
+    transparent 72%);
+}
+.sc-scrim--trail {
+  background: linear-gradient(to top left,
+    color-mix(in oklab, var(--sc-canvas) 94%, transparent) 0%,
+    color-mix(in oklab, var(--sc-canvas) 72%, transparent) 30%,
+    color-mix(in oklab, var(--sc-canvas) 30%, transparent) 52%,
+    transparent 72%);
+}
+/* A band across the bottom, for copy that spans the full width of the frame.
+   That is what both corner anchors become below 860px, and it is also the right
+   shape whenever the copy block is wider than a corner. */
+.sc-scrim--band {
+  background: linear-gradient(to top,
+    color-mix(in oklab, var(--sc-canvas) 94%, transparent) 0%,
+    color-mix(in oklab, var(--sc-canvas) 74%, transparent) 22%,
+    color-mix(in oklab, var(--sc-canvas) 30%, transparent) 42%,
+    transparent 58%);
+}
+.sc-scrim--vignette {
+  background: radial-gradient(120% 90% at 50% 45%, transparent 40%,
+              color-mix(in oklab, var(--sc-canvas) 70%, transparent) 100%);
+}
+
+/* copy over a stage.
+   max-width is in rem, never ch. A `ch` on this container resolves against the
+   CONTAINER's font-size (body size), not the display size of the heading inside
+   it, so `max-width: 20ch` here silently produces a ~180px column and wraps a
+   hero headline to six lines. Set a ch measure on the text element itself. */
+.sc-copy {
+  position: absolute; z-index: var(--sc-z-copy);
+  inset-inline: var(--sc-gutter);
+  max-width: min(46rem, 76vw);
+  will-change: opacity, transform;
+}
+.sc-copy--lead   { left: var(--sc-gutter); bottom: clamp(3rem, 12vh, 9rem); }
+/* inset-inline FIRST. It is the shorthand for left+right, so declaring it after
+   `left: 50%` resets left to auto and the block drifts off the left edge. */
+.sc-copy--center { inset-inline: auto; left: 50%; top: 50%; translate: -50% -50%; text-align: center; }
+.sc-copy--trail  { inset-inline: auto; right: var(--sc-gutter); bottom: clamp(3rem, 12vh, 9rem); text-align: right; }
+
+/* cue defaults: the engine writes opacity/transform inline, these are the
+   pre-paint state so nothing flashes before the first read() */
+[data-sc-cue] { opacity: 0; will-change: opacity, transform; }
+.sc-ready [data-sc-cue] { transition: none; }
+
+/* kinetic split */
+.sc-split { display: inline-block; overflow: hidden; vertical-align: top; }
+/* Descenders live below the baseline; a line mask clipped to the line box eats
+   the tails off g, y, p, j. The padding buys them room back. */
+.sc-split--line { display: block; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+.sc-split__i { display: inline-block; will-change: transform, opacity; }
+.sc-is-split { opacity: 1 !important; }
+
+/* horizontal rail */
+[data-sc-pan] { display: flex; will-change: transform; }
+
+/* reveal + parallax */
+[data-sc-reveal] { will-change: clip-path; }
+[data-sc-parallax] { will-change: transform; }
+
+/* flow reveal (fires once) */
+[data-sc-in], [data-sc-stagger] > * {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition: opacity 620ms var(--sc-ease-out), transform 620ms var(--sc-ease-out);
+}
+[data-sc-in].sc-in, [data-sc-stagger] > .sc-in { opacity: 1; transform: none; }
+
+/* pointer devices */
+[data-sc-tilt] { transform-style: preserve-3d; will-change: transform; }
+[data-sc-magnet] { will-change: transform; }
+/* isolation always; position only if nothing more specific already set it.
+   Written with :where() (zero specificity) on purpose: a plain `position:
+   relative` here has the same weight as `.sc-stage` and, being later in the
+   file, silently wins. A stage carrying both attributes then stops being
+   sticky and the whole act scrolls away instead of pinning. */
+[data-sc-spotlight] { isolation: isolate; }
+:where([data-sc-spotlight]) { position: relative; }
+[data-sc-spotlight]::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: radial-gradient(
+    28rem 28rem at calc(var(--sc-mx, 0.5) * 100%) calc(var(--sc-my, 0.5) * 100%),
+    color-mix(in oklab, var(--sc-accent) 16%, transparent), transparent 70%);
+  opacity: 0; transition: opacity var(--sc-d-slow) var(--sc-ease-out);
+}
+[data-sc-spotlight]:hover::after { opacity: 1; }
+
+/* =========================================================== WORLDFLIGHT ==
+   One fixed stage for the whole page. The only thing in document flow is the
+   spacer, and it is empty. If you find yourself adding a section here, you want
+   act mode instead: the moment a real block scrolls past the fixed stage, the
+   page has a seam again and the whole point is gone.                        */
+
+[data-sc-mode="worldflight"] { position: relative; }
+
+.sc-world {
+  position: fixed; inset: 0;
+  overflow: clip;
+  z-index: var(--sc-z-stage);
+  background: var(--sc-canvas);
+}
+
+/* Every leg is mounted for the life of the page and stacked in the same box.
+   The engine owns opacity, visibility and z-index here; do not set them. */
+.sc-world__seg {
+  position: absolute; inset: 0;
+  opacity: 0;
+  will-change: opacity;
+}
+.sc-world__seg > :is(video, img, canvas) {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+/* The poster is the frame-holder AND the first camera move: the engine pushes
+   it in slowly until a real decoded frame is available to replace it. */
+.sc-world__poster {
+  z-index: 0;
+  transform-origin: 50% 50%;
+  transition: opacity 420ms var(--sc-ease-out);
+}
+.sc-world__seg > video { z-index: 1; }
+.sc-world__seg.sc-has-clip .sc-world__poster { opacity: 0; }
+/* The act stylesheet lights a clip through its ancestor act. A worldflight leg
+   has no act, so match the class the engine also writes on the clip itself. */
+video[data-sc-scrub].sc-has-clip { opacity: 1; }
+
+/* The copy layer is fixed too, and inert by default: the engine hands
+   pointer-events back to a block only while it is actually legible. */
+.sc-world__copy {
+  position: fixed; inset: 0;
+  z-index: var(--sc-z-copy);
+  pointer-events: none;
+}
+.sc-world__scrim { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+[data-sc-copy] {
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+.sc-ready [data-sc-copy] { transition: none; }
+
+/* The track. Empty on purpose. */
+.sc-world__spacer { pointer-events: none; }
+
+/* scroll progress */
+[data-sc-progress] {
+  position: fixed; inset: 0 0 auto 0; height: 2px; z-index: var(--sc-z-chrome);
+  background: var(--sc-accent); transform-origin: 0 50%; transform: scaleX(0);
+  will-change: transform;
+}
+
+/* ----------------------------------------------------------- atmosphere --
+   Depth is not only shadow. Grain keeps a flat dark ground from banding, and
+   it is the difference between "a dark page" and "a lit room". */
+.sc-grain { position: fixed; inset: 0; pointer-events: none; z-index: 3; opacity: 0.045; }
+.sc-grain::before {
+  content: ""; position: absolute; inset: -50%;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+}
+
+/* -------------------------------------------------------- reduced motion -- */
+@media (prefers-reduced-motion: reduce) {
+  /* Fewer and gentler, not zero. Opacity still carries the reveal so the page
+     is comprehensible; every position change is dropped. */
+  [data-sc-in], [data-sc-stagger] > * { transform: none; transition-duration: 220ms; }
+  [data-sc-parallax], [data-sc-pan], .sc-split__i { transform: none !important; }
+  /* A wipe is a position change too. Show reveal content settled. */
+  [data-sc-reveal] { clip-path: none !important; }
+  /* A rail's transform IS its navigation, not decoration. Zeroing it the way
+     parallax and kinetic type are zeroed parks the act on its first screenful
+     and makes everything past the fold unreachable: a device degrading into
+     missing content. Hand the travel back to the reader as an ordinary scroll
+     region instead, so the same items are all still gettable without motion.
+     A build that would rather re-lay the rail out as a grid can still do that;
+     this is the floor, not the ceiling. */
+  [data-sc-act="pan"] .sc-stage,
+  [data-sc-act="pan"] [data-sc-stage] {
+    overflow-x: auto; overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+  }
+  [data-sc-pan] > * { scroll-snap-align: center; }
+  [data-sc-spotlight]::after { display: none; }
+  /* A worldflight keeps its whole story here. No clip is ever fetched, so the
+     posters are the film, and they cross-dissolve through exactly the same
+     seams at exactly the same scroll positions. The push-in and the copy drift
+     are the only things that go. */
+  .sc-world__poster, [data-sc-copy] { transform: none !important; }
+}
+
+/* --------------------------------------------------------------- mobile -- */
+@media (max-width: 860px) {
+  .sc-copy { inset-inline: var(--sc-gutter); max-width: none; }
+  .sc-copy--trail { text-align: left; }
+  .sc-stage { height: 100svh; }
+  /* .sc-copy--trail re-anchors to the left and spans the full width here, so a
+     bottom-RIGHT corner gradient darkens the one corner the copy just left and
+     guarantees a contrast failure over any bright clip. Point the density at
+     the copy: the same band .sc-scrim--band paints. */
+  .sc-scrim--trail {
+    background: linear-gradient(to top,
+      color-mix(in oklab, var(--sc-canvas) 94%, transparent) 0%,
+      color-mix(in oklab, var(--sc-canvas) 74%, transparent) 22%,
+      color-mix(in oklab, var(--sc-canvas) 30%, transparent) 42%,
+      transparent 58%);
+  }
+}
+
+</style>
+<style>
+/* Archive photography on hard dark grounds. One accent for what matters:
+   the turn, the actions, the numbers. */
+:root{
+  --sc-canvas:#0E0D0B; --sc-surface:#171512; --sc-ink:#F4F1EA; --sc-ink-soft:#C9C2B4;
+  --sc-accent:#FF7A55; --sc-accent-ink:#17150F;
+  --sc-font-display:"Archivo",system-ui,sans-serif; --sc-font-text:"Geist",system-ui,sans-serif; --sc-font-mono:"Geist Mono",ui-monospace,Menlo,monospace;
+  --warm:#24201B; --deep:#121110; --mute:#9A9284; --line:rgba(244,241,234,.14); --line-hi:rgba(244,241,234,.32); --acc-hi:#FFA183;
+  --gut:clamp(16px,5vw,72px);
+  color-scheme:dark;
+}
+body{background:var(--sc-canvas);color:var(--sc-ink);font-family:var(--sc-font-text);-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+a{color:var(--sc-accent);text-decoration:none}
+a:hover{color:var(--acc-hi)}
+:focus-visible{outline:2px solid var(--sc-accent);outline-offset:3px;border-radius:4px}
+h1,h2,h3{margin:0;font-family:var(--sc-font-display);font-weight:900;letter-spacing:-0.035em;line-height:.98;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+img{display:block}
+.wrap{max-width:1240px;margin-inline:auto;padding-inline:var(--gut);width:100%}
+.data{font-family:var(--sc-font-mono);font-variant-numeric:tabular-nums}
+.kicker{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--sc-ink);font-weight:500}
+
+/* buttons: one label per intent */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:56px;padding:0 26px;border-radius:999px;font-family:var(--sc-font-display);font-weight:700;font-size:18px;letter-spacing:-0.01em;white-space:nowrap;transition:background-color .16s,color .16s,border-color .16s}
+.btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;flex:none}
+.btn--acc{background:var(--sc-accent);color:var(--sc-accent-ink)}
+.btn--acc:hover{background:var(--acc-hi);color:var(--sc-accent-ink)}
+.btn--line{border:1px solid var(--line-hi);color:var(--sc-ink)}
+.btn--line:hover{border-color:var(--sc-ink);color:var(--sc-ink)}
+.btn--sm{min-height:42px;padding:0 18px;font-size:15px}
+
+/* bar: hidden over the hero, which carries its own mark and CTA */
+.bar{position:fixed;top:0;left:0;right:0;z-index:40;padding-top:env(safe-area-inset-top,0px);background:rgba(14,13,11,.84);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transform:translateY(-100%);visibility:hidden;transition:transform .3s cubic-bezier(.2,.7,.2,1),visibility 0s .3s}
+.bar.on{transform:none;visibility:visible;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;min-height:64px}
+.mark{color:var(--sc-ink);font-family:var(--sc-font-display);font-weight:900;font-size:24px;letter-spacing:-0.045em}
+.mark:hover{color:var(--sc-ink)}
+
+/* ---------- 1 · promise: the archive photo, the mark and a very large line ---------- */
+.hero-stage{background:var(--sc-canvas)}
+.h-photo{position:absolute;inset:0}
+.h-photo img{width:100%;height:100%;object-fit:cover;object-position:52% 40%;filter:grayscale(1) contrast(1.05) brightness(.5);transform:scale(calc(1.08 - var(--sc-p,0) * .07));transform-origin:50% 40%}
+.h-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(14,13,11,.9) 0%,rgba(14,13,11,.4) 46%,rgba(14,13,11,.3) 100%)}
+.hero-copy{z-index:3;inset:0;max-width:none;display:flex;flex-direction:column;justify-content:flex-end;padding-block:calc(env(safe-area-inset-top,0px) + clamp(28px,6vh,64px)) clamp(28px,6vh,60px)}
+.hero-in{display:flex;flex-direction:column;gap:clamp(20px,3.4vh,36px)}
+.hero-top{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.brand-row{display:flex;align-items:center;flex-wrap:wrap;gap:16px clamp(24px,2.6vw,40px)}
+.brand{display:flex;flex-direction:column;gap:12px;margin:0}
+.brand b{font-family:var(--sc-font-display);font-weight:900;font-size:clamp(48px,6vw,92px);letter-spacing:-0.05em;line-height:.86;color:var(--sc-ink)}
+.brand-line{font-size:clamp(13px,1.15vw,18px);letter-spacing:.2em;text-transform:uppercase;color:var(--sc-ink-soft);font-weight:500}
+.hero-copy h1{font-size:clamp(52px,7.8vw,128px);letter-spacing:-0.045em;line-height:.9;max-width:13ch}
+.hero-copy h1 em{font-style:normal;color:var(--sc-accent)}
+.hero-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px 32px}
+.hero-foot p{font-size:clamp(17px,1.4vw,21px);line-height:1.45;color:var(--sc-ink);max-width:46ch}
+.hero-foot p a{color:var(--sc-accent);font-weight:500;white-space:nowrap}
+.hero-credit{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+
+/* ---------- 2 · pain: tonight, row by row ---------- */
+.pain{background:var(--deep);padding-block:clamp(88px,14vh,150px)}
+.pain .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,88px);align-items:start}
+.pain-head{position:sticky;top:110px;display:flex;flex-direction:column;gap:22px}
+.clock{display:flex;flex-direction:column;gap:4px;margin:0}
+.clock .k{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--sc-ink-soft)}
+.clock .t{font-family:var(--sc-font-display);font-weight:900;font-size:clamp(44px,5.4vw,84px);letter-spacing:-0.045em;line-height:.95;color:var(--sc-accent);font-variant-numeric:tabular-nums}
+.clock .t b{font-weight:900;color:inherit}
+.pain h2{font-size:clamp(36px,4.6vw,68px)}
+.pain-head p{color:var(--sc-ink-soft);font-size:17px;max-width:34ch}
+.rows{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-hi)}
+.row{display:grid;grid-template-columns:minmax(118px,1.2fr) minmax(0,4fr);gap:20px;padding:26px 0;border-bottom:1px solid var(--line-hi)}
+.row .when{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--sc-accent);padding-top:8px}
+.row h3{font-size:clamp(26px,2.6vw,38px);letter-spacing:-0.035em}
+.row p{margin-top:10px;color:var(--sc-ink-soft);font-size:17px;line-height:1.55;max-width:46ch}
+
+/* ---------- 3 · the eras wipe over each other, settle into a triptych, then the turn ---------- */
+.eras-stage{background:#000}
+.era{position:absolute;inset:0;margin:0;will-change:clip-path}
+.era img{width:100%;height:100%;object-fit:cover}
+.era[data-era="0"] img{object-position:50% 40%;filter:grayscale(1) contrast(1.06) brightness(.82)}
+.era[data-era="1"]{background:#B4122A}
+.era[data-era="1"] img{object-position:50% 20%;filter:grayscale(var(--t,0)) brightness(.86)}
+.era[data-era="2"] img{object-position:60% 40%;filter:saturate(calc(.7 - var(--t,0) * .4)) brightness(.7)}
+.seam{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--sc-accent);z-index:2;opacity:0;pointer-events:none}
+.era-col{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:calc(1 - var(--t,0));background:linear-gradient(90deg,rgba(10,9,8,.94) 0%,rgba(10,9,8,.82) 38%,rgba(10,9,8,0) 66%)}
+.era-dim{position:absolute;inset:0;z-index:2;background:#0A0908;pointer-events:none;opacity:calc(var(--t,0) * .56)}
+.tri{position:absolute;z-index:3;top:clamp(84px,11vh,112px);left:0;right:0;margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));opacity:var(--t,0);pointer-events:none}
+.tri li{padding-inline:clamp(14px,2.6vw,40px);display:flex;flex-direction:column;gap:10px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--sc-ink-soft)}
+.tri b{font-family:var(--sc-font-display);font-weight:900;font-size:clamp(40px,4.4vw,68px);letter-spacing:-0.045em;line-height:.9;color:var(--sc-ink);text-transform:none}
+.era-black{position:absolute;inset:0;z-index:4;background:#0A0908;pointer-events:none;opacity:calc(var(--k,0) * .38)}
+.era-year{position:absolute;z-index:5;right:var(--gut);top:clamp(80px,12vh,128px);margin:0;font-family:var(--sc-font-display);font-weight:900;font-size:clamp(84px,14vw,220px);line-height:.82;letter-spacing:-0.06em;color:var(--sc-ink);font-variant-numeric:tabular-nums;overflow:hidden;height:.84em;opacity:var(--yo,1)}
+.era-year span{display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .4s}
+.era-year.roll span{transform:translateY(-30%);opacity:0;transition:none}
+.era-copy{z-index:6;max-width:min(40rem,52vw);display:flex;flex-direction:column;gap:18px}
+.era-copy .yr{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--sc-ink-soft)}
+.era-copy h2{font-size:clamp(48px,7vw,112px)}
+.era-copy p.line{font-family:var(--sc-font-display);font-weight:700;font-size:clamp(20px,1.9vw,28px);line-height:1.25;letter-spacing:-0.02em;max-width:34ch}
+.era-copy .cr{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.era-copy--turn{top:50%;bottom:auto;translate:0 -46%;left:calc(var(--gut) + 8vw);max-width:min(60rem,78vw);gap:24px}
+.era-copy--turn .lbl{display:flex;align-items:center;gap:18px;font-size:14px;letter-spacing:.16em;color:var(--sc-ink-soft)}
+.era-copy--turn .lbl:before{content:"";flex:none;width:18px;height:58px;background:var(--sc-accent)}
+.era-copy--turn h2{font-size:clamp(40px,5.4vw,88px);max-width:14ch}
+.era-copy--turn .pay{display:flex;flex-direction:column;gap:18px}
+.era-copy--turn .pay h2{color:var(--sc-accent)}
+.era-copy--turn .pay p{font-size:clamp(18px,1.5vw,22px);line-height:1.45;color:var(--sc-ink);max-width:44ch}
+
+/* ---------- 4 · the real screens ---------- */
+.inside{background:var(--sc-canvas);padding-block:clamp(88px,14vh,150px)}
+.inside .wrap{display:flex;flex-direction:column;gap:clamp(32px,5vh,56px)}
+.head{display:flex;flex-direction:column;gap:16px;max-width:780px}
+.head h2{font-size:clamp(36px,4.8vw,72px)}
+.head p{font-size:clamp(18px,1.5vw,22px);line-height:1.42;color:var(--sc-ink-soft)}
+.viewer{display:grid;grid-template-columns:minmax(280px,4fr) minmax(0,8fr);gap:clamp(24px,3.4vw,56px);align-items:start}
+.tabs-col{display:flex;flex-direction:column;gap:26px;min-width:0}
+.tabs{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.tab{appearance:none;background:none;border:0;border-bottom:1px solid var(--line);color:var(--mute);font:500 16px/1.2 var(--sc-font-text);text-align:left;padding:11px 0 11px 24px;cursor:pointer;position:relative;display:flex;justify-content:space-between;gap:12px;transition:color .16s}
+.tab:before{content:"";position:absolute;left:0;top:50%;width:9px;height:9px;margin-top:-5px;border-radius:50%;border:1px solid var(--line-hi)}
+.tab:hover,.tab[aria-selected="true"]{color:var(--sc-ink)}
+.tab[aria-selected="true"]:before{background:var(--sc-accent);border-color:var(--sc-accent)}
+.panel{display:flex;flex-direction:column;gap:14px}
+.panel .tag{font-family:var(--sc-font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--sc-accent)}
+.panel h3{font-size:clamp(26px,2.6vw,38px)}
+.panel ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.panel li{position:relative;padding-left:22px;color:var(--sc-ink-soft);font-size:16px;line-height:1.5}
+.panel li:before{content:"";position:absolute;left:0;top:.72em;width:12px;height:2px;background:var(--sc-accent)}
+.panel .note{font-size:14px;color:var(--mute)}
+.device{min-width:0;position:sticky;top:110px}
+.lid{background:#1C1A17;border-radius:14px 14px 4px 4px;padding:1.8%;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.screen{position:relative;aspect-ratio:16/10;background:var(--sc-canvas);border-radius:6px;overflow:hidden}
+.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left}
+.screen .blank{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:8%;background:radial-gradient(rgba(244,241,234,.08) 1px,transparent 1.2px) 0 0/22px 22px,var(--sc-canvas)}
+.blank b{font-family:var(--sc-font-display);font-weight:900;font-size:clamp(24px,3vw,44px);letter-spacing:-0.035em;line-height:1}
+.blank p{font-size:16px;color:var(--sc-ink-soft);max-width:40ch}
+.base{height:14px;margin:0 -3%;background:#2A2824;border-radius:0 0 14px 14px;position:relative}
 .base:before{content:"";position:absolute;left:50%;top:0;width:14%;height:5px;transform:translateX(-50%);background:#17150F;border-radius:0 0 6px 6px}
-.cursor{position:absolute;width:18px;height:18px;z-index:3;opacity:0;transition:opacity .3s,left .7s cubic-bezier(.3,.7,.2,1),top .7s cubic-bezier(.3,.7,.2,1);pointer-events:none}
-.cursor.on{opacity:1}
-.cursor:after{content:"";position:absolute;inset:-10px;border:2px solid var(--acc);border-radius:50%;opacity:0}
-.cursor.click:after{animation:ring .7s ease-out 1}
-@keyframes ring{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.4);opacity:0}}
+.offer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;padding:clamp(22px,3vw,36px);border:1px solid var(--line-hi);border-radius:20px}
+.offer p{font-family:var(--sc-font-display);font-weight:700;font-size:clamp(20px,1.8vw,26px);letter-spacing:-0.02em;line-height:1.2;max-width:28ch}
 
-.mobile-tour{display:none}
+/* ---------- 6 · trust ---------- */
+.trust{background:var(--sc-canvas);padding-block:clamp(88px,14vh,150px)}
+.trust .wrap{display:flex;flex-direction:column;gap:clamp(40px,6vh,64px)}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(28px,4vw,64px);border-top:1px solid var(--line-hi)}
+.fact{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:20px;padding:24px 0;border-bottom:1px solid var(--line-hi)}
+.fact h3{font-size:clamp(20px,1.7vw,24px);letter-spacing:-0.025em;line-height:1.12}
+.fact p{color:var(--sc-ink-soft);font-size:16px;line-height:1.55}
+.along{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,4vw,64px);padding:clamp(28px,4vw,56px);background:var(--warm);border-radius:24px}
+.along h2{font-size:clamp(32px,3.8vw,56px)}
+.along .who{margin-top:18px;color:var(--sc-ink-soft);font-size:16px;line-height:1.55;max-width:40ch}
+.steps{display:flex;flex-direction:column}
+.step{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,6fr);gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.step:first-child{border-top:1px solid var(--line)}
+.step b{font-family:var(--sc-font-display);font-weight:700;font-size:clamp(19px,1.6vw,23px);letter-spacing:-0.02em;line-height:1.15}
+.step span{color:var(--sc-ink-soft);font-size:16px;line-height:1.5}
 
-/* juntos without photo: typographic ground */
-.sc--juntos{background:#24201B;align-items:center}
-.sc--juntos .wrap{padding-top:14vh}
-.sc--juntos h2{font-size:clamp(3.4rem,10vw,9.4rem)}
-.sc--juntos .line{font-size:clamp(22px,2.2vw,34px);max-width:30ch}
-.sc--juntos .people{margin-top:28px;gap:32px}
-.sc--juntos .person b{font-size:clamp(20px,1.7vw,26px)}
-.sc--juntos .person span{font-size:17px}
-.sc--juntos .ghost{position:absolute;right:-2vw;top:8vh;font-family:var(--d);font-weight:900;font-size:clamp(200px,34vw,520px);line-height:.8;letter-spacing:-0.06em;color:transparent;-webkit-text-stroke:1px rgba(244,241,234,.14);pointer-events:none}
+/* ---------- 7 · founders over the first flight ---------- */
+.fly-stage{background:#1A1917}
+.fly-ph{position:absolute;inset:0}
+.fly-ph img{width:100%;height:100%;object-fit:cover;object-position:62% 45%;filter:grayscale(1) contrast(1.08) brightness(.62);transform:scale(calc(1.12 - var(--sc-p,0) * .1));transform-origin:62% 45%}
+.fly-col{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(14,13,11,.94) 0%,rgba(14,13,11,.8) 36%,rgba(14,13,11,0) 66%)}
+.fly-copy{z-index:2;bottom:auto;top:50%;translate:0 -50%;max-width:min(40rem,56vw);display:flex;flex-direction:column;gap:20px}
+.fly-copy h2{font-size:clamp(42px,5.6vw,88px)}
+.fly-copy p{font-size:clamp(17px,1.4vw,21px);line-height:1.45;color:var(--sc-ink-soft);max-width:40ch}
+.fly-copy .cr{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;border-top:1px solid var(--line-hi)}
+.perks li{display:flex;gap:12px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line-hi);font-size:16px}
+.perks li:before{content:"";flex:none;width:9px;height:9px;border-radius:50%;background:var(--sc-accent);transform:translateY(-1px)}
 
-/* colophon */
-.colofon{padding:clamp(56px,10vh,120px) 0 clamp(40px,6vh,72px);background:#0E0D0B}
-.colofon .wrap{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:36px}
-.colofon h2{grid-column:1/10;font-size:clamp(2.2rem,5vw,4.6rem)}
-.colofon .cta{grid-column:1/9;display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px}
-.colofon .cta p{font-size:clamp(17px,1.4vw,22px);line-height:1.45;max-width:30ch;color:var(--soft)}
-.colofon .btn{display:inline-flex;align-items:center;gap:12px;min-height:60px;padding:0 30px;background:var(--acc);color:#17150F;font-family:var(--d);font-weight:700;font-size:clamp(18px,1.5vw,22px);letter-spacing:-0.01em;text-decoration:none;border-radius:999px;transition:background .2s}
-.colofon .btn:hover{background:#FFA183;color:#17150F}
-.colofon .btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2}
-.colofon .all{grid-column:1/13;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px;padding:clamp(28px,4.5vh,52px) clamp(24px,3.2vw,52px);border:1px solid rgba(244,241,234,.35);border-radius:22px;text-decoration:none;color:var(--ink);transition:background .25s,border-color .25s,color .25s}
-.colofon .all:hover{background:var(--ink);border-color:var(--ink);color:var(--ground)}
-.colofon .all-k{display:block;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:500;margin-bottom:12px}
-.colofon .all-t{display:block;font-family:var(--d);font-weight:900;font-size:clamp(30px,4vw,60px);letter-spacing:-0.035em;line-height:1;max-width:20ch}
-.colofon .all-go{flex:none;display:grid;place-items:center;width:clamp(64px,6vw,92px);height:clamp(64px,6vw,92px);border-radius:50%;background:var(--acc);color:#17150F}
-.colofon .all-go svg{width:40%;height:40%;stroke:currentColor;fill:none;stroke-width:2.2}
-.colofon .credits{grid-column:1/13;font-size:11px;line-height:1.7;color:#8E877A;border-top:1px solid rgba(244,241,234,.2);padding-top:14px;letter-spacing:.02em}
-.colofon .mast{grid-column:1/13;display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
-.colofon .mast b{font-family:var(--d);font-weight:900;font-size:22px;letter-spacing:-0.04em;color:var(--ink);text-transform:none}
+/* ---------- 8 · questions ---------- */
+.faq{background:var(--deep);padding-block:clamp(88px,14vh,150px)}
+.faq .wrap{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(28px,4vw,64px);align-items:start}
+.faq h2{font-size:clamp(32px,3.8vw,56px)}
+.qs{border-top:1px solid var(--line-hi)}
+.qs details{border-bottom:1px solid var(--line-hi)}
+.qs summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 0;font-family:var(--sc-font-display);font-weight:700;font-size:clamp(19px,1.7vw,24px);letter-spacing:-0.02em;line-height:1.2}
+.qs summary::-webkit-details-marker{display:none}
+.qs summary:after{content:"+";flex:none;font-family:var(--sc-font-mono);font-weight:400;font-size:24px;color:var(--sc-accent);transition:transform .16s}
+.qs details[open] summary:after{transform:rotate(45deg)}
+.qs details p{padding:0 0 22px;color:var(--sc-ink-soft);font-size:16px;line-height:1.6;max-width:62ch}
+.qs .credits p{font-size:13px;color:var(--mute)}
 
-/* keep chapter text clear of the fixed folio */
-@media (min-width:901px){
-  .scene .wrap,.colofon .wrap,.eras-copy{padding-left:clamp(110px,11vw,170px)}
+/* ---------- 9 · close ---------- */
+.close-stage{background:var(--warm);display:flex;flex-direction:column;justify-content:center}
+.close-stage .wrap{display:flex;flex-direction:column;gap:24px}
+.close-stage h2{font-size:clamp(46px,7vw,112px);letter-spacing:-0.045em;max-width:13ch}
+.close-stage .sub{font-size:clamp(18px,1.5vw,22px);line-height:1.45;color:var(--sc-ink-soft);max-width:40ch}
+.phone{font-size:15px;color:var(--sc-ink-soft)}
+.phone b{color:var(--sc-ink);font-weight:500;user-select:all}
+.foot{position:absolute;left:0;right:0;bottom:0;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;align-items:baseline;border-top:1px solid var(--line);padding-top:16px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--sc-ink-soft)}
+.foot .all{color:var(--sc-ink);text-transform:none;letter-spacing:0;font-size:15px;font-weight:500}
+.foot .all:hover{color:var(--sc-accent)}
+.foot b{font-family:var(--sc-font-display);font-weight:900;font-size:20px;letter-spacing:-0.045em;color:var(--sc-ink);text-transform:none}
+
+@media (max-width:1080px){
+  .viewer{grid-template-columns:minmax(0,1fr)}
+  .tabs-col{display:contents}
+  .tabs{order:-2;flex-direction:row;overflow-x:auto;border-top:0;border-bottom:1px solid var(--line);scrollbar-width:none;margin-inline:calc(-1 * var(--gut));padding-inline:var(--gut)}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{border-bottom:2px solid transparent;padding:12px 14px;white-space:nowrap;flex:none}
+  .tab:before{display:none}
+  .tab[aria-selected="true"]{border-bottom-color:var(--sc-accent)}
+  .device{position:relative;top:0;order:-1}
+  .pain .wrap,.faq .wrap,.along{grid-template-columns:minmax(0,1fr)}
+  .pain-head{position:static}
+  .facts{grid-template-columns:minmax(0,1fr)}
 }
-@media (max-width:900px){
-  .folio{display:none}
-  .prog-marks li.cur{font-size:10px}
-  .scene .wrap{padding-top:40vh}
-  .scene h2,.hero h1,.scene .line,.scene .sub,.scene .credit{grid-column:1/13}
-  .scene .credit{justify-self:start;text-align:left}
-  .hero h1{font-size:clamp(2.4rem,11vw,4rem)}
-  .scene h2{font-size:clamp(2.4rem,11vw,4rem)}
-  .era-ph--planilla img{object-position:50% 15%}
-  .era-txts{grid-column:1/13}
-  .era-t h2{font-size:clamp(2.4rem,11vw,4rem)}
-  .era-year{font-size:clamp(72px,24vw,120px);top:clamp(64px,12vh,110px)}
-  .tri li{font-size:10px;letter-spacing:.08em}
-  .tri li b{font-size:22px}
-  .people{grid-template-columns:1fr;gap:14px}
-  .tour{display:none}
-  .mobile-tour{display:flex;flex-direction:column;gap:40px;padding:12vh 0;background:#0A0A0B}
-  .mobile-tour .eyebrow{display:flex;align-items:baseline;gap:14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
-  .mobile-tour .eyebrow b{font-family:var(--d);font-weight:900;font-size:34px;letter-spacing:-0.05em;line-height:.8;color:var(--acc)}
-  .mobile-tour h2{font-size:clamp(2rem,9vw,3rem)}
-  .mobile-tour .mstep{display:flex;flex-direction:column;gap:10px}
-  .mobile-tour .mframe{background:#1C1A17;padding:3%;border-radius:10px}
-  .mobile-tour .mframe img{width:100%;height:auto;border-radius:4px}
-  .mobile-tour h3{font-size:22px;font-weight:700;letter-spacing:-0.02em}
-  .mobile-tour ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-  .mobile-tour li{color:var(--soft);font-size:16px;line-height:1.45;padding-left:20px;position:relative}
-  .mobile-tour li:before{content:"";position:absolute;left:0;top:.7em;width:10px;height:2px;background:var(--acc)}
-  .mobile-tour .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:500}
-  .colofon h2,.colofon .cta,.colofon .all{grid-column:1/13}
-  /* phone: product screens are shown at a readable size and panned sideways instead of shrunk */
-  .mobile-tour .pan-hint{margin-top:12px;font-size:14px;color:var(--soft)}
-  .mobile-tour .mstep + .mstep .mframe{margin:0 calc(-1 * clamp(20px,5vw,80px));padding:0;border-radius:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:#1C1A17;overscroll-behavior-x:contain}
-  .mobile-tour .mstep + .mstep .mframe::-webkit-scrollbar{display:none}
-  .mobile-tour .mstep + .mstep .mframe img{height:min(62vh,500px);width:auto;max-width:none;border-radius:0}
-  .mobile-tour .mstep{gap:14px}
-  .mobile-tour h3{font-size:26px}
-  .prog-marks li.cur{background:rgba(14,13,11,.82);border-radius:0 0 6px 6px;padding:6px 10px 6px 12px}
-  .prog-marks li.cur:last-child{padding:6px 12px 6px 10px}
-  .sc--juntos{align-items:start}
-  .sc--juntos .wrap{padding-top:clamp(96px,16vh,140px)}
-  .sc--juntos .ghost{top:4vh;font-size:52vw}
-  .colofon .all{flex-wrap:nowrap;padding:24px 20px;gap:16px}
-  .colofon .all-t{font-size:clamp(26px,8vw,34px)}
-  .colofon .all-go{width:56px;height:56px}
-  .colofon .btn{width:100%;justify-content:center}
-  .scene .sub{font-size:16px}
+@media (max-width:760px){
+  .bar .btn{min-height:38px;padding:0 14px;font-size:14px}
+  .h-photo img{object-position:64% 40%}
+  .brand-row{gap:14px 18px}
+  .brand-row .btn{min-height:46px;padding:0 18px;font-size:16px}
+  .brand b{font-size:clamp(44px,13vw,56px)}
+  .brand-line{font-size:12px;letter-spacing:.16em}
+  .hero-copy h1{font-size:clamp(40px,12vw,56px)}
+  .hero-foot p{font-size:17px}
+  .row{grid-template-columns:minmax(0,1fr);gap:6px}
+  .row .when{padding-top:0}
+  .era-col{background:linear-gradient(to top,rgba(10,9,8,.94) 0%,rgba(10,9,8,.78) 46%,rgba(10,9,8,0) 72%)}
+  .era-copy{max-width:none;bottom:calc(36px + env(safe-area-inset-bottom,0px))}
+  .era-copy h2{font-size:clamp(44px,14vw,64px)}
+  .era-copy--turn{left:var(--gut);right:var(--gut);max-width:none;gap:18px}
+  .era-copy--turn .lbl{font-size:12px;gap:12px}
+  .era-copy--turn .lbl:before{width:12px;height:36px}
+  .era-copy--turn h2{font-size:clamp(32px,9.4vw,42px)}
+  .era-copy--turn .pay p{font-size:16px}
+  .era-year{top:84px;font-size:clamp(64px,20vw,96px)}
+  .tri{top:80px}
+  .tri li{padding-inline:12px;font-size:10px;letter-spacing:.1em}
+  .tri b{font-size:26px}
+  .screen{aspect-ratio:auto;height:min(52vh,420px);overflow-x:auto;overflow-y:hidden;border-radius:10px;border:1px solid var(--line);-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none}
+  .screen::-webkit-scrollbar{display:none}
+  .lid{padding:0;background:none;box-shadow:none;border-radius:10px}
+  .base{display:none}
+  .screen img{position:static;height:100%;width:auto;max-width:none}
+  .screen .blank{position:static;height:100%;padding:24px}
+  .offer .btn{width:100%}
+  .fact,.step{grid-template-columns:minmax(0,1fr);gap:6px}
+  .fly-col{background:linear-gradient(to top,rgba(14,13,11,.96) 0%,rgba(14,13,11,.84) 55%,rgba(14,13,11,.2) 100%)}
+  .fly-copy{top:auto;bottom:calc(32px + env(safe-area-inset-bottom,0px));translate:none;max-width:none;gap:14px}
+  .fly-copy h2{font-size:clamp(34px,10vw,46px)}
+  .perks{grid-template-columns:minmax(0,1fr)}
+  .perks li{padding:10px 0;font-size:15px}
+  .close-stage{justify-content:flex-start;padding-top:96px}
+  .close-stage .btn{width:100%}
 }
 @media (prefers-reduced-motion:reduce){
-  .r{opacity:1;transform:none;transition:none}
-  .scene .photo{transform:none !important}
-  .pulse{animation:none}
-  .lid{transform:none !important}
-  .fn,.fn li{transition:none}
-  .hint svg{animation:none}
+  .h-photo img,.fly-ph img{transform:none}
+  .era-year span,.bar{transition:none}
 }
 </style>
 </head>
 <body>
-<article class="pg" id="pg">
 
-  <aside class="folio" id="folio" aria-hidden="true">
-    <span class="folio-num" id="folio-num">0</span>
-    <span class="folio-rule"></span>
-    <span id="folio-title">Portada</span>
-    <span class="folio-year" id="folio-year">1937</span>
-  </aside>
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="mark" href="#top" aria-label="Pultzo, inicio">Pultzo</a>
+    <a class="btn btn--acc btn--sm" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20pedir%20una%20demo%20de%20Pultzo%20para%20mi%20cl%C3%ADnica.">Pedí una demo</a>
+  </div>
+</header>
 
-  <nav class="prog" aria-hidden="true">
-    <span class="prog-fill" id="prog-fill"></span>
-    <ol class="prog-marks" id="prog-marks">
-      <li data-to="eras">Antes</li>
-      <li data-to="primeros">Los primeros</li>
-      <li data-to="adentro">Adentro</li>
-      <li data-to="juntos">Con vos</li>
-      <li data-to="contacto">Contacto</li>
-    </ol>
-  </nav>
+<main id="top">
 
-  <!-- Portada -->
-  <header class="scene hero" id="portada" data-ch="" data-title="Portada" data-year="1937">
-    <div class="photo" data-par="0.16" aria-hidden="true"><img src="assets/portada-1937.jpg" srcset="assets/portada-1937-1200.jpg 1200w, assets/portada-1937.jpg 1900w" sizes="100vw" width="1900" height="1460" alt="" fetchpriority="high"></div>
-    <div class="scrim" aria-hidden="true"></div>
-    <div class="wrap">
-      <div class="mark r"><span>Pultzo</span><small>Gestión odontológica con inteligencia artificial</small></div>
-      <h1 class="r r2">Toda gestión fue, alguna vez, una revolución. <em>Esta es la tuya.</em></h1>
-      <p class="credit r r3">Oficina de registros, Baltimore, 1937</p>
+  <!-- 1 · promise -->
+  <section data-sc-act="pin" data-sc-span="1.3" id="inicio" aria-labelledby="h-hero">
+    <div data-sc-stage class="hero-stage">
+      <div class="h-photo" data-sc-parallax="-0.8" aria-hidden="true"><img src="assets/portada-1937-1200.jpg" width="1200" height="922" alt="" fetchpriority="high"></div>
+      <div class="h-shade" aria-hidden="true"></div>
+      <div class="sc-copy hero-copy" data-sc-cue="0 0.86 0">
+        <div class="wrap hero-in">
+          <div class="hero-top">
+            <div class="brand-row">
+              <p class="brand"><b>Pultzo</b></p>
+              <a class="btn btn--acc" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20pedir%20una%20demo%20de%20Pultzo%20para%20mi%20cl%C3%ADnica.">Pedí una demo<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a>
+            </div>
+            <span class="brand-line">Gestión odontológica con inteligencia artificial</span>
+          </div>
+          <h1 id="h-hero">Vos atendés pacientes. <em>Pultzo hace el resto.</em></h1>
+          <div class="hero-foot">
+            <p>Contesta WhatsApp, confirma turnos y te avisa lo que falta en tu clínica, también a la noche. <a href="#adentro">Ver cómo funciona</a></p>
+            <span class="hero-credit">Oficina de registros, Baltimore, 1937</span>
+          </div>
+        </div>
+      </div>
     </div>
-  </header>
+  </section>
 
-  <!-- I: three eras, one pinned stage -->
-  <section class="eras" id="eras" data-ch="I" data-title="Antes" data-year="1946">
-    <div class="eras-stage">
-      <div class="era-ph era-ph--papel" data-era="0" aria-hidden="true"><img src="assets/papel-1946.jpg" srcset="assets/papel-1946-1200.jpg 1200w, assets/papel-1946.jpg 2400w" sizes="100vw" loading="lazy" decoding="async" width="2400" height="1516" alt=""></div>
-      <div class="era-ph era-ph--planilla" data-era="1" aria-hidden="true"><img src="assets/planilla-1984.jpg" srcset="assets/planilla-1984-1200.jpg 1200w, assets/planilla-1984.jpg 2400w" sizes="100vw" loading="lazy" decoding="async" width="2400" height="3534" alt=""></div>
-      <div class="era-ph era-ph--software" data-era="2" aria-hidden="true"><img src="assets/software-1987.jpg" srcset="assets/software-1987-1200.jpg 1200w, assets/software-1987.jpg 2400w" sizes="100vw" loading="lazy" decoding="async" width="2400" height="1600" alt=""></div>
+  <!-- 2 · tonight, in their words -->
+  <section class="pain" id="dolor" aria-labelledby="h-pain">
+    <div class="wrap">
+      <div class="pain-head" data-sc-in>
+        <p class="clock"><span class="k">Ahora mismo</span><span class="t"><span id="clk-day">Hoy</span> <b id="clk">--:--</b></span></p>
+        <h2 id="h-pain">Y la clínica sigue abierta en tu teléfono.</h2>
+        <p>Cuatro cosas que, a esta hora, todavía esperan a alguien.</p>
+      </div>
+      <ol class="rows" data-sc-in data-sc-stagger="70">
+        <li class="row"><span class="when data">21:14 · WhatsApp</span><div><h3>40 mensajes sin leer</h3><p>Pacientes que quieren turno, que quieren cambiarlo o que preguntan si atienden el sábado.</p></div></li>
+        <li class="row"><span class="when data">11:00 · Agenda</span><div><h3>El paciente de las 11 no vino</h3><p>No confirmó, nadie lo llamó y el sillón quedó vacío una hora.</p></div></li>
+        <li class="row"><span class="when data">Viernes · Obra social</span><div><h3>Vence la presentación del mes</h3><p>Las prestaciones están en la agenda, en papel y en la memoria de alguien.</p></div></li>
+        <li class="row"><span class="when data">Este mes · Tratamientos</span><div><h3>Tratamientos a medias</h3><p>Pacientes que empezaron un conducto y nunca sacaron la segunda sesión.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 3 · the eras, the triptych, then the turn: the peak -->
+  <section data-sc-act="pin" data-sc-span="4.4" id="historia" aria-label="Cómo cambió la gestión">
+    <div data-sc-stage class="eras-stage" id="eras-stage">
+      <figure class="era" data-era="0"><img src="assets/papel-1946-1200.jpg" width="1200" height="758" alt="Empleados en un mostrador de trámites con pilas de papel, Toronto, 1946"></figure>
+      <figure class="era" data-era="1"><img src="assets/planilla-1984-1200.jpg" width="1200" height="1767" alt="Steve Jobs con la primera Macintosh, enero de 1984"></figure>
+      <figure class="era" data-era="2"><img src="assets/software-1987-1200.jpg" width="1200" height="800" alt="Puesto de enfermería con una terminal de computadora, 1987"></figure>
       <span class="seam" id="era-seam" aria-hidden="true"></span>
-      <div class="era-dim" id="era-dim" aria-hidden="true"></div>
-      <div class="scrim" aria-hidden="true"></div>
-      <ol class="tri" id="era-tri" aria-hidden="true">
+      <div class="era-col" aria-hidden="true"></div>
+      <div class="era-dim" aria-hidden="true"></div>
+      <ol class="tri" aria-hidden="true">
         <li><b>1946</b>El papel</li>
         <li><b>1984</b>La planilla</li>
         <li><b>1987</b>El software</li>
       </ol>
-      <p class="era-year" id="era-year" aria-hidden="true">1946</p>
-      <div class="wrap eras-copy">
-        <div class="era-txts">
-          <div class="era-t on" data-t="0">
-            <div class="eyebrow"><b>I</b><span>1946 · Mostrador de trámites, Toronto</span></div>
-            <h2>El papel</h2>
-            <p class="line">Durante casi un siglo, administrar un consultorio fue una habilidad manual.</p>
-            <p class="credit">Toronto Telegram · York University · dominio público</p>
-          </div>
-          <div class="era-t" data-t="1">
-            <div class="eyebrow"><b>I</b><span>1984 · Steve Jobs y la Macintosh</span></div>
-            <h2>La planilla</h2>
-            <p class="line">La Macintosh puso una computadora con ventanas y mouse sobre un escritorio común. Cada paciente pasó a ser una fila y cada cobro, una celda.</p>
-            <p class="sub">Nada más se perdía. Pero nada se entendía: la planilla sólo espera que alguien la cargue.</p>
-            <p class="credit">Bernard Gotfryd · Biblioteca del Congreso</p>
-          </div>
-          <div class="era-t" data-t="2">
-            <div class="eyebrow"><b>I</b><span>1987 · Puesto de enfermería con terminal, Estados Unidos</span></div>
-            <h2>El software</h2>
-            <p class="line">El sistema llegó a la clínica. Ordenó la información, pero no la entendió.</p>
-            <p class="credit">Bill Branson · National Cancer Institute · dominio público</p>
-          </div>
-          <div class="era-t" data-t="3">
-            <div class="eyebrow"><b>I</b><span>1946 · 1984 · 1987</span></div>
-            <h2>Cambió la herramienta. El trabajo siguió siendo tuyo.</h2>
-          </div>
+      <div class="era-black" aria-hidden="true"></div>
+      <p class="era-year" id="era-year" aria-hidden="true"><span>1946</span></p>
+
+      <div class="sc-copy sc-copy--lead era-copy" data-sc-cue="0 0.2 0 0.04">
+        <span class="yr data">1946 · Toronto</span>
+        <h2>El papel.</h2>
+        <p class="line">Durante décadas, administrar una clínica fue una habilidad manual: fichas, cuadernos y la memoria de quien atendía el mostrador.</p>
+        <span class="cr">Toronto Telegram · York University · dominio público</span>
+      </div>
+      <div class="sc-copy sc-copy--lead era-copy" data-sc-cue="0.21 0.42 0.04 0.04">
+        <span class="yr data">1984 · Steve Jobs y la Macintosh</span>
+        <h2>La planilla.</h2>
+        <p class="line">La Macintosh puso ventanas y mouse en un escritorio común, y al año siguiente Excel nació en ella. Cada paciente pasó a ser una fila. Cada cobro, una celda.</p>
+        <span class="cr">Bernard Gotfryd · Biblioteca del Congreso</span>
+      </div>
+      <div class="sc-copy sc-copy--lead era-copy" data-sc-cue="0.43 0.58 0.04 0.04">
+        <span class="yr data">1987 · Puesto de enfermería</span>
+        <h2>El software.</h2>
+        <p class="line">El sistema llegó a la clínica. Ordenó la información, pero no la entendió.</p>
+        <span class="cr">Bill Branson · National Cancer Institute · dominio público</span>
+      </div>
+      <div class="sc-copy sc-copy--lead era-copy era-copy--turn" data-sc-cue="0.64 1 0.05 0.03">
+        <span class="lbl data">1946 · 1984 · 1987</span>
+        <h2 data-sc-kinetic="lines">Cambió la herramienta. El trabajo siguió siendo tuyo.</h2>
+        <div class="pay" data-sc-cue="0.8 1 0.05 0.03">
+          <h2>Con Pultzo, no.</h2>
+          <p>Pultzo contesta los mensajes, ofrece turnos reales, recuerda las sesiones pendientes y te avisa lo que falta. Vos revisás y decidís.</p>
         </div>
-        <ol class="era-line" aria-label="Tres épocas">
-          <li class="cur"><span class="bar"><i></i></span>1946 · El papel</li>
-          <li><span class="bar"><i></i></span>1984 · La planilla</li>
-          <li><span class="bar"><i></i></span>1987 · El software</li>
-        </ol>
       </div>
     </div>
   </section>
 
-  <!-- II: peak -->
-  <section class="scene sc--ahora" id="primeros" data-ch="II" data-title="Los primeros" data-year="1903">
-    <div class="photo" data-par="0.14" aria-hidden="true"><img src="assets/primer-vuelo-1903.jpg" srcset="assets/primer-vuelo-1903-1200.jpg 1200w, assets/primer-vuelo-1903.jpg 2400w" sizes="100vw" loading="lazy" decoding="async" width="2400" height="1555" alt=""></div>
-    <div class="scrim" aria-hidden="true"></div>
+  <!-- 4 · the real screens, by what costs the most -->
+  <section class="inside" id="adentro" aria-labelledby="h-inside">
     <div class="wrap">
-      <div class="eyebrow r"><b>II</b><span>17 de diciembre de 1903 · Kitty Hawk, Carolina del Norte</span></div>
-      <h2 class="r r2">Toda revolución empezó con pocos.</h2>
-      <p class="line r r3">Doce segundos en el aire y cinco testigos. Los primeros nunca fueron mayoría: fueron los que llegaron antes, aprendieron antes y se quedaron con la ventaja.</p>
-      <p class="sub r r3">En los consultorios está pasando hoy. Mientras unos siguen atendiendo el teléfono, en otros el paciente ya sacó turno por WhatsApp. Sumarse primero es la diferencia.</p>
-      <p class="credit r r3">John T. Daniels · Biblioteca del Congreso · dominio público</p>
-    </div>
-  </section>
-
-  <!-- V: laptop over servers -->
-  <section id="adentro" data-ch="III" data-title="Adentro" data-year="now">
-    <div class="tour" id="tour">
-      <div class="stage">
-        <div class="dots" aria-hidden="true"></div>
-        <div class="floor" aria-hidden="true"></div>
-        <div class="panel">
-          <div class="eyebrow"><b>III</b><span>Pantallas reales de Pultzo · datos ficticios</span></div>
-          <h2>Así se ve desde adentro</h2>
-          <ol class="idx" aria-label="Recorrido">
-            <li><span class="bar"><i></i></span>Inicio</li>
-            <li><span class="bar"><i></i></span>Agenda</li>
-            <li><span class="bar"><i></i></span>WhatsApp</li>
-            <li><span class="bar"><i></i></span>Ficha</li>
-            <li><span class="bar"><i></i></span>Sesiones</li>
-            <li><span class="bar"><i></i></span>Stock</li>
-          </ol>
-          <div class="fns">
-            <div class="fn on" data-fn="open"><span class="tag">Seis pantallas</span><h3>De la recepción al depósito.</h3><p class="intro">Bajá despacio: cada pantalla se abre por partes. La barra de arriba te dice cuánto falta.</p></div>
-            <div class="fn" data-fn="0"><span class="tag">01 · Inicio</span><h3>Tu consultorio, en una sola mirada</h3><ul><li><span class="n">01</span><span>Trece pacientes hoy, con su horario y su sillón.</span></li><li><span class="n">02</span><span>Tres insumos para reponer antes de que falten.</span></li><li><span class="n">03</span><span>Una corona que volvió del laboratorio. Cada etiqueta abre la lista exacta.</span></li></ul></div>
-            <div class="fn" data-fn="1"><span class="tag">02 · Agenda</span><h3>El día, medido contra el horario real</h3><ul><li><span class="n">01</span><span>La línea roja marca la hora actual.</span></li><li><span class="n">02</span><span>Al costado, cuánto sillón libre le queda a cada profesional.</span></li><li><span class="n">03</span><span>Recordatorios automáticos veinticuatro y tres horas antes del turno.</span></li></ul></div>
-            <div class="fn" data-fn="2"><span class="tag">03 · WhatsApp · IA</span><h3>El turno se reservó solo</h3><ul><li><span class="n">01</span><span>El paciente escribe a la hora que quiere.</span></li><li><span class="n">02</span><span>El asistente ofrece un hueco real de la agenda y lo confirma.</span></li><li><span class="n">03</span><span>Lo que no resuelve pasa a una persona, con la charla completa.</span></li></ul></div>
-            <div class="fn" data-fn="3"><span class="tag">04 · Historia clínica</span><h3>Una boca, tres cosas por hacer</h3><ul><li><span class="n">01</span><span>El odontograma en arcada marca lo que hay y lo que falta.</span></li><li><span class="n">02</span><span>Se dicta por voz, sin que la voz salga del consultorio.</span></li><li><span class="n">03</span><span>Lo escrito no se borra: se corrige con una entrada nueva.</span></li></ul></div>
-            <div class="fn" data-fn="4"><span class="tag">05 · Sesiones pendientes</span><h3>Diez horas de sillón sin agendar</h3><ul><li><span class="n">01</span><span>Tratamientos en curso que todavía esperan turno.</span></li><li><span class="n">02</span><span>Ordenados por profesional y por quién espera más.</span></li><li><span class="n">03</span><span>Un clic y pasan a la agenda.</span></li></ul></div>
-            <div class="fn" data-fn="5"><span class="tag">06 · Stock</span><h3>Cuántos días de cobertura quedan</h3><ul><li><span class="n">01</span><span>Cada práctica hecha descuenta sola los insumos.</span></li><li><span class="n">02</span><span>Lo que se termina esta semana aparece arriba.</span></li><li><span class="n">03</span><span>El pedido sale ya armado.</span></li></ul></div>
+      <div class="head" data-sc-in>
+        <h2 id="h-inside">Así se ve por dentro.</h2>
+        <p>Pantallas reales con datos ficticios, ordenadas por lo que más plata le cuesta a una clínica.</p>
+      </div>
+      <div class="viewer">
+        <div class="tabs-col">
+          <div class="tabs" role="tablist" aria-label="Módulos de Pultzo">
+            <button class="tab" role="tab" id="t-wa" aria-controls="p-wa" aria-selected="true">WhatsApp</button>
+            <button class="tab" role="tab" id="t-agenda" aria-controls="p-agenda" aria-selected="false" tabindex="-1">Turnos</button>
+            <button class="tab" role="tab" id="t-cobros" aria-controls="p-cobros" aria-selected="false" tabindex="-1">Cobros y obras sociales</button>
+            <button class="tab" role="tab" id="t-sesiones" aria-controls="p-sesiones" aria-selected="false" tabindex="-1">Sesiones pendientes</button>
+            <button class="tab" role="tab" id="t-ficha" aria-controls="p-ficha" aria-selected="false" tabindex="-1">Historia clínica</button>
+            <button class="tab" role="tab" id="t-stock" aria-controls="p-stock" aria-selected="false" tabindex="-1">Stock</button>
+            <button class="tab" role="tab" id="t-inicio" aria-controls="p-inicio" aria-selected="false" tabindex="-1">Todo junto</button>
           </div>
-          <div class="tfoot">
-            <div class="hint" id="hint"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v11M2.5 7.5 7 12l4.5-4.5"/></svg>Seguí bajando</div>
-            <p class="tour-end" id="tour-end">Eso es estar adentro. El trabajo ya no te espera.</p>
+          <div class="panel" role="tabpanel" id="p-wa" aria-labelledby="t-wa">
+            <span class="tag">WhatsApp · IA</span><h3>El turno se reservó solo.</h3>
+            <ul><li>El paciente escribe a la hora que quiere, también a las once de la noche.</li><li>El asistente ofrece un hueco real de la agenda y lo confirma.</li><li>Lo que no resuelve pasa a una persona, con la charla completa.</li></ul>
+          </div>
+          <div class="panel" role="tabpanel" id="p-agenda" aria-labelledby="t-agenda" hidden>
+            <span class="tag">Agenda</span><h3>El día, medido contra el horario real.</h3>
+            <ul><li>Recordatorios automáticos veinticuatro y tres horas antes del turno.</li><li>Cuánto sillón libre le queda a cada profesional.</li><li>La línea roja marca la hora actual.</li></ul>
+          </div>
+          <div class="panel" role="tabpanel" id="p-cobros" aria-labelledby="t-cobros" hidden>
+            <span class="tag">Obras sociales · Cobros</span><h3>Lo que te deben, a la vista.</h3>
+            <ul><li>La presentación de cada obra social, armada con las prestaciones del mes.</li><li>Lo que deben, por días desde que se presentó, y los débitos para refacturar.</li><li>En cobros, la foto del comprobante se lee sola y una persona confirma con un clic.</li></ul>
+            <p class="note">Sin integración directa con las obras sociales por ahora.</p>
+          </div>
+          <div class="panel" role="tabpanel" id="p-sesiones" aria-labelledby="t-sesiones" hidden>
+            <span class="tag">Sesiones pendientes</span><h3>Diez horas de sillón sin agendar.</h3>
+            <ul><li>Tratamientos en curso que todavía esperan turno.</li><li>Ordenados por profesional y por quién espera más.</li><li>Un clic y pasan a la agenda.</li></ul>
+          </div>
+          <div class="panel" role="tabpanel" id="p-ficha" aria-labelledby="t-ficha" hidden>
+            <span class="tag">Historia clínica</span><h3>Una boca, tres cosas por hacer.</h3>
+            <ul><li>El odontograma en arcada marca lo que hay y lo que falta.</li><li>Se dicta por voz, sin que la voz salga del consultorio.</li><li>Lo escrito no se borra: se corrige con una entrada nueva.</li></ul>
+          </div>
+          <div class="panel" role="tabpanel" id="p-stock" aria-labelledby="t-stock" hidden>
+            <span class="tag">Stock</span><h3>Cuántos días de cobertura quedan.</h3>
+            <ul><li>Cada práctica hecha descuenta sola los insumos.</li><li>Lo que se termina esta semana aparece arriba.</li><li>El pedido sale ya armado.</li></ul>
+          </div>
+          <div class="panel" role="tabpanel" id="p-inicio" aria-labelledby="t-inicio" hidden>
+            <span class="tag">Inicio</span><h3>Tu clínica, en una sola mirada.</h3>
+            <ul><li>Los pacientes de hoy, con su horario y su sillón.</li><li>Los insumos para reponer antes de que falten.</li><li>El trabajo que volvió del laboratorio. Cada etiqueta abre la lista exacta.</li></ul>
           </div>
         </div>
-        <div class="laptop" id="laptop">
-          <div class="lid" id="lid">
-            <div class="screen" id="screen">
-              <img src="assets/pantalla-inicio.png" srcset="assets/pantalla-inicio-1600.jpg 1600w, assets/pantalla-inicio.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Inicio 3D de Pultzo: el consultorio en isométrico con etiquetas de lo que pasa hoy" data-s="0" class="on">
-              <img src="assets/pantalla-agenda.png" srcset="assets/pantalla-agenda-1600.jpg 1600w, assets/pantalla-agenda.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Agenda de Pultzo con la línea de ahora, tres profesionales y el panel Cómo viene el día" data-s="1">
-              <img src="assets/pantalla-whatsapp.png" srcset="assets/pantalla-whatsapp-1600.jpg 1600w, assets/pantalla-whatsapp.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Conversaciones de WhatsApp: el asistente confirma un turno" data-s="2">
-              <img src="assets/pantalla-ficha.png" srcset="assets/pantalla-ficha-1600.jpg 1600w, assets/pantalla-ficha.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Ficha de un paciente con el odontograma en arcada y la pieza 27 abierta" data-s="3">
-              <img src="assets/pantalla-sesiones.png" srcset="assets/pantalla-sesiones-1600.jpg 1600w, assets/pantalla-sesiones.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Sesiones pendientes: horas de sillón sin agendar, por profesional y quién espera más" data-s="4">
-              <img src="assets/pantalla-stock.png" srcset="assets/pantalla-stock-1600.jpg 1600w, assets/pantalla-stock.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Stock con días de cobertura por insumo y el pedido armado" data-s="5">
-              <div class="glare"></div>
-              <svg class="cursor" id="cursor" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 1 L2 15 L6 11 L9 17 L11 16 L8 10 L13 10 Z" fill="#F4F1EA" stroke="#17150F" stroke-width="1"/></svg>
+        <div class="device" id="device">
+          <div class="lid">
+            <div class="screen" id="screen" tabindex="0" aria-label="Pantalla del módulo elegido. En el teléfono, deslizá de costado para recorrerla.">
+              <img data-s="wa" src="assets/pantalla-whatsapp-1600.jpg" width="1600" height="1000" decoding="async" alt="Conversaciones de WhatsApp: el asistente confirma un turno">
+              <img data-s="agenda" src="assets/pantalla-agenda-1600.jpg" width="1600" height="1000" decoding="async" alt="Agenda con la línea de ahora, tres profesionales y el panel Cómo viene el día" hidden>
+              <img data-s="cobros" src="assets/pantalla-obras-sociales-1600.jpg" width="1600" height="1000" decoding="async" alt="Obras sociales: presentaciones del mes por obra social, lo que deben por días desde la presentación y débitos para refacturar" hidden>
+              <img data-s="sesiones" src="assets/pantalla-sesiones-1600.jpg" width="1600" height="1000" decoding="async" alt="Sesiones pendientes: horas de sillón sin agendar, por profesional" hidden>
+              <img data-s="ficha" src="assets/pantalla-ficha-1600.jpg" width="1600" height="1000" decoding="async" alt="Ficha de un paciente con el odontograma en arcada" hidden>
+              <img data-s="stock" src="assets/pantalla-stock-1600.jpg" width="1600" height="1000" decoding="async" alt="Stock con días de cobertura por insumo y el pedido armado" hidden>
+              <img data-s="inicio" src="assets/pantalla-inicio-1600.jpg" width="1600" height="1000" decoding="async" alt="Inicio: la clínica en isométrico con etiquetas de lo que pasa hoy" hidden>
             </div>
           </div>
-          <div class="base"></div>
+          <div class="base" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="offer" data-sc-in>
+        <p>¿Lo querés ver con la agenda de tu clínica?</p>
+        <a class="btn btn--acc" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20pedir%20una%20demo%20de%20Pultzo%20para%20mi%20cl%C3%ADnica.">Pedí una demo<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · trust -->
+  <section class="trust" id="confianza" aria-labelledby="h-trust">
+    <div class="wrap">
+      <div class="head" data-sc-in>
+        <h2 id="h-trust">Lo que guarda Pultzo es una historia clínica. Lo cuidamos así.</h2>
+      </div>
+      <div class="facts" data-sc-in data-sc-stagger="60">
+        <div class="fact"><h3>La voz no sale del consultorio</h3><p>El dictado de la historia clínica se procesa en la clínica. La grabación no viaja a ningún servicio externo.</p></div>
+        <div class="fact"><h3>Por WhatsApp, sólo turnos</h3><p>El asistente habla de horarios y reservas. Nunca pide ni manda datos de salud del paciente.</p></div>
+        <div class="fact"><h3>La historia clínica no se borra</h3><p>Lo escrito se corrige con una entrada nueva. Queda registro de quién cambió qué y cuándo.</p></div>
+        <div class="fact"><h3>La IA, con lo mínimo</h3><p>Las integraciones de inteligencia artificial reciben sólo lo necesario y no se entrenan con tus datos.</p></div>
+      </div>
+      <div class="along" data-sc-in>
+        <div>
+          <h2>Lo ponemos en marcha con vos.</h2>
+          <p class="who">No te damos un usuario y una contraseña para que te arregles. Pultzo lo hace y lo opera un equipo chico en Mar del Plata, y la misma persona que te da de alta es la que atiende cuando algo no cierra.</p>
+        </div>
+        <div class="steps">
+          <div class="step"><b>Configuramos tu clínica</b><span>Profesionales, sillones, horarios y aranceles, en una sesión con vos.</span></div>
+          <div class="step"><b>Pasamos tus datos</b><span>Pacientes y turnos desde tu planilla o tu sistema anterior.</span></div>
+          <div class="step"><b>Un contacto directo</b><span>La misma persona desde el primer día, por WhatsApp.</span></div>
+          <div class="step"><b>Mejoras que pide tu equipo</b><span>Lo que tu recepción pide se convierte en producto.</span></div>
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="mobile-tour">
-      <div class="wrap" style="display:flex;flex-direction:column;gap:40px">
-        <div><div class="eyebrow"><b>III</b><span>Pantallas reales · datos ficticios</span></div><h2>Así se ve desde adentro</h2><p class="pan-hint">Deslizá cada pantalla de costado para recorrerla completa.</p></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-inicio-movil.png" loading="lazy" decoding="async" width="780" height="1688" alt="Inicio de Pultzo en el teléfono" style="max-width:56%;margin:0 auto"></div><span class="tag">01 · Inicio</span><h3>Tu consultorio, en una sola mirada</h3><ul><li>Trece pacientes hoy, con su horario y su sillón.</li><li>Tres insumos para reponer antes de que falten.</li><li>Una corona que volvió del laboratorio.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-agenda.png" srcset="assets/pantalla-agenda-1600.jpg 1600w, assets/pantalla-agenda.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Agenda de Pultzo"></div><span class="tag">02 · Agenda</span><h3>El día, medido contra el horario real</h3><ul><li>La línea roja marca la hora actual.</li><li>Cuánto sillón libre le queda a cada profesional.</li><li>Recordatorios automáticos veinticuatro y tres horas antes.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-whatsapp.png" srcset="assets/pantalla-whatsapp-1600.jpg 1600w, assets/pantalla-whatsapp.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Conversaciones de WhatsApp"></div><span class="tag">03 · WhatsApp · IA</span><h3>El turno se reservó solo</h3><ul><li>El paciente escribe a la hora que quiere.</li><li>El asistente ofrece un hueco real y lo confirma.</li><li>Lo que no resuelve pasa a una persona.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-ficha.png" srcset="assets/pantalla-ficha-1600.jpg 1600w, assets/pantalla-ficha.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Odontograma en arcada"></div><span class="tag">04 · Historia clínica</span><h3>Una boca, tres cosas por hacer</h3><ul><li>El odontograma marca lo que hay y lo que falta.</li><li>Se dicta por voz, sin que la voz salga del consultorio.</li><li>Lo escrito se corrige con una entrada nueva.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-sesiones.png" srcset="assets/pantalla-sesiones-1600.jpg 1600w, assets/pantalla-sesiones.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Sesiones pendientes"></div><span class="tag">05 · Sesiones pendientes</span><h3>Diez horas de sillón sin agendar</h3><ul><li>Tratamientos en curso que esperan turno.</li><li>Ordenados por quién espera más.</li><li>Un clic y pasan a la agenda.</li></ul></div>
-        <div class="mstep"><div class="mframe"><img src="assets/pantalla-stock.png" srcset="assets/pantalla-stock-1600.jpg 1600w, assets/pantalla-stock.png 2880w" sizes="(min-width: 901px) 62vw, 520px" loading="lazy" decoding="async" width="2880" height="1800" alt="Stock"></div><span class="tag">06 · Stock</span><h3>Cuántos días de cobertura quedan</h3><ul><li>Cada práctica hecha descuenta sola.</li><li>Lo que se termina esta semana aparece arriba.</li><li>El pedido sale ya armado.</li></ul></div>
+  <!-- 7 · the first flight: founding clinics -->
+  <section data-sc-act="pin" data-sc-span="3.4" id="fundadoras" aria-labelledby="h-fly">
+    <div data-sc-stage class="fly-stage">
+      <div class="fly-ph" aria-hidden="true"><img src="assets/primer-vuelo-1903-1200.jpg" width="1200" height="777" alt=""></div>
+      <div class="fly-col" aria-hidden="true"></div>
+      <div class="sc-copy sc-copy--lead fly-copy" data-sc-cue="0 0.44 0 0.05">
+        <span class="kicker data">17 de diciembre de 1903 · Kitty Hawk</span>
+        <h2 id="h-fly" data-sc-kinetic="lines">Toda revolución empezó con pocos.</h2>
+        <p>Doce segundos en el aire y cinco testigos. Los primeros nunca fueron mayoría: fueron los que llegaron antes y se quedaron con la ventaja.</p>
+        <span class="cr">John T. Daniels · Biblioteca del Congreso · dominio público</span>
+      </div>
+      <div class="sc-copy sc-copy--lead fly-copy" data-sc-cue="0.46 1 0.06 0.02">
+        <h2>Buscamos diez clínicas fundadoras.</h2>
+        <p>Todavía no tenemos testimonios para mostrarte. Preferimos decirlo y ofrecerte algo concreto. A cambio, te pedimos tu opinión.</p>
+        <ul class="perks">
+          <li>Los primeros meses, sin costo</li>
+          <li>Alta y migración de datos incluidas</li>
+          <li>Línea directa con quienes lo construyen</li>
+          <li>Precio fundador cuando empiece a cobrarse</li>
+        </ul>
+        <div class="actions"><a class="btn btn--acc" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20sumar%20mi%20cl%C3%ADnica%20al%20programa%20de%20cl%C3%ADnicas%20fundadoras%20de%20Pultzo.">Quiero ser clínica fundadora<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a></div>
       </div>
     </div>
   </section>
 
-  <!-- VI -->
-  <section class="scene sc--juntos" id="juntos" data-ch="IV" data-title="Con vos" data-year="now">
-    <div class="ghost" aria-hidden="true">IV</div>
+  <!-- 8 · questions -->
+  <section class="faq" id="preguntas" aria-labelledby="h-faq">
     <div class="wrap">
-      <div class="eyebrow r"><b>IV</b><span>Un servicio acompañado, no un login</span></div>
-      <h2 class="r r2">Lo ponemos en marcha con vos.</h2>
-      <p class="line r r3">No te damos un usuario y una contraseña para que te arregles. Configuramos tu clínica juntos y seguimos al lado cuando algo no cierra.</p>
-      <div class="people r r3">
-        <div class="person"><b>Alta acompañada</b><span>Configuramos tu clínica con vos, en una sesión.</span></div>
-        <div class="person"><b>Un contacto directo</b><span>La misma persona desde el primer día.</span></div>
-        <div class="person"><b>Mejoras que pide tu equipo</b><span>Lo que tu equipo pide se convierte en producto.</span></div>
+      <h2 id="h-faq" data-sc-in>Lo que nos preguntan antes de la demo.</h2>
+      <div class="qs" data-sc-in>
+        <details><summary>¿Cuánto cuesta?</summary><p>Las clínicas fundadoras lo usan sin costo los primeros meses y después pagan un precio fundador, que queda fijo para ellas. El precio depende de la cantidad de profesionales y sillones; te lo pasamos en la demo, por escrito.</p></details>
+        <details><summary>¿Cómo paso mis datos?</summary><p>Lo hacemos nosotros. Nos pasás la planilla o la exportación de tu sistema actual y cargamos pacientes y turnos durante el alta.</p></details>
+        <details><summary>¿Funciona con obras sociales?</summary><p>Sí. Cargás los aranceles de cada obra social con su copago, y Pultzo arma la presentación mensual con las prestaciones del mes. Por ahora no hay integración directa con los sistemas de las obras sociales.</p></details>
+        <details><summary>¿Qué pasa si el asistente de WhatsApp se equivoca?</summary><p>Sólo ofrece huecos reales de tu agenda. Lo que no entiende o no puede resolver pasa a una persona de la clínica, con la conversación completa. Las campañas no salen sin que alguien de la clínica las apruebe.</p></details>
+        <details><summary>¿Dónde están mis datos y quién los ve?</summary><p>En infraestructura propia, no en una planilla compartida. Cada persona ve lo que corresponde a su rol: la recepción no ve lo mismo que el profesional. Las integraciones de IA reciben el mínimo necesario y no se entrenan con tus datos.</p></details>
+        <details><summary>¿Sirve si trabajo solo en mi consultorio?</summary><p>Pultzo está pensado para clínicas con varios profesionales y una recepción. Si trabajás solo, escribinos igual y vemos juntos si te sirve.</p></details>
+        <details class="credits"><summary>Créditos de las fotografías</summary><p>Oficina de registros de la Social Security Board, Baltimore, 1937, Harris &amp; Ewing, Biblioteca del Congreso, dominio público. Mostrador de trámites, Toronto, 1946, Toronto Telegram, York University Libraries, dominio público. Steve Jobs y la Macintosh, enero de 1984, Bernard Gotfryd, Biblioteca del Congreso, sin restricciones de copyright conocidas. Puesto de enfermería, 1987, Bill Branson, National Cancer Institute, dominio público. Primer vuelo de los hermanos Wright, Kitty Hawk, 17 de diciembre de 1903, John T. Daniels, Biblioteca del Congreso, dominio público. Las pantallas de Pultzo muestran datos ficticios.</p></details>
       </div>
     </div>
   </section>
 
-  <!-- Colofón -->
-  <section class="colofon" id="contacto" data-ch="" data-title="Colofón" data-year="now">
-    <div class="wrap">
-      <h2 class="r">Si llegaste hasta acá, ya estás un paso adentro.</h2>
-      <div class="cta r r2"><a class="btn" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20pedir%20una%20demo%20de%20Pultzo%20para%20mi%20cl%C3%ADnica.">Pedí una demo<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a><p>Veinte minutos sobre tu consultorio. Te lo mostramos funcionando.</p></div>
-      <a class="all r r2" href="funciones.html"><span><span class="all-k">Todo Pultzo, módulo por módulo</span><span class="all-t">Ver todas las funciones</span></span><span class="all-go" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M3 9h12M10 4l5 5-5 5"/></svg></span></a>
-      <p class="credits r r3">Fotografías: oficina de registros de la Social Security Board, Baltimore, 1937, Harris &amp; Ewing, Biblioteca del Congreso, dominio público · mostrador de trámites, Toronto, 1946, Toronto Telegram, York University Libraries, dominio público · Steve Jobs y la Macintosh, enero de 1984, Bernard Gotfryd, Biblioteca del Congreso, sin restricciones de copyright conocidas · puesto de enfermería, 1987, Bill Branson, National Cancer Institute, dominio público · primer vuelo de los hermanos Wright, Kitty Hawk, 17 de diciembre de 1903, John T. Daniels, Biblioteca del Congreso, dominio público. Las pantallas de Pultzo muestran datos ficticios.</p>
-      <div class="mast r r3"><b>Pultzo</b><span>Gestión odontológica · Argentina · <span id="year">2026</span></span></div>
+  <!-- 9 · close -->
+  <section data-sc-act="pin" data-sc-span="1.2" id="contacto" aria-labelledby="h-close">
+    <div data-sc-stage class="close-stage">
+      <div class="wrap">
+        <h2 id="h-close" data-sc-cue="0 1 0 0">Veinte minutos sobre tu clínica.</h2>
+        <p class="sub" data-sc-cue="0 1 0 0">Te lo mostramos funcionando, con tus profesionales y tus horarios. Si no te sirve, te lo decimos.</p>
+        <div class="actions" data-sc-cue="0 1 0 0"><a class="btn btn--acc" href="https://wa.me/5492235412083?text=Hola%2C%20quiero%20pedir%20una%20demo%20de%20Pultzo%20para%20mi%20cl%C3%ADnica.">Pedí una demo<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a></div>
+        <p class="phone data" data-sc-cue="0 1 0 0">O agendá el número: <b>+54 9 223 541-2083</b></p>
+      </div>
+      <footer class="foot"><div class="wrap"><b>Pultzo</b><a class="all" href="funciones.html">Todas las funciones</a><span>Gestión odontológica · Mar del Plata, Argentina · <span id="year">2026</span></span></div></footer>
     </div>
   </section>
 
-</article>
+</main>
+
 <script>
-(function () {
-    var self = { props: { parallax: 1 } };
-    var root = document.getElementById('pg');
-    if (!root) return;
-    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ============================================================================
+   scrollcraft: a scroll-driven interaction runtime
+   ----------------------------------------------------------------------------
+   Vanilla JS. Zero dependencies. Zero DOM generation.
 
-    // Reveals
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
-    root.querySelectorAll('.r').forEach(function (el) { io.observe(el); });
+   The engine does NOT build your page. You author real, semantic HTML and mark
+   it up with data-sc-* attributes; the engine reads them and drives them from a
+   single scroll value on a single rAF loop. That is deliberate: a runtime that
+   generates its own DOM from a config object makes every site it touches look
+   identical, which is the failure mode this replaces.
 
-    // Folio
-    var folio = document.getElementById('folio');
-    var fNum = document.getElementById('folio-num');
-    var fTitle = document.getElementById('folio-title');
-    var fYear = document.getElementById('folio-year');
-    var chapters = Array.prototype.slice.call(root.querySelectorAll('[data-ch]'));
-    var mode = 'year';
-    var chIo = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var el = e.target;
-        var ch = el.getAttribute('data-ch');
-        fNum.textContent = ch || '∞';
-        if (el.id === 'portada') fNum.textContent = '0';
-        fTitle.textContent = el.getAttribute('data-title') || '';
-        var y = el.getAttribute('data-year');
-        if (y === 'now') { mode = 'clock'; folio.classList.add('now'); }
-        else { mode = 'year'; folio.classList.remove('now'); fYear.textContent = y || ''; }
+   ---------------------------------------------------------------------------
+   ACTS: the unit of scroll time
+   ---------------------------------------------------------------------------
+     <section data-sc-act="pin" data-sc-span="2.5"> ... </section>
+
+     data-sc-act   scrub | pin | pan | flow   (default: flow)
+     data-sc-clip-map="travel" opts a pinned act OUT of full-life clip mapping.
+                   By DEFAULT a scrub clip is mapped across the stage's entire
+                   on-screen life, not across its pinned travel, because a pinned
+                   stage is visible for a viewport BEFORE the pin begins (sliding
+                   up into view) and a viewport AFTER it ends (sliding off the
+                   top). Mapped to pinned travel, the clip sits on its first
+                   frame through the whole entry and its last frame through the
+                   whole exit: the reader watches a still photograph while the
+                   page moves. Pair it with data-sc-dwell, which moves quickly at
+                   the edges and settles in the middle, so the fast motion lands
+                   on the two slides and the settle lands inside the pin where
+                   the copy is. data-sc-runout is accepted and ignored; it named
+                   the old opt-in for the exit half of this.
+     data-sc-span  viewport-heights of scroll this act owns. Pinned devices only
+                   (scrub/pin/pan). Default 1.5. The engine sets the outer
+                   height and sticks the first .sc-stage / [data-sc-stage] child.
+
+     Every act exposes a normalized progress p (0..1):
+       pinned  p = (y - top) / (height - vh)
+       flow    p = (y + vh - top) / (height + vh)
+     and publishes it as --sc-p on the act element, so CSS can read it too.
+
+   ---------------------------------------------------------------------------
+   DEVICES: what p drives
+   ---------------------------------------------------------------------------
+     data-sc-scrub            on <video>. p scrubs currentTime. Blob-loaded, so
+                              it seeks without needing HTTP range support.
+     data-sc-sequence="a/{i}.webp:120:1"
+                              on <canvas>. p scrubs an image sequence
+                              (path template : frameCount : startIndex).
+     data-sc-pan="0.6"        on a wide rail inside data-sc-act="pan". p drives
+                              horizontal travel. Value = extra travel multiplier.
+     data-sc-parallax="-0.2"  translateY by rate * act-progress * viewport.
+                              Negative = moves up faster than scroll (recedes).
+     data-sc-cue="0.1 0.5"    opacity/rise keyed to p. One value = enter+hold.
+                              Two = enter..leave. Add a third for the hold point.
+     data-sc-kinetic="lines"  lines | words | chars. Splits the element and
+                              staggers its reveal across the cue window.
+     data-sc-reveal="up"      up | down | left | right | iris. clip-path wipe.
+     data-sc-count="0 4200"   number bloom across the cue window. Outside any
+                              act it ticks up once on entry instead, over
+                              data-sc-count-ms (default 1400).
+     data-sc-in               flow-section reveal, fires once on entry via
+                              IntersectionObserver (cheaper, and content that
+                              re-hides on scroll-up is a defect, not an effect).
+                              data-sc-stagger="60" on the parent staggers kids.
+     data-sc-drift="#07090c"  page background interpolates toward this colour
+                              while the act is on screen.
+
+   ---------------------------------------------------------------------------
+   WORLDFLIGHT: the page mode for one continuous flight
+   ---------------------------------------------------------------------------
+     <div data-sc-mode="worldflight" data-sc-seam="0.12">
+       <div data-sc-world>
+         <div data-sc-segment data-sc-w="1.4" data-sc-linger="0.3"
+              data-sc-waypoint="Approach">
+           <img class="sc-world__poster" src="p1.webp" alt="">
+           <video data-sc-src="leg1.mp4" data-sc-src-mobile="leg1-m.mp4"></video>
+         </div>
+         ... more segments, in flight order ...
+       </div>
+       <div data-sc-world-copy>
+         <div class="sc-world__scrim sc-scrim sc-scrim--band"></div>
+         <div data-sc-copy data-sc-window="hero"> ... </div>
+         <div data-sc-copy data-sc-window="0.34 0.56"> ... </div>
+         <div data-sc-copy data-sc-window="finale"> ... </div>
+       </div>
+       <div data-sc-spacer aria-hidden="true"></div>
+     </div>
+
+   Acts cut the page into pinned blocks, which is the right shape for a page of
+   chapters and the wrong shape for one continuous camera move: the reader hits
+   the end of an act, the stage unsticks, a static page slides past, and the next
+   act starts the whole thing again. Worldflight removes the seams by removing
+   the blocks. There is ONE fixed stage for the entire page. The only element in
+   document flow is a spacer, whose height the engine sets to the sum of the
+   segment weights plus one viewport so the last flight can finish. Scroll drives
+   the film timeline and the overlay opacity. Nothing else moves.
+
+     data-sc-w        viewport-heights this segment owns. Default 1.3.
+     data-sc-linger   dwell remap for this leg only (see lingerEase). Max 0.6.
+     data-sc-seam     crossfade band, in viewport-heights of scroll. Default 0.12.
+     data-sc-waypoint label published on --sc-seg / the sc:waypoint event, so a
+                      page can draw its own route rail. The engine draws none.
+     data-sc-window   on a copy block: "hero" | "finale" | "from to [in [out]]"
+                      as fractions of the WHOLE track.
+
+   Every clip stays mounted for the life of the page. Segments crossfade by
+   opacity over the seam band; nothing ever swaps a src, because a src swap is a
+   black frame and a black frame is the cut this mode exists to avoid.
+
+   ---------------------------------------------------------------------------
+   POINTER: interactivity that isn't scroll
+   ---------------------------------------------------------------------------
+     data-sc-tilt="8"         3D tilt toward the pointer, spring-damped, degrees.
+     data-sc-magnet="0.35"    element drifts toward the pointer inside its bounds.
+     data-sc-spotlight        publishes --sc-mx/--sc-my (0..1) for a light that
+                              follows the pointer across the surface.
+   All three are gated to (hover: hover) and (pointer: fine) and disabled under
+   prefers-reduced-motion. Touch never fires them.
+
+   ---------------------------------------------------------------------------
+   REDUCED MOTION
+   ---------------------------------------------------------------------------
+   Fewer and gentler, not zero. Cues still fade (comprehension survives), but
+   translation collapses, video clips are never fetched (the poster holds), and
+   pointer devices are inert. A worldflight still tells its whole story: the
+   posters cross-dissolve through the same seams and the same copy windows.
+
+   ---------------------------------------------------------------------------
+   THE PLAYHEAD
+   ---------------------------------------------------------------------------
+   Every scrub clip on the page, act or worldflight, is driven by one smoothed
+   playhead. Scroll only ever writes a TARGET; a standalone rAF loop walks the
+   current time toward it at a fixed fraction per frame (data-sc-lerp, default
+   0.18; 1.0 under reduced motion, which is no smoothing at all). Writes are
+   gated by a deadband and skipped while the decoder is still seeking. Without
+   the smoothing a trackpad flick reads as a stutter, because wheel events do
+   not arrive at a constant rate and a 1:1 write reproduces every gap in them.
+   ========================================================================== */
+
+(function (global) {
+  'use strict';
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fineMQ = matchMedia('(hover: hover) and (pointer: fine)');
+  var smallMQ = matchMedia('(max-width: 860px)');
+  var coarse = matchMedia('(hover: none) and (pointer: coarse)').matches;
+  var isMobile = function () { return coarse || smallMQ.matches; };
+
+  var clamp = function (x, a, b) { return x < a ? a : x > b ? b : x; };
+  var clamp01 = function (x) { return clamp(x, 0, 1); };
+  var smooth = function (x) { x = clamp01(x); return x * x * (3 - 2 * x); };
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+
+  // Monotone dwell remap. Settles the camera mid-act (where the copy peaks) and
+  // moves quicker at the edges. f(0)=0 and f(1)=1 always, so seam frames between
+  // consecutive clips are untouched and the chain stays invisible.
+  function dwell(x, L) {
+    if (!L) return x;
+    L = clamp01(L);
+    var c = x - 0.5;
+    return (1 - L) * x + L * (4 * c * c * c + 0.5);
+  }
+
+  // Same curve, capped harder, and used per worldflight segment. Above ~0.6 the
+  // derivative at the midpoint gets low enough that the camera visibly stops
+  // dead mid-leg, which reads as a stall rather than a hold. The endpoints are
+  // fixed by construction: f(0)=0, f(1)=1, so the first and last frames of every
+  // leg are still exactly the frames the seam law matched, and the chain between
+  // legs stays invisible no matter how much dwell a leg asks for.
+  function lingerEase(x, L) {
+    if (!L) return x;
+    L = clamp(L, 0, 0.6);
+    var c = x - 0.5;
+    return (1 - L) * x + L * (4 * c * c * c + 0.5);
+  }
+
+  // The lerp is a mechanism, not a taste knob. It is exposed so a page whose
+  // clips are unusually short (where 0.18 lags behind the pointer) can tighten
+  // it, and it is never read as 0: a 0 lerp is a playhead that never moves.
+  function lerpRate(el) {
+    var v = parseFloat(el && el.getAttribute && el.getAttribute('data-sc-lerp'));
+    return isNaN(v) || v <= 0 ? 0 : clamp(v, 0.02, 1);
+  }
+
+  // ---- colour -------------------------------------------------------------
+  function parseColor(str) {
+    str = (str || '').trim();
+    var m = str.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    if (m) {
+      var h = m[1];
+      if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+      return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+    }
+    m = str.match(/rgba?\(([^)]+)\)/i);
+    if (m) {
+      var p = m[1].split(/[,\s/]+/).filter(Boolean).map(parseFloat);
+      return [p[0], p[1], p[2]];
+    }
+    return null;
+  }
+  function mixColor(a, b, t) {
+    return 'rgb(' + Math.round(lerp(a[0], b[0], t)) + ',' +
+                    Math.round(lerp(a[1], b[1], t)) + ',' +
+                    Math.round(lerp(a[2], b[2], t)) + ')';
+  }
+
+  // ---- text splitting -----------------------------------------------------
+  // Wraps each unit in a masked span so the reveal can slide from behind a clean
+  // edge instead of just fading. Lines are measured after layout, so this must
+  // run once fonts are ready or the line boxes are wrong.
+  function splitText(el, mode) {
+    if (el.__scSplit) return el.__scSplit;
+    var text = el.textContent;
+    var units = [];
+
+    if (mode === 'chars' || mode === 'words') {
+      var parts = mode === 'chars' ? Array.from(text) : text.split(/(\s+)/);
+      el.textContent = '';
+      parts.forEach(function (t) {
+        if (/^\s+$/.test(t)) { el.appendChild(document.createTextNode(t)); return; }
+        var mask = document.createElement('span');
+        mask.className = 'sc-split';
+        var inner = document.createElement('span');
+        inner.className = 'sc-split__i';
+        inner.textContent = t;
+        mask.appendChild(inner);
+        el.appendChild(mask);
+        units.push(inner);
       });
-    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-    chapters.forEach(function (c) { chIo.observe(c); });
-
-    // Clock
-    var hm = document.getElementById('clk-hm'), sec = document.getElementById('clk-s'), date = document.getElementById('clk-date');
-    var fmtDate = new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    function pad(n) { return (n < 10 ? '0' : '') + n; }
-    function tick() {
-      var d = new Date();
-      var t = pad(d.getHours()) + ':' + pad(d.getMinutes());
-      if (hm) hm.textContent = t;
-      if (sec) sec.textContent = ':' + pad(d.getSeconds());
-      if (date) date.textContent = fmtDate.format(d);
-      if (mode === 'clock' && fYear) fYear.textContent = t + ':' + pad(d.getSeconds());
-    }
-    tick();
-    self._clock = setInterval(tick, 1000);
-
-    // Laptop tour: every function gets the same scroll distance, split in four beats
-    // (title, then one item per beat), so progress is visible and never rushed.
-    var tour = document.getElementById('tour');
-    var lid = document.getElementById('lid');
-    var screen = document.getElementById('screen');
-    var cursor = document.getElementById('cursor');
-    var hint = document.getElementById('hint');
-    var tourEnd = document.getElementById('tour-end');
-    var shots = screen ? Array.prototype.slice.call(screen.querySelectorAll('img[data-s]')) : [];
-    var fns = Array.prototype.slice.call(root.querySelectorAll('.fn'));
-    var idxItems = Array.prototype.slice.call(root.querySelectorAll('.idx li'));
-    var cursorSpots = { '0': [56, 46], '1': [30, 70], '2': [82, 56], '3': [58, 66], '4': [26, 20], '5': [92, 20] };
-    var OPEN = 0.9, FN = 1.6, BEATS = 4, COUNT = 6;
-    var current = null, currentSub = -1;
-    function pulseCursor() {
-      if (!cursor) return;
-      cursor.classList.remove('click');
-      void cursor.offsetWidth;
-      cursor.classList.add('click');
-    }
-    function render(idx, sub, frac, end) {
-      var key = idx < 0 ? 'open' : String(idx);
-      // Classes are re-applied every frame: a re-render resets them to the markup.
-      fns.forEach(function (f) { f.classList.toggle('on', f.getAttribute('data-fn') === key); });
-      var shot = idx < 0 ? '0' : key;
-      shots.forEach(function (img) { img.classList.toggle('on', img.getAttribute('data-s') === shot); });
-      // Push into the part of the screen each item talks about; the cursor spot is the zoom origin,
-      // so the cursor stays on the same pixel while the screen grows around it.
-      var zoom = (idx < 0 || end) ? 1 : [1, 1.14, 1.26, 1.36][sub];
-      shots.forEach(function (img) {
-        var k = img.getAttribute('data-s');
-        var sp = cursorSpots[k] || [50, 50];
-        img.style.transformOrigin = sp[0] + '% ' + sp[1] + '%';
-        img.style.transform = 'scale(' + (k === shot ? zoom : 1) + ')';
+    } else {
+      // lines: wrap every word, measure offsetTop, regroup words into line spans
+      var words = text.split(/\s+/).filter(Boolean);
+      el.textContent = '';
+      var probes = words.map(function (w, i) {
+        var s = document.createElement('span');
+        s.textContent = w;
+        el.appendChild(s);
+        if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+        return s;
       });
-      if (idx >= 0 && fns[idx + 1]) {
-        Array.prototype.forEach.call(fns[idx + 1].querySelectorAll('li'), function (li, i) { li.classList.toggle('on', i < sub); });
-      }
-      if (key !== current) {
-        current = key;
-        currentSub = -1;
-        if (cursor) {
-          if (idx < 0) cursor.classList.remove('on');
-          else {
-            var spot = cursorSpots[key] || [50, 50];
-            cursor.classList.add('on');
-            cursor.style.left = spot[0] + '%';
-            cursor.style.top = spot[1] + '%';
-          }
-        }
-      }
-      if (idx >= 0 && sub !== currentSub) {
-        currentSub = sub;
-        if (sub > 0) pulseCursor();
-      }
-      idxItems.forEach(function (li, i) {
-        var f = i < idx ? 1 : (i === idx ? frac : 0);
-        li.querySelector('i').style.setProperty('--f', f.toFixed(3));
-        li.classList.toggle('done', i < idx || (i === idx && end));
-        li.classList.toggle('cur', i === idx && !end);
+      var lines = [], cur = null, lastTop = null;
+      probes.forEach(function (s) {
+        var top = s.offsetTop;
+        if (lastTop === null || Math.abs(top - lastTop) > 1) { cur = []; lines.push(cur); lastTop = top; }
+        cur.push(s.textContent);
       });
-      if (hint) hint.classList.toggle('off', end);
-      if (tourEnd) tourEnd.classList.toggle('on', end);
+      el.textContent = '';
+      lines.forEach(function (words, li) {
+        var mask = document.createElement('span');
+        mask.className = 'sc-split sc-split--line';
+        var inner = document.createElement('span');
+        inner.className = 'sc-split__i';
+        inner.textContent = words.join(' ');
+        mask.appendChild(inner);
+        el.appendChild(mask);
+        // Whitespace between the line spans. Without it the line boxes abut in
+        // the text layer, so selecting and copying the heading yields
+        // "even whenbreakfast" and a screen reader hears the same.
+        if (li < lines.length - 1) el.appendChild(document.createTextNode(' '));
+        units.push(inner);
+      });
     }
-    function tourFrame(vh) {
-      if (!tour) return;
-      var s = Math.max(0, -tour.getBoundingClientRect().top / vh);
-      if (lid) lid.style.setProperty('--open', reduced ? 1 : Math.min(1, s / 0.6).toFixed(3));
-      var t = s - OPEN;
-      if (t < 0) { render(-1, 0, 0, false); return; }
-      var end = t >= COUNT * FN;
-      var idx = Math.min(COUNT - 1, Math.floor(t / FN));
-      var within = Math.min(FN, t - idx * FN);
-      var sub = Math.min(BEATS - 1, Math.floor(within / (FN / BEATS)));
-      render(idx, sub, within / FN, end);
+    el.classList.add('sc-is-split');
+    el.__scSplit = units;
+    return units;
+  }
+
+  // ---- number formatting --------------------------------------------------
+  function formatNum(v, template) {
+    var decimals = 0;
+    var dot = template.indexOf('.');
+    if (dot > -1) decimals = template.length - dot - 1;
+    var s = v.toFixed(decimals);
+    if (/,/.test(template) || Math.abs(v) >= 10000) {
+      var bits = s.split('.');
+      bits[0] = bits[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      s = bits.join('.');
+    }
+    return s;
+  }
+
+  // =========================================================================
+  function mount(root, opts) {
+    root = typeof root === 'string' ? document.querySelector(root) : (root || document);
+    opts = opts || {};
+
+    var acts = [];
+    var worlds = [];
+    var drifts = [];
+    var playheads = [];
+    var scrollEls = [];
+    var vh = innerHeight, vw = innerWidth;
+    var y = 0, needsLayout = true;
+    var progressBar = root.querySelector('[data-sc-progress]');
+    var docEl = document.documentElement;
+
+    // One rate for the page, overridable per clip. Read from the mount root, the
+    // document element, or the option bag, in that order.
+    var LERP = lerpRate(root.nodeType === 1 ? root : null) ||
+               lerpRate(docEl) ||
+               (opts.lerp > 0 ? clamp(opts.lerp, 0.02, 1) : 0) ||
+               0.18;
+
+    // Every scrub clip on the page lives here, whatever drives it. tick() walks
+    // this one list, so an act clip and a worldflight leg get the same playhead.
+    function makeClip(v, host) {
+      var rec = {
+        el: v, host: host || v,
+        ready: false, loading: false, painted: false,
+        cur: 0, target: 0, live: false, stuckAt: 0,
+        lerp: lerpRate(v) || LERP
+      };
+      v.muted = true; v.playsInline = true; v.preload = 'none';
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+      playheads.push(rec);
+      return rec;
     }
 
-    // Eras: one pinned stage, scroll position s in viewport-heights (0 to 5).
-    // 0-0.9 paper holds, 0.9-1.5 the spreadsheet wipes in, 2.4-3.0 the software wipes in,
-    // 3.7-4.4 the three settle into a triptych, then a viewport of reading.
-    var eras = document.getElementById('eras');
-    var eraPh = eras ? Array.prototype.slice.call(eras.querySelectorAll('.era-ph')) : [];
-    var eraTs = eras ? Array.prototype.slice.call(eras.querySelectorAll('.era-t')) : [];
-    var eraLis = eras ? Array.prototype.slice.call(eras.querySelectorAll('.era-line li')) : [];
-    var eraYear = document.getElementById('era-year');
-    var seam = document.getElementById('era-seam');
-    var tri = document.getElementById('era-tri');
-    function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
-    function ease(v) { v = clamp01(v); return v * v * (3 - 2 * v); }
-    function seg(s, a, b) { return clamp01((s - a) / (b - a)); }
-    function clip(r, l, g) { return 'inset(0 calc(' + r.toFixed(3) + '% + ' + g + 'px) 0 calc(' + l.toFixed(3) + '% + ' + g + 'px))'; }
-    function erasFrame(vh) {
-      if (!eras || eraPh.length < 3) return;
-      var s = Math.max(0, -eras.getBoundingClientRect().top / vh);
-      var w1 = reduced ? (s >= 1.2 ? 1 : 0) : ease(seg(s, 0.9, 1.5));
-      var w2 = reduced ? (s >= 2.7 ? 1 : 0) : ease(seg(s, 2.4, 3.0));
-      var t = reduced ? (s >= 4.0 ? 1 : 0) : ease(seg(s, 3.7, 4.4));
-      var g = (t * 5).toFixed(1);
-      eraPh[0].style.clipPath = clip(66.667 * t, 0, g);
-      eraPh[1].style.clipPath = clip(33.333 * t, (1 - t) * 100 * (1 - w1) + t * 33.333, g);
-      eraPh[2].style.clipPath = clip(0, (1 - t) * 100 * (1 - w2) + t * 66.667, g);
-      eraPh.forEach(function (p, i) { p.style.setProperty('--z', (1.08 - 0.06 * clamp01(s / 5) - 0.02 * i * t).toFixed(4)); });
-      var edge = (w1 > 0 && w1 < 1) ? 1 - w1 : ((w2 > 0 && w2 < 1) ? 1 - w2 : -1);
-      if (seam) {
-        seam.style.opacity = edge < 0 ? '0' : '1';
-        seam.style.transform = 'translateX(' + (Math.max(0, edge) * eras.clientWidth).toFixed(1) + 'px)';
-      }
-      var year = Math.round(s < 1.95 ? 1946 + 38 * w1 : 1984 + 3 * w2);
-      if (eraYear) { eraYear.textContent = String(year); eraYear.style.opacity = (1 - t).toFixed(3); }
-      if (tri) tri.style.opacity = (t * 0.85).toFixed(3);
-      var dim = document.getElementById('era-dim');
-      if (dim) dim.style.opacity = (t * 0.5).toFixed(3);
-      var eraLine = eras.querySelector('.era-line');
-      if (eraLine) eraLine.style.opacity = (1 - t).toFixed(3);
-      var active = s < 1.2 ? 0 : (s < 2.7 ? 1 : (s < 4.0 ? 2 : 3));
-      eraTs.forEach(function (el, i) { el.classList.toggle('on', i === active); });
-      var fills = [seg(s, 0, 1.5), seg(s, 1.5, 3.0), seg(s, 3.0, 4.4)];
-      eraLis.forEach(function (li, i) {
-        li.querySelector('i').style.setProperty('--f', fills[i].toFixed(3));
-        li.classList.toggle('cur', active === i || (active === 3));
-      });
-      var r = eras.getBoundingClientRect();
-      if (r.top < vh * 0.5 && r.bottom > vh * 0.5 && fYear) fYear.textContent = String(year);
-    }
+    // ---- collect acts -----------------------------------------------------
+    Array.prototype.forEach.call(root.querySelectorAll('[data-sc-act]'), function (el) {
+      var device = el.getAttribute('data-sc-act') || 'flow';
+      var pinned = device === 'scrub' || device === 'pin' || device === 'pan';
+      var act = {
+        el: el,
+        device: device,
+        pinned: pinned,
+        span: parseFloat(el.getAttribute('data-sc-span')) || (pinned ? 1.5 : 0),
+        dwell: parseFloat(el.getAttribute('data-sc-dwell')) || 0,
+        clipTravel: pinned && el.getAttribute('data-sc-clip-map') === 'travel',
+        p: 0, raw: 0, top: 0, height: 0, live: false,
+        cues: [], parallax: [], reveals: [], counts: [],
+        video: null, seq: null, rail: null
+      };
 
-    // Phone tour: each wide screen opens already panned to the part its copy talks about.
-    var panAt = [null, 0.08, 0.55, 0.5, 0.1, 0.15];
-    Array.prototype.forEach.call(root.querySelectorAll('.mobile-tour .mframe'), function (f, i) {
-      var x = panAt[i];
-      if (x == null) return;
-      var img = f.querySelector('img');
-      function place() { f.scrollLeft = Math.max(0, f.scrollWidth - f.clientWidth) * x; }
-      if (img && !img.complete) img.addEventListener('load', place, { once: true });
-      place();
+      if (pinned) {
+        act.stage = el.querySelector('[data-sc-stage]') || el.querySelector('.sc-stage');
+        if (act.stage) act.stage.classList.add('sc-stage');
+        el.classList.add('sc-act--pinned');
+      }
+
+      // scrub video
+      var v = el.querySelector('video[data-sc-scrub]');
+      if (v) act.video = makeClip(v, el);
+
+      // image sequence
+      var cv = el.querySelector('canvas[data-sc-sequence]');
+      if (cv) {
+        var spec = cv.getAttribute('data-sc-sequence').split(':');
+        act.seq = {
+          el: cv, ctx: cv.getContext('2d', { alpha: false }),
+          tpl: spec[0], count: parseInt(spec[1], 10) || 1, start: parseInt(spec[2], 10) || 0,
+          frames: [], loaded: 0, drawn: -1
+        };
+      }
+
+      // horizontal rail
+      act.rail = el.querySelector('[data-sc-pan]');
+      if (act.rail) act.railExtra = parseFloat(act.rail.getAttribute('data-sc-pan')) || 0;
+
+      // cues
+      Array.prototype.forEach.call(el.querySelectorAll('[data-sc-cue]'), function (c) {
+        var nums = (c.getAttribute('data-sc-cue') || '').trim().split(/\s+/).map(parseFloat);
+        // from [to [rampIn [rampOut]]]
+        // rampIn/rampOut are fractions OF THE WINDOW, defaulting to 0.3 each.
+        // That leaves a ~40% plateau at full opacity in the middle. Without a
+        // plateau a cue is a triangle: it touches opacity 1 for a single
+        // instant, so the reader has to stop on exactly the right pixel to see
+        // the line at full strength, and every heading reads as slightly faded.
+        var cue = {
+          el: c,
+          from: isNaN(nums[0]) ? 0 : nums[0],
+          to: nums.length > 1 && !isNaN(nums[1]) ? nums[1] : null,
+          rIn: nums.length > 2 && !isNaN(nums[2]) ? clamp01(nums[2]) : 0.3,
+          rOut: nums.length > 3 && !isNaN(nums[3]) ? clamp01(nums[3]) : null,
+          rise: parseFloat(c.getAttribute('data-sc-rise')),
+          kinetic: c.getAttribute('data-sc-kinetic'),
+          units: null, state: -1
+        };
+        if (cue.rOut === null) cue.rOut = (nums.length > 2 && !isNaN(nums[2])) ? 0.3 : 0.3;
+        if (isNaN(cue.rise)) cue.rise = 1;
+        act.cues.push(cue);
+      });
+
+      // parallax
+      Array.prototype.forEach.call(el.querySelectorAll('[data-sc-parallax]'), function (c) {
+        act.parallax.push({ el: c, rate: parseFloat(c.getAttribute('data-sc-parallax')) || 0 });
+      });
+
+      // reveals
+      Array.prototype.forEach.call(el.querySelectorAll('[data-sc-reveal]'), function (c) {
+        var nums = (c.getAttribute('data-sc-reveal-at') || '0 0.5').trim().split(/\s+/).map(parseFloat);
+        act.reveals.push({ el: c, dir: c.getAttribute('data-sc-reveal') || 'up', from: nums[0] || 0, to: nums[1] || 0.5 });
+      });
+
+      // counters
+      Array.prototype.forEach.call(el.querySelectorAll('[data-sc-count]'), function (c) {
+        var nums = (c.getAttribute('data-sc-count') || '').trim().split(/\s+/);
+        var at = (c.getAttribute('data-sc-count-at') || '0.1 0.55').trim().split(/\s+/).map(parseFloat);
+        // Strip separators before parsing so the author can write the target
+        // exactly as it should render. Without this, "0 3,500" parses the target
+        // as 3 (the comma stops parseFloat) and "0 3500" renders "3500", because
+        // formatNum only adds separators above 10,000. So any real figure between
+        // 1,000 and 9,999 could not be shown the way it is written everywhere
+        // else on the page. The template still drives the formatting.
+        var num = function (s) { return parseFloat(String(s).replace(/,/g, '')) || 0; };
+        act.counts.push({
+          el: c, a: num(nums[0]), b: num(nums[1]),
+          tpl: nums[1] || '0', from: at[0], to: at[1], last: null
+        });
+      });
+
+      acts.push(act);
+
+      var d = el.getAttribute('data-sc-drift');
+      if (d) { var rgb = parseColor(d); if (rgb) drifts.push({ act: act, rgb: rgb }); }
     });
 
-    // Scroll-driven: photo parallax, lid opening
-    var pars = Array.prototype.slice.call(root.querySelectorAll('[data-par]'));
-    var ticking = false;
-    function frame() {
-      ticking = false;
-      var vh = window.innerHeight || 800;
-      var k = Number(self.props.parallax == null ? 1 : self.props.parallax);
-      if (!reduced) {
-        pars.forEach(function (p) {
-          var r = p.parentElement.getBoundingClientRect();
-          var prog = (vh - r.top) / (vh + r.height);
-          prog = Math.min(1, Math.max(0, prog));
-          var f = parseFloat(p.getAttribute('data-par')) * k;
-          p.style.transform = 'translate3d(0,' + ((prog - 0.5) * f * vh).toFixed(1) + 'px,0)';
+    // ---- collect worldflights --------------------------------------------
+    Array.prototype.forEach.call(root.querySelectorAll('[data-sc-mode="worldflight"]'), function (el) {
+      var W = {
+        el: el,
+        stage: el.querySelector('[data-sc-world]') || el.querySelector('.sc-world'),
+        copyLayer: el.querySelector('[data-sc-world-copy]') || el.querySelector('.sc-world__copy'),
+        spacer: el.querySelector('[data-sc-spacer]') || el.querySelector('.sc-world__spacer'),
+        seam: 0, segs: [], copies: [], total: 0, top: 0, index: -1, checked: false
+      };
+      var seam = parseFloat(el.getAttribute('data-sc-seam'));
+      // A seam wider than the shortest leg would have three clips dissolving at
+      // once and no leg ever fully present. Cap it well under that.
+      W.seam = isNaN(seam) || seam <= 0 ? 0.12 : clamp(seam, 0.02, 0.4);
+      if (W.stage) W.stage.classList.add('sc-world');
+      if (W.copyLayer) W.copyLayer.classList.add('sc-world__copy');
+      if (W.spacer) W.spacer.classList.add('sc-world__spacer');
+
+      Array.prototype.forEach.call(el.querySelectorAll('[data-sc-segment]'), function (s) {
+        var seg = {
+          el: s,
+          w: parseFloat(s.getAttribute('data-sc-w')) || 1.3,
+          linger: clamp(parseFloat(s.getAttribute('data-sc-linger')) || 0, 0, 0.6),
+          label: s.getAttribute('data-sc-waypoint') || '',
+          poster: s.querySelector('[data-sc-poster]') || s.querySelector('.sc-world__poster') || s.querySelector('img'),
+          c0: 0, c1: 0, local: 0, op: -1, z: -1, clip: null
+        };
+        s.classList.add('sc-world__seg');
+        if (seg.poster) seg.poster.classList.add('sc-world__poster');
+        var v = s.querySelector('video');
+        if (v) {
+          // Mark it as a scrub clip whether or not the author did. Everything
+          // downstream, the stylesheet and the verification harness included,
+          // finds scrub media by this attribute.
+          v.setAttribute('data-sc-scrub', '');
+          seg.clip = makeClip(v, s);
+        }
+        W.segs.push(seg);
+      });
+
+      var run = 0;
+      W.segs.forEach(function (s) { s.c0 = run; run += Math.max(s.w, 0.1); s.c1 = run; });
+      W.total = Math.max(run, 0.001);
+
+      Array.prototype.forEach.call(el.querySelectorAll('[data-sc-copy]'), function (cEl) {
+        var spec = (cEl.getAttribute('data-sc-window') || '').trim();
+        var q = { el: cEl, from: 0, to: 1, rIn: 0.3, rOut: 0.3, state: -1 };
+        var first = W.segs[0], last = W.segs[W.segs.length - 1];
+        if (spec === 'hero') {
+          // Present the instant the reader lands. A hero that fades IN has to
+          // fade in from nothing over an empty first screen, which is the one
+          // moment on the page where there is nothing else to look at.
+          q.from = 0;
+          q.to = first ? (0.62 * first.w) / W.total : 0.3;
+          q.rIn = 0; q.rOut = 0.65;
+        } else if (spec === 'finale') {
+          q.from = last ? (last.c0 + 0.4 * last.w) / W.total : 0.7;
+          q.to = 1; q.rIn = 0.55; q.rOut = 0;
+        } else {
+          var n = spec.split(/\s+/).map(parseFloat);
+          q.from = isNaN(n[0]) ? 0 : clamp01(n[0]);
+          q.to = (n.length > 1 && !isNaN(n[1])) ? clamp01(n[1]) : clamp01(q.from + 0.18);
+          if (n.length > 2 && !isNaN(n[2])) q.rIn = clamp01(n[2]);
+          if (n.length > 3 && !isNaN(n[3])) q.rOut = clamp01(n[3]);
+        }
+        if (q.to <= q.from) q.to = clamp01(q.from + 0.05);
+        W.copies.push(q);
+      });
+
+      worlds.push(W);
+    });
+
+    // ---- flow reveals (fire once) ----------------------------------------
+    var io = null;
+    if ('IntersectionObserver' in window) {
+      io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var el = e.target;
+          el.classList.add('sc-in');
+          var stagger = parseFloat(el.getAttribute('data-sc-stagger'));
+          if (!isNaN(stagger)) {
+            Array.prototype.forEach.call(el.children, function (kid, i) {
+              kid.style.transitionDelay = (i * stagger) + 'ms';
+              kid.classList.add('sc-in');
+            });
+          }
+          io.unobserve(el);
+        });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.01 });
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sc-in]'), function (el) { io.observe(el); });
+    } else {
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sc-in]'), function (el) { el.classList.add('sc-in'); });
+    }
+
+    // ---- entry counters (fire once) --------------------------------------
+    // A [data-sc-count] outside any pinned act is not scrubbed by scroll; it
+    // ticks up once when it enters view, over data-sc-count-ms (default 1400).
+    // Same formatting rules as the act counter: write the target as it should
+    // render. Reduced motion writes the final value and never animates.
+    (function () {
+      var ease = function (t) { return 1 - Math.pow(1 - t, 3); };
+      var num = function (s) { return parseFloat(String(s).replace(/,/g, '')) || 0; };
+      var spec = function (c) { return (c.getAttribute('data-sc-count') || '').trim().split(/\s+/); };
+      var els = Array.prototype.filter.call(root.querySelectorAll('[data-sc-count]'), function (c) {
+        return !c.closest('[data-sc-act]');
+      });
+      if (!els.length) return;
+      function run(c) {
+        var nums = spec(c);
+        var a = num(nums[0]), b = num(nums[1]), tpl = nums[1] || '0';
+        var ms = parseFloat(c.getAttribute('data-sc-count-ms')) || 1400;
+        if (reduce || ms <= 0) { c.textContent = formatNum(b, tpl); return; }
+        var t0 = null, last = null;
+        function frame(now) {
+          if (t0 === null) t0 = now;
+          var t = Math.min((now - t0) / ms, 1);
+          var out = formatNum(a + (b - a) * ease(t), tpl);
+          if (out !== last) { c.textContent = out; last = out; }
+          if (t < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+      els.forEach(function (c) { var n = spec(c); c.textContent = formatNum(num(n[0]), n[1] || '0'); });
+      if ('IntersectionObserver' in window) {
+        var cio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            run(e.target); cio.unobserve(e.target);
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.5 });
+        els.forEach(function (c) { cio.observe(c); });
+      } else {
+        els.forEach(run);
+      }
+    })();
+
+    // ---- layout -----------------------------------------------------------
+    function layout() {
+      vh = innerHeight; vw = innerWidth;
+      acts.forEach(function (a) {
+        if (a.pinned) a.el.style.height = (a.span * 100) + 'vh';
+      });
+      // The spacer is the whole document flow of a worldflight. Its height is
+      // the sum of the leg weights plus one viewport: without that extra screen
+      // the track runs out at the moment the last leg reaches p=1, so the last
+      // leg's final second is a place the reader can never actually stop.
+      // Set in pixels, not vh, because .sc-world is sized in svh on phones and a
+      // vh/svh mismatch would put the track and the stage on different rulers.
+      worlds.forEach(function (W) {
+        if (W.spacer) W.spacer.style.height = Math.round((W.total + 1) * vh) + 'px';
+      });
+      acts.forEach(function (a) {
+        var r = a.el.getBoundingClientRect();
+        a.top = r.top + scrollY;
+        a.height = r.height;
+      });
+      if (acts.length) {
+        acts.forEach(function (a) {
+          if (a.seq && a.seq.el) {
+            var box = a.seq.el.getBoundingClientRect();
+            var dpr = Math.min(devicePixelRatio || 1, 2);
+            a.seq.el.width = Math.round(box.width * dpr);
+            a.seq.el.height = Math.round(box.height * dpr);
+            a.seq.drawn = -1;
+          }
         });
       }
-      // Safety net for reveals: anything already on screen is shown, even after a re-render.
-      root.querySelectorAll('.r:not(.in)').forEach(function (el) {
-        if (el.getBoundingClientRect().top < vh * 0.95) el.classList.add('in');
+      // A pinned act whose stage is not actually sticky fails silently: the
+      // stage just scrolls by, the copy cues correctly against a frame nobody
+      // can see, and every automated check passes. Any author rule that sets
+      // `position` on the stage causes it. Say so.
+      acts.forEach(function (a) {
+        if (!a.pinned || !a.stage || a.stageChecked) return;
+        a.stageChecked = true;
+        var pos = getComputedStyle(a.stage).position;
+        if (pos !== 'sticky' && pos !== '-webkit-sticky') {
+          console.warn('[scrollcraft] act "' + (a.el.id || a.device) + '" will not pin: its stage computes ' +
+            'position:' + pos + ', not sticky. Something is overriding .sc-stage.', a.stage);
+        }
       });
-      erasFrame(vh);
-      tourFrame(vh);
-      progFrame(vh);
+
+      worlds.forEach(function (W) {
+        W.top = W.el.getBoundingClientRect().top + scrollY;
+        if (W.checked) return;
+        W.checked = true;
+        if (!W.stage) {
+          console.warn('[scrollcraft] worldflight has no [data-sc-world] stage; nothing will fly.', W.el);
+          return;
+        }
+        if (!W.spacer) {
+          console.warn('[scrollcraft] worldflight has no [data-sc-spacer]; the page has no scroll track.', W.el);
+        }
+        // The same silent failure as an unpinned act, one level worse: a stage
+        // that is not fixed scrolls away and takes the whole page with it, while
+        // every progress number still reads correctly.
+        var wp = getComputedStyle(W.stage).position;
+        if (wp !== 'fixed') {
+          console.warn('[scrollcraft] worldflight stage computes position:' + wp + ', not fixed. ' +
+            'Something is overriding .sc-world, and the flight will scroll off screen.', W.stage);
+        }
+      });
+
+      needsLayout = false;
+      read();
     }
-    // Reading rail: fill follows the whole page; each mark sits where its chapter starts.
-    var progFill = document.getElementById('prog-fill');
-    var progMarks = Array.prototype.slice.call(root.querySelectorAll('#prog-marks li'));
-    function progFrame(vh) {
-      var rr = root.getBoundingClientRect();
-      var span = Math.max(1, rr.height - vh);
-      var p = clamp01(-rr.top / span);
-      if (progFill) progFill.style.setProperty('--p', p.toFixed(4));
-      var cur = -1;
-      var at = progMarks.map(function (li, i) {
-        var el = document.getElementById(li.getAttribute('data-to'));
-        var f = el ? clamp01((el.getBoundingClientRect().top - rr.top) / span) : 1;
-        if (f <= p + 0.002) cur = i;
-        return f;
+
+    // ---- video ------------------------------------------------------------
+    function loadVideo(a) { loadClip(a.video); }
+    function loadClip(V) {
+      // Under reduced motion the clip is never fetched. The poster holds the
+      // frame and the copy still cues, so the page reads without the decode.
+      if (reduce || !V || V.loading) return;
+      var src = V.el.getAttribute('data-sc-src') ||
+                (isMobile() && V.el.getAttribute('data-sc-src-mobile')) ||
+                V.el.currentSrc || V.el.src;
+      if (isMobile() && V.el.getAttribute('data-sc-src-mobile')) src = V.el.getAttribute('data-sc-src-mobile');
+      if (!src) return;
+      V.loading = true;
+      fetch(src).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+        .then(function (blob) {
+          // Listeners and preload BEFORE src. Assigning src starts the load, so
+          // attaching afterwards and then calling load() restarts it and aborts
+          // the first request (visible as ERR_ABORTED on the blob URL).
+          V.el.addEventListener('loadedmetadata', function () {
+            V.ready = true;
+            // Force one seek even when the target is already 0. The reveal is
+            // gated on a 'seeked' event, and the raf loop only seeks when the
+            // time actually needs to change, so a clip sitting at the very top
+            // of its act would never seek, never fire 'seeked', and never
+            // replace its poster until the reader scrolled it off zero.
+            try { V.el.currentTime = Math.max(V.target * (V.el.duration || 1), 0.001); } catch (e) {}
+            read();
+            // Prime the decoder the moment the clip can be primed, without
+            // waiting for a gesture. A muted inline play() is allowed with no
+            // user activation on every platform except a restricted one (Low
+            // Power Mode, data saver), and there the rejection is harmless: the
+            // gesture listeners below retry on the next real touch.
+            primeClip(V);
+          });
+          // Reveal only once a real frame has painted. iOS keeps a seeked-but-
+          // never-played muted video blank, so hiding the poster on metadata
+          // alone flashes an empty stage.
+          var reveal = function () {
+            if (V.painted) return;
+            V.painted = true;
+            V.host.classList.add('sc-has-clip');
+            V.el.classList.add('sc-has-clip');
+          };
+          V.el.addEventListener('seeked', reveal, { once: true });
+          // Never let visibility depend only on an event that may not arrive.
+          // On iOS a clip that has not been played can accept a seek and never
+          // fire 'seeked', which leaves the element at opacity 0 for the life of
+          // the page: the poster stays up, the act looks frozen, and every later
+          // act is fine because by then the reader has touched the screen and
+          // the decoder is live. Reveal on a timer as well. A stage that is
+          // briefly blank is a smaller fault than one that never shows its clip.
+          setTimeout(reveal, 2500);
+          V.el.preload = 'auto';
+          V.el.muted = true;            // as a property, not only an attribute
+          V.el.playsInline = true;
+          V.el.src = URL.createObjectURL(blob);
+        })
+        .catch(function () { V.loading = false; });
+    }
+
+    // ---- image sequence ---------------------------------------------------
+    function loadSeq(a) {
+      var S = a.seq;
+      if (!S || S.frames.length) return;
+      for (var i = 0; i < S.count; i++) {
+        (function (i) {
+          var img = new Image();
+          img.decoding = 'async';
+          img.src = S.tpl.replace('{i}', String(S.start + i))
+                         .replace('{ii}', String(S.start + i).padStart(2, '0'))
+                         .replace('{iii}', String(S.start + i).padStart(3, '0'))
+                         .replace('{iiii}', String(S.start + i).padStart(4, '0'));
+          img.onload = function () { S.loaded++; if (S.loaded === 1) S.drawn = -1; };
+          S.frames[i] = img;
+        })(i);
+      }
+    }
+    function drawSeq(a) {
+      var S = a.seq;
+      if (!S || !S.frames.length) return;
+      var idx = clamp(Math.round(a.p * (S.count - 1)), 0, S.count - 1);
+      if (idx === S.drawn) return;
+      var img = S.frames[idx];
+      if (!img || !img.complete || !img.naturalWidth) return;
+      var cw = S.el.width, ch = S.el.height;
+      // cover fit
+      var scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+      var w = img.naturalWidth * scale, h = img.naturalHeight * scale;
+      S.ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+      S.drawn = idx;
+    }
+
+    // ---- worldflight ------------------------------------------------------
+    // t is the position along the flight, measured in viewport-heights of
+    // scroll, so every number here is in the same unit the author wrote the
+    // weights in. There is no per-segment geometry to read: the stage never
+    // moves, so nothing needs measuring on scroll.
+    function readWorld(W) {
+      if (!W.segs.length) return;
+      var S = W.seam;
+      var t = clamp((y - W.top) / Math.max(vh, 1), 0, W.total);
+      var pr = t / W.total;
+      var i, s;
+
+      // The current leg is the last one whose crossfade has begun.
+      var k = 0;
+      for (i = 0; i < W.segs.length; i++) if (t >= W.segs[i].c0 - S / 2) k = i;
+
+      for (i = 0; i < W.segs.length; i++) {
+        s = W.segs[i];
+        var local = clamp01((t - s.c0) / Math.max(s.w, 0.001));
+        s.local = local;
+
+        // Fetch a leg only while it is within reach. Loading the whole flight up
+        // front is tens of megabytes before the first frame paints; loading it
+        // on arrival means arriving at a poster.
+        if (s.clip && t > s.c0 - 1.6 && t < s.c1 + 1.6) loadClip(s.clip);
+
+        // Opacity. The incoming leg fades UP over the outgoing one, which holds
+        // at full strength underneath until it is completely covered. Fading
+        // both halves of a crossfade is what puts the page ground through the
+        // middle of the seam and reads as a flash.
+        var op;
+        if (i > k) op = 0;
+        else if (i === k) op = i === 0 ? 1 : smooth((t - (s.c0 - S / 2)) / S);
+        else op = t < s.c1 + S / 2 ? 1 : 0;
+
+        var z = i === k ? 120 : Math.round(100 + op * 10);
+        if (op !== s.op) {
+          s.el.style.opacity = op.toFixed(3);
+          // A leg at zero must stop compositing entirely. Six full-bleed video
+          // layers all painting at opacity 0 costs the same as painting them.
+          s.el.style.visibility = op > 0.002 ? 'visible' : 'hidden';
+          s.op = op;
+        }
+        if (z !== s.z) { s.el.style.zIndex = String(z); s.z = z; }
+
+        if (s.clip) {
+          s.clip.live = op > 0.002;
+          s.clip.target = lingerEase(local, s.linger);
+        }
+        // Until a real frame has painted, the poster carries the move. A still
+        // that sits perfectly still while the page scrolls announces itself as a
+        // placeholder; a slow push in reads as the camera already flying.
+        if (s.poster && !reduce && !(s.clip && s.clip.painted) && op > 0.002) {
+          s.poster.style.transform = 'scale(' + (1.03 + local * 0.14).toFixed(4) + ')';
+        }
+      }
+
+      for (var c = 0; c < W.copies.length; c++) {
+        var q = W.copies[c];
+        var win = Math.max(q.to - q.from, 0.001);
+        var inEnd = q.from + win * q.rIn;
+        var outStart = q.to - win * q.rOut;
+        var vis;
+        // A hero declares rIn 0, so inEnd sits exactly on `from` and the ramp
+        // branch is skipped: the block is simply present from the first pixel.
+        if (pr < q.from) vis = 0;
+        else if (pr < inEnd) vis = smooth((pr - q.from) / Math.max(inEnd - q.from, 0.001));
+        else if (pr <= outStart) vis = 1;
+        else vis = smooth(1 - (pr - outStart) / Math.max(q.to - outStart, 0.001));
+        vis = clamp01(vis);
+
+        // The ONLY transform on the copy side, and it is capped at 4vh across
+        // the whole window. Anything larger stops reading as a parallax layer
+        // over a moving world and starts reading as a second page scrolling at a
+        // different speed, which is the exact cheapness this mode replaces.
+        var wp = clamp01((pr - q.from) / win);
+        q.el.style.opacity = vis.toFixed(3);
+        q.el.style.transform = reduce ? 'none'
+          : 'translate3d(0,' + ((0.5 - wp) * 4).toFixed(2) + 'vh,0)';
+        var on = vis > 0.5;
+        if (on !== (q.state === 1)) { q.state = on ? 1 : 0; q.el.style.pointerEvents = on ? 'auto' : 'none'; }
+      }
+
+      // Publish the route, draw none of it. A gauge, a map, a leg counter and a
+      // set of chapter dots are all the same two numbers, and a runtime that
+      // ships one of them ships it to every page that uses this mode.
+      var cur = W.segs[k];
+      W.el.style.setProperty('--sc-seg', String(k));
+      W.el.style.setProperty('--sc-segp', cur.local.toFixed(4));
+      docEl.style.setProperty('--sc-seg', String(k));
+      docEl.style.setProperty('--sc-segp', cur.local.toFixed(4));
+      if (k !== W.index) {
+        W.index = k;
+        try {
+          W.el.dispatchEvent(new CustomEvent('sc:waypoint', {
+            bubbles: true,
+            detail: { index: k, count: W.segs.length, label: cur.label, el: cur.el, progress: pr }
+          }));
+        } catch (e) {}
+      }
+    }
+
+    // ---- per-frame scroll read -------------------------------------------
+    function read() {
+      y = scrollY || pageYOffset;
+      var driftA = null, driftB = null, driftT = 0;
+      var maxY = Math.max((document.documentElement.scrollHeight || 0) - vh, 1);
+
+      for (var i = 0; i < acts.length; i++) {
+        var a = acts[i];
+        var raw;
+        if (a.pinned) {
+          var travel = Math.max(a.height - vh, 1);
+          raw = clamp01((y - a.top) / travel);
+        } else {
+          raw = clamp01((y + vh - a.top) / (a.height + vh));
+        }
+        a.raw = raw;
+        a.p = a.dwell ? dwell(raw, a.dwell) : raw;
+
+        // Clip time is NOT cue time. Cues belong to the pin, so they keep using
+        // `p`. The clip belongs to the stage, and the stage is on screen for one
+        // viewport before the pin starts and one after it ends. Driving the clip
+        // from `p` therefore parks it on frame one for the whole entry slide and
+        // on its last frame for the whole exit slide, which is a still
+        // photograph moving up the screen under the reader's hand.
+        //
+        // So map the clip across the stage's entire visible life instead. Both
+        // ends are clamped to scroll that actually exists: an act at the top of
+        // the document has no entry slide and must still start on frame one, and
+        // an act near the bottom must still reach its last frame while the page
+        // can still scroll.
+        a.vp = a.p;
+        if (a.pinned && !a.clipTravel) {
+          var startY = a.top - Math.min(vh, a.top);
+          var endY = Math.min(a.top + a.height, maxY);
+          var vraw = clamp01((y - startY) / Math.max(endY - startY, 1));
+          a.vp = a.dwell ? dwell(vraw, a.dwell) : vraw;
+        }
+        a.live = (y > a.top - vh * 1.25) && (y < a.top + a.height + vh * 1.25);
+        a.el.style.setProperty('--sc-p', a.p.toFixed(4));
+
+        // Fetch earlier than we drive. A 1080p clip is megabytes, and a reader
+        // who scrolls briskly will otherwise arrive at a stage that is still
+        // downloading and see a poster where the camera move should be.
+        var warm = (y > a.top - vh * 3) && (y < a.top + a.height + vh * 1.5);
+        if (warm) {
+          if (a.video) loadVideo(a);
+          if (a.seq) loadSeq(a);
+        }
+        if (a.live && a.seq) drawSeq(a);
+        if (a.video) { a.video.live = a.live; if (a.video.ready) a.video.target = a.vp; }
+
+        // horizontal rail
+        if (a.rail) {
+          var over = a.rail.scrollWidth - vw;
+          if (over > 0) {
+            var extra = over * (a.railExtra || 0);
+            a.rail.style.transform = 'translate3d(' + (-(over + extra) * a.p).toFixed(2) + 'px,0,0)';
+          }
+        }
+
+        if (!a.live) {
+          // An act that scrolls out of range must release its cues rather than
+          // freezing them at whatever they last were. A "hold" cue left at
+          // opacity 1 keeps its element hit-testable and paintable long after
+          // its act is gone, which shows up as a stray headline over a later
+          // section. Zero once, then leave it alone.
+          if (a.parked !== true) {
+            for (var z = 0; z < a.cues.length; z++) {
+              var pq = a.cues[z];
+              pq.el.style.opacity = '0';
+              pq.el.style.pointerEvents = 'none';
+              pq.state = 0;
+              if (pq.units) for (var zu = 0; zu < pq.units.length; zu++) pq.units[zu].style.opacity = '0';
+            }
+            a.parked = true;
+          }
+          continue;
+        }
+        a.parked = false;
+
+        // cues
+        for (var c = 0; c < a.cues.length; c++) {
+          var q = a.cues[c];
+          var vis;
+          if (q.to === null) {
+            vis = smooth((a.p - q.from) / 0.18);
+          } else {
+            var win = Math.max(q.to - q.from, 0.001);
+            var inEnd = q.from + win * q.rIn;        // full opacity from here
+            var outStart = q.to - win * q.rOut;      // starts leaving here
+            if (a.p < inEnd) vis = smooth((a.p - q.from) / Math.max(inEnd - q.from, 0.001));
+            else if (a.p <= outStart) vis = 1;       // the plateau
+            else vis = smooth(1 - (a.p - outStart) / Math.max(q.to - outStart, 0.001));
+          }
+          vis = clamp01(vis);
+
+          if (q.kinetic) {
+            if (!q.units) q.units = splitText(q.el, q.kinetic);
+            var n = q.units.length;
+            // Stagger across the reveal window. 0.62 spread leaves the tail of
+            // the window for the last unit to finish, so the line lands together
+            // rather than trickling.
+            for (var u = 0; u < n; u++) {
+              var uStart = (u / Math.max(n, 1)) * 0.62;
+              var uv = clamp01((vis - uStart) / (1 - 0.62 + 0.001));
+              uv = smooth(uv);
+              q.units[u].style.opacity = uv.toFixed(3);
+              q.units[u].style.transform = reduce ? 'none'
+                : 'translate3d(0,' + ((1 - uv) * 100).toFixed(2) + '%,0)';
+            }
+            q.el.style.opacity = '1';
+          } else {
+            q.el.style.opacity = vis.toFixed(3);
+            q.el.style.transform = reduce ? 'none'
+              : 'translate3d(0,' + ((1 - vis) * 2.4 * q.rise).toFixed(2) + 'vh,0)';
+          }
+          var on = vis > 0.5;
+          if (on !== (q.state === 1)) { q.state = on ? 1 : 0; q.el.style.pointerEvents = on ? 'auto' : 'none'; }
+        }
+
+        // parallax
+        if (!reduce) {
+          for (var pz = 0; pz < a.parallax.length; pz++) {
+            var pp = a.parallax[pz];
+            pp.el.style.transform = 'translate3d(0,' + (pp.rate * (a.p - 0.5) * 100).toFixed(2) + 'px,0)';
+          }
+        }
+
+        // reveals
+        for (var rv = 0; rv < a.reveals.length; rv++) {
+          var R = a.reveals[rv];
+          var t = smooth((a.p - R.from) / Math.max(R.to - R.from, 0.001));
+          var pct = ((1 - t) * 100).toFixed(2);
+          R.el.style.clipPath =
+            R.dir === 'down' ? 'inset(' + pct + '% 0 0 0)' :
+            R.dir === 'left' ? 'inset(0 ' + pct + '% 0 0)' :
+            R.dir === 'right' ? 'inset(0 0 0 ' + pct + '%)' :
+            R.dir === 'iris' ? 'circle(' + (t * 78).toFixed(2) + '% at 50% 50%)' :
+                               'inset(0 0 ' + pct + '% 0)';
+        }
+
+        // counters
+        for (var ct = 0; ct < a.counts.length; ct++) {
+          var K = a.counts[ct];
+          var kt = smooth((a.p - K.from) / Math.max(K.to - K.from, 0.001));
+          var val = lerp(K.a, K.b, kt);
+          var out = formatNum(val, K.tpl);
+          if (out !== K.last) { K.el.textContent = out; K.last = out; }
+        }
+      }
+
+      for (var w = 0; w < worlds.length; w++) readWorld(worlds[w]);
+
+      // background drift
+      for (var d = 0; d < drifts.length; d++) {
+        var D = drifts[d];
+        if (D.act.raw > 0 && D.act.raw < 1) {
+          driftA = D; driftT = smooth(D.act.raw / 0.35);
+          driftB = drifts[d - 1] || D;
+          break;
+        }
+        if (D.act.raw >= 1) { driftA = D; driftB = D; driftT = 1; }
+      }
+      if (driftA) {
+        docEl.style.setProperty('--sc-canvas', mixColor(driftB.rgb, driftA.rgb, driftT));
+      }
+
+      if (progressBar) {
+        var max = Math.max(document.body.scrollHeight - vh, 1);
+        progressBar.style.transform = 'scaleX(' + clamp01(y / max).toFixed(4) + ')';
+      }
+    }
+
+    // ---- video seek loop --------------------------------------------------
+    // Split from read() on purpose: seeking is asynchronous and rate-limited by
+    // the decoder, while read() must stay cheap enough to run on every scroll
+    // event. The lerp here is also what turns a jittery wheel into a glide.
+    function tick() {
+      // Deadband. A phone decoder cannot service a seek every frame, so asking
+      // for one costs more than it shows; 20ms of clip is under a frame of
+      // footage anyway.
+      var eps = isMobile() ? 0.02 : 0.008;
+      for (var i = 0; i < playheads.length; i++) {
+        var V = playheads[i];
+        if (!V.ready) continue;
+        // Never queue a seek while the decoder is still resolving the last one.
+        // On a phone a fast flick otherwise piles seeks up and freezes the clip.
+        // But a seek that never completes would freeze the clip for the life of
+        // the page through this very guard, so a seek stuck past 700ms is
+        // re-issued rather than waited on forever.
+        if (V.el.seeking) {
+          var nw = performance.now();
+          if (!V.stuckAt) V.stuckAt = nw;
+          else if (nw - V.stuckAt > 700) {
+            V.stuckAt = nw;
+            try { V.el.currentTime = V.el.currentTime + 0.001; } catch (e) {}
+          }
+          continue;
+        }
+        V.stuckAt = 0;
+        // An offscreen clip that has already arrived stops costing anything.
+        if (!V.live && Math.abs(V.cur - V.target) < 0.002) continue;
+        V.cur += (V.target - V.cur) * (reduce ? 1 : V.lerp);
+        var dur = V.el.duration || 1;
+        var t = clamp(V.cur, 0, 0.999) * dur;
+        if (Math.abs(V.el.currentTime - t) > eps) { try { V.el.currentTime = t; } catch (e) {} }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // iOS will not paint a muted video that has never been handed a user
+    // gesture, so a clip can be loaded, seeked and still show nothing.
+    //
+    // This used to fire once, on the first touch, across every playhead. That
+    // loses a race it cannot win. The first act's clip is still being fetched
+    // when the reader's first touch arrives (they touch the screen in order to
+    // scroll, and the clip is megabytes) so play() is called on a video with
+    // no source, does nothing, and the one shot is spent. Every later act loads
+    // long after that touch, with user activation already granted, and works
+    // without ever needing this. That is the exact shape of the bug: the hero
+    // frozen, everything below it fine.
+    //
+    // So: keep listening, prime each clip once it actually has a source, and
+    // stop only when they are all done. And force a seek afterwards, because a
+    // primed decoder still shows the stale frame until something asks it for a
+    // different time, and the deadband in tick() will not ask if the playhead is
+    // already where it should be.
+    var primedCount = 0;
+    function primeClip(V) {
+      // priming guards the retry: play() is a promise, and calling it again
+      // while the last one is unsettled produces "interrupted by pause" and can
+      // leave the element playing.
+      if (V.primed || V.priming || !V.el.src) return;
+      V.priming = true;
+      var done = function () {
+        V.priming = false;
+        if (!V.primed) { V.primed = true; primedCount++; }
+        try { V.el.pause(); } catch (e) {}
+        // repaint: nudge past the deadband so the next tick writes for real
+        try {
+          var dur = V.el.duration || 1;
+          V.cur = clamp(V.cur, 0, 0.999);
+          V.el.currentTime = clamp(V.cur * dur + 0.05, 0, dur * 0.999);
+        } catch (e) {}
+      };
+      var fail = function () { V.priming = false; };
+      // A play() promise is allowed to stay pending forever (iOS does this to a
+      // video it has decided not to start). If that happened here, `priming`
+      // would jam and no gesture could ever retry, so the flag is released on a
+      // timer as well. A late resolution after the release still lands in
+      // done(), which is idempotent.
+      setTimeout(function () { if (V.priming) fail(); }, 2000);
+      var pr;
+      try { pr = V.el.play(); } catch (e) { fail(); return; }
+      if (pr && pr.then) pr.then(done, fail);
+      else done();
+    }
+    function prime() {
+      for (var i = 0; i < playheads.length; i++) primeClip(playheads[i]);
+      if (playheads.length && primedCount >= playheads.length) {
+        removeEventListener('touchstart', prime);
+        removeEventListener('touchend', prime);
+        removeEventListener('pointerdown', prime);
+        removeEventListener('click', prime);
+        removeEventListener('scroll', prime);
+      }
+    }
+    // touchend and click are here because the HTML spec's list of activation-
+    // triggering events includes touchend but NOT touchstart. A restricted
+    // device (Low Power Mode) that rejects the touchstart prime for lacking
+    // activation gets a second, valid chance the moment the finger lifts.
+    addEventListener('touchstart', prime, { passive: true });
+    addEventListener('touchend', prime, { passive: true });
+    addEventListener('pointerdown', prime, { passive: true });
+    addEventListener('click', prime, { passive: true });
+    addEventListener('scroll', prime, { passive: true });
+
+    // ---- pointer devices --------------------------------------------------
+    var tilts = [], magnets = [], spots = [];
+    function initPointer() {
+      if (reduce || !fineMQ.matches) return;
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sc-tilt]'), function (el) {
+        tilts.push({ el: el, max: parseFloat(el.getAttribute('data-sc-tilt')) || 6, x: 0, ty: 0, tx: 0, y: 0 });
       });
-      progMarks.forEach(function (li, i) {
-        li.style.left = (at[i] * 100).toFixed(2) + '%';
-        li.classList.toggle('cur', i === cur);
-        li.classList.toggle('done', i < cur);
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sc-magnet]'), function (el) {
+        magnets.push({ el: el, k: parseFloat(el.getAttribute('data-sc-magnet')) || 0.3, x: 0, y: 0, tx: 0, ty: 0 });
+      });
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sc-spotlight]'), function (el) {
+        spots.push(el);
+      });
+      if (!tilts.length && !magnets.length && !spots.length) return;
+
+      addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        for (var i = 0; i < tilts.length; i++) {
+          var T = tilts[i], r = T.el.getBoundingClientRect();
+          if (r.bottom < -200 || r.top > vh + 200) { T.tx = 0; T.ty = 0; continue; }
+          var nx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+          var ny = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+          var inside = Math.abs(nx) < 1.6 && Math.abs(ny) < 1.6;
+          T.tx = inside ? clamp(ny, -1, 1) * -T.max : 0;
+          T.ty = inside ? clamp(nx, -1, 1) * T.max : 0;
+        }
+        for (var m = 0; m < magnets.length; m++) {
+          var M = magnets[m], mr = M.el.getBoundingClientRect();
+          var dx = e.clientX - (mr.left + mr.width / 2);
+          var dy = e.clientY - (mr.top + mr.height / 2);
+          var near = Math.abs(dx) < mr.width && Math.abs(dy) < mr.height * 2.5;
+          M.tx = near ? dx * M.k : 0;
+          M.ty = near ? dy * M.k : 0;
+        }
+        for (var s = 0; s < spots.length; s++) {
+          var sr = spots[s].getBoundingClientRect();
+          spots[s].style.setProperty('--sc-mx', clamp01((e.clientX - sr.left) / sr.width).toFixed(3));
+          spots[s].style.setProperty('--sc-my', clamp01((e.clientY - sr.top) / sr.height).toFixed(3));
+        }
+      }, { passive: true });
+
+      (function pointerTick() {
+        // Interpolate toward the target rather than tracking the pointer
+        // directly. Direct tracking reads as artificial because it carries no
+        // momentum; the lerp gives it weight.
+        for (var i = 0; i < tilts.length; i++) {
+          var T = tilts[i];
+          T.x += (T.tx - T.x) * 0.09; T.y += (T.ty - T.y) * 0.09;
+          if (Math.abs(T.x) > 0.001 || Math.abs(T.y) > 0.001) {
+            T.el.style.transform = 'perspective(1100px) rotateX(' + T.x.toFixed(3) + 'deg) rotateY(' + T.y.toFixed(3) + 'deg)';
+          }
+        }
+        for (var m = 0; m < magnets.length; m++) {
+          var M = magnets[m];
+          M.x += (M.tx - M.x) * 0.12; M.y += (M.ty - M.y) * 0.12;
+          M.el.style.transform = 'translate3d(' + M.x.toFixed(2) + 'px,' + M.y.toFixed(2) + 'px,0)';
+        }
+        requestAnimationFrame(pointerTick);
+      })();
+    }
+
+    // ---- wiring -----------------------------------------------------------
+    var ticking = false;
+    addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(function () { read(); ticking = false; }); }
+    }, { passive: true });
+
+    // Keyboard focus on a pinned or panning act. The browser's own
+    // scroll-into-view parks the focused element barely on screen, which is
+    // exactly the scroll position at which its cue has not opened yet, so focus
+    // lands on a control nobody can see and every automated opacity check still
+    // passes. Centring the act instead is a position where the cue is lit by
+    // definition. behavior:'instant' on purpose: scrollcraft.css sets
+    // scroll-behavior:smooth, so the default animates the jump and focus sits
+    // off screen for the whole of a multi-screen glide.
+    addEventListener('focusin', function (e) {
+      var el = e.target;
+      if (!el || !el.closest) return;
+      var act = el.closest('[data-sc-act]');
+      if (!act || !root.contains(act)) return;
+      var cue = el.closest('[data-sc-cue]');
+      if (!cue) return;
+      if (parseFloat(getComputedStyle(cue).opacity || '1') > 0.85) return;
+      el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
+    });
+
+    var lastW = innerWidth;
+    addEventListener('resize', function () {
+      // Ignore URL-bar-only height changes on phones. Relaying out on those
+      // makes the page jump under the reader's thumb for no reason.
+      if (innerWidth === lastW && isMobile()) { vh = innerHeight; return; }
+      lastW = innerWidth;
+      layout();
+    }, { passive: true });
+
+    if (document.fonts && document.fonts.ready) {
+      // Line splitting measures line boxes, so it has to wait for the real face.
+      document.fonts.ready.then(function () {
+        acts.forEach(function (a) { a.cues.forEach(function (q) { if (q.kinetic && q.units) { q.el.__scSplit = null; q.units = null; } }); });
+        layout();
       });
     }
-    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
-    self._onScroll = onScroll;
-    window.addEventListener('scroll', onScroll, { passive: true });
-    document.addEventListener('scroll', onScroll, { passive: true, capture: true });
-    window.addEventListener('resize', onScroll);
-    // A re-render rewrites class attributes; re-run the frame so state comes back at once.
-    self._mo = new MutationObserver(onScroll);
-    self._mo.observe(root, { subtree: true, attributes: true, attributeFilter: ['class'] });
-    frame();
-    var yr = document.getElementById('year');
-    if (yr) yr.textContent = String(new Date().getFullYear());
+
+    layout();
+    initPointer();
+    requestAnimationFrame(tick);
+    document.documentElement.classList.add('sc-ready');
+
+    var api = { layout: layout, read: read, acts: acts, worlds: worlds, clips: playheads, lerp: LERP };
+    global.ScrollCraft.instances.push(api);
+    return api;
+  }
+
+  // The instance list is not an API for the page. It is how the verification
+  // harness reads the real playhead records: a screenshot taken mid-lerp is a
+  // frame the page never actually holds, so the harness has to be able to ask
+  // whether the playhead has arrived rather than guess with a timeout.
+  global.ScrollCraft = { mount: mount, reduce: reduce, instances: [] };
+})(window);
+
+</script>
+<script>
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function cl(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+  function ease(v) { v = cl(v); return v * v * (3 - 2 * v); }
+  function seg(p, a, b) { return cl((p - a) / (b - a)); }
+
+  /* ---- clock ---- */
+  var fmtDay = new Intl.DateTimeFormat('es-AR', { weekday: 'long' });
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function tick() {
+    var d = new Date(), el = document.getElementById('clk'), day = document.getElementById('clk-day');
+    if (el) el.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes());
+    if (day) { var w = fmtDay.format(d); day.textContent = w.charAt(0).toUpperCase() + w.slice(1); }
+  }
+  tick(); setInterval(tick, 15000);
+  var yr = document.getElementById('year'); if (yr) yr.textContent = String(new Date().getFullYear());
+
+  /* ---- the bar appears once the hero, with its own mark and CTA, is gone ---- */
+  var bar = document.getElementById('bar'), hero = document.getElementById('inicio');
+  function barFrame() { bar.classList.toggle('on', hero.getBoundingClientRect().bottom < 140); }
+
+  /* ---- module tabs ---- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var shots = Array.prototype.slice.call(document.querySelectorAll('#screen [data-s]'));
+  var screen = document.getElementById('screen');
+  var panAt = { wa: .55, agenda: .08, cobros: .3, sesiones: .1, ficha: .5, stock: .15, inicio: .4 };
+  function select(tab, focus) {
+    var key = tab.id.slice(2);
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    shots.forEach(function (s) { s.hidden = s.getAttribute('data-s') !== key; });
+    if (focus) tab.focus();
+    var el = shots.filter(function (s) { return !s.hidden; })[0];
+    function place() { screen.scrollLeft = Math.max(0, screen.scrollWidth - screen.clientWidth) * (panAt[key] || 0); }
+    if (el && el.tagName === 'IMG' && !el.complete) el.addEventListener('load', place, { once: true });
+    place();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(t, false); });
+    t.addEventListener('keydown', function (e) {
+      var k = e.key, n = null;
+      if (k === 'ArrowDown' || k === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+      else if (k === 'ArrowUp' || k === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+      else if (k === 'Home') n = tabs[0];
+      else if (k === 'End') n = tabs[tabs.length - 1];
+      if (n) { e.preventDefault(); select(n, true); }
+    });
+  });
+  // A screenshot that fails to load is asked for once more instead of showing a broken frame.
+  shots.forEach(function (img) {
+    if (img.tagName !== 'IMG') return;
+    img.addEventListener('error', function retry() {
+      img.removeEventListener('error', retry);
+      setTimeout(function () { img.src = img.getAttribute('src').split('?')[0] + '?r=' + Date.now(); }, 600);
+    });
+  });
+  if (matchMedia('(max-width:760px)').matches) select(tabs[0], false);
+
+  /* ---- the eras: each photo wipes over the last while the year rolls, then the three
+     settle side by side as a triptych, then the payoff lands under the turn line ---- */
+  var eras = document.getElementById('historia'), stage = document.getElementById('eras-stage');
+  var ph = Array.prototype.slice.call(stage.querySelectorAll('.era'));
+  var seam = document.getElementById('era-seam'), yearEl = document.getElementById('era-year'), lastYear = '1946';
+  function clip(r, l, g) { return 'inset(0 calc(' + r.toFixed(3) + '% + ' + g + 'px) 0 calc(' + l.toFixed(3) + '% + ' + g + 'px))'; }
+  function eraFrame() {
+    // Measured here rather than read from --sc-p, which the engine writes a frame later.
+    var r = eras.getBoundingClientRect();
+    var p = cl(-r.top / Math.max(1, r.height - innerHeight));
+    var w1 = reduce ? (p >= .23 ? 1 : 0) : ease(seg(p, .17, .27));
+    var w2 = reduce ? (p >= .45 ? 1 : 0) : ease(seg(p, .39, .49));
+    var t = reduce ? (p >= .62 ? 1 : 0) : ease(seg(p, .56, .68));
+    var k = reduce ? (p >= .82 ? 1 : 0) : ease(seg(p, .78, .88));
+    var g = (t * 4).toFixed(1);
+    ph[0].style.clipPath = clip(66.667 * t, 0, g);
+    ph[1].style.clipPath = clip(33.333 * t, (1 - t) * 100 * (1 - w1) + t * 33.333, g);
+    ph[2].style.clipPath = clip(0, (1 - t) * 100 * (1 - w2) + t * 66.667, g);
+    var edge = (w1 > 0 && w1 < 1) ? 1 - w1 : ((w2 > 0 && w2 < 1) ? 1 - w2 : -1);
+    seam.style.opacity = edge < 0 ? '0' : '1';
+    seam.style.transform = 'translateX(' + (Math.max(0, edge) * stage.clientWidth).toFixed(1) + 'px)';
+    stage.style.setProperty('--t', t.toFixed(3));
+    stage.style.setProperty('--k', k.toFixed(3));
+    var y = p < .22 ? '1946' : (p < .44 ? '1984' : '1987');
+    stage.style.setProperty('--yo', (1 - t).toFixed(3));
+    if (y !== lastYear) {
+      lastYear = y;
+      var span = yearEl.firstElementChild;
+      yearEl.classList.add('roll'); span.textContent = y;
+      requestAnimationFrame(function () { requestAnimationFrame(function () { yearEl.classList.remove('roll'); }); });
+    }
+  }
+
+  var ticking = false;
+  function frame() { ticking = false; eraFrame(); barFrame(); }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+
+  ScrollCraft.mount(document.body);
+  frame();
 })();
 </script>
 </body>
