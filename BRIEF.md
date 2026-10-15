@@ -1,249 +1,160 @@
-# Pultzo Admin, landing brief
+# Pultzo, "La revolución" v6: landing brief
 
-Interviewed in conversation on 2026-09-22. User answers are quoted verbatim
-(Spanish, as given). Where the user delegated a decision, the authored choice is
-labelled `Authored`. Evidence about the product comes from the product's own
-codebase (`apps/web/src/features/app-shell/dashboard-nav-items.ts`,
-`metrics-config/`, `globals.css`) and from prior session notes.
+Self-authored under explicit creative delegation, on 2026-10-14. The user asked
+for a new version that follows the written critique ("Crítica de la landing de
+Pultzo", Claude Docs) with two exceptions, and to use scroll-craft. Their words:
+
+> "con esta critica, haceme una nueva version de la landing mejorada, manteniendo la escencia del branding"
+
+> "me gusta esto de la seleccion, sin embargo me gustaria seguir con la foto de
+> steve jobs, que incorpora el excel en las masas, y la del avion, quiero
+> mantener la escencia de la revolucion, segui todo lo de la critica menos eso"
+
+"Esto de la selección" is the tabbed module viewer from v5. It stays.
+
+Evidence comes from the critique, the live repo (steffanfelipe-alt/Landing-Pultzo,
+index.html + funciones.html) and prior session notes. Assumptions are marked.
 
 ## The subject
 
-Pultzo Admin: a SaaS for running a dental clinic. Agenda, WhatsApp assistant
-that books appointments on its own, automatic patient follow-up, and a panel of
-indicators derived from the agenda. Audience: the owner or manager of a small
-dental clinic in Argentina. The page's single job: get that person to write on
-WhatsApp or by email to ask for a demo.
+Pultzo: dental clinic management with AI, for Argentine clinics with a team
+(several professionals, a front desk). The page's single job: get the owner to
+write on WhatsApp for a 20 minute demo. One CTA label everywhere: "Pedí una demo".
 
 Hard facts that bound the copy:
 
-- The product has never been deployed to a real clinic. No customer counts, no
-  testimonials, no logos, no percentages. Sample data inside the demo screens is
-  labelled as fictional on the surface itself.
-- Clinical records are out of scope. The five indicators come from the agenda.
-- Google Calendar integration is free/busy only. Not claimed on the page.
-- Brand tokens are the product's own: Inter, canvas `#f7f6f2`, ink `#17181a`,
-  soft ink `#5b5f66`, success `#0b6e4f`, error `#c2410c`, dark rail `#17181a`
-  with `#b9bcc2` text, radius 4px, tight negative tracking on display type.
+- Never deployed to a real clinic. No testimonials, no counts, no logos, no
+  percentages. Screens carry fictional data and say so.
+- WhatsApp handles appointments only, never health data (funciones.html).
+- Obras sociales: aranceles con copago, presentación mensual, no direct
+  integration yet (funciones.html).
+- Comprobantes read by AI, a person confirms with one click (funciones.html).
+- AI integrations get the minimum, no training on clinic data (funciones.html).
+- Voice dictation stays in the clinic (current landing copy).
+- Brand tokens of the current landing: ground #0E0D0B, ink #F4F1EA, soft
+  #C9C2B4, accent #FF7A55, Archivo (display) + Geist (text). Archive photography
+  with credits.
+
+Unconfirmed (flag to the user): "Mar del Plata"; "diez clínicas fundadoras",
+"los primeros meses sin costo", "precio fundador".
 
 ## The eight topics
 
-1. **Vibe.** Authored (the brief pins the direction without naming it): calm,
-   precise, monochrome, "Apple keynote for a consultorio". References: the
-   product's own dashboard; a MacBook product page; a clean dental office at
-   8 am before the first patient.
+1. **Vibe.** Authored from the existing brand: archival, editorial, warm dark,
+   confident. References: a museum's photo archive at night; a printed
+   almanac; the Apple "1984" era press kit.
+2. **Journey, from the critique.** Value first (hero promise + CTA), the pain in
+   their words, the short history ending "Con Pultzo, no.", real screens ordered
+   by what costs the most, the cost in pesos, trust, founding-clinic offer, FAQ,
+   final CTA. The user's exception: Jobs 1984 and the 1903 flight stay.
+3. **Energy.** Authored: medium open (value), low (pain is quiet and specific),
+   rising through the eras, the loudest beat at the cut to "Con Pultzo, no.",
+   calm working surface, a second smaller lift at the first flight, quiet close.
+4. **Feeling and the one moment.** See the curve and the peak below.
+5. **Something no other site does.** Authored: the pending pile. The things that
+   keep the owner up at night are collected in a corner while they read, and
+   the product clears them one by one. They leave with an empty list.
+6. **Range.** Editorial, dark. Kept because it is the brand.
+7. **One world or scenes.** Distinct scenes, hard grounds, no drift.
+8. **Assets.** The repo's archive photos (1937, 1946, 1984, 1987, 1903) and six
+   real product screenshots. No generation, no API key, no spend.
 
-2. **Scroll journey, in the user's words.**
-   > "mi idea es que el viaje comienze con la pantalla principal, que diga
-   > PULTZO en grande, todo siempre respetando las fuentes y paletas. Y con un
-   > asset de una macbook cerrada, acostada en horizontal debajo de la palabra
-   > pultzo, la compu debe ser 3D. al scrollear hacia abajo, esta se abrira y
-   > mostrara la primera funcion, resaltando el outcome de ella y como ayudaria
-   > a mejorar la gestion."
-   > "Mostra las funciones clave y que mas cambian la gestion de la clinica"
-   > "podes resaltar que nosotros nos encargamos de todo el onboarding de la
-   > configuracion de la cuenta, migracion de datos en caso de que se necesite"
-   > "disena la pagina de forma que sea un 'embudo' hacia el final para el
-   > visitante"
+## Grammar: "Lista de pendientes" (new)
 
-3. **Energy curve.** Authored: quiet open, one rise (the lid), a plateau of
-   working screens with one louder moment (the assistant booking at night), a
-   quiet promise (onboarding), then a hard cut to dark for the close.
+The page is one evening's to-do list being cleared.
 
-4. **Feeling, stage by stage, and the one moment.** Authored, see the curve
-   below. The user delegated this explicitly:
-   > "descubri la forma en la que podes hacer sentir e incentivar al cliente a
-   > que continue bajando y viendo las funciones"
+- **Nav:** the pending pile itself. A fixed list (a chip on phones) that fills
+  as the pain is named and empties as the product handles each item. Each item
+  is a link that jumps to the screen that resolves it.
+- **Sequence:** items are added (pain), the argument for why tools never took
+  them off your plate (history), then they are resolved (product), priced
+  (money), made safe (trust), and offered (founders).
+- **Ending:** the list is empty and says the real time. One CTA.
+- **Bans:** scrub video, drift gradients (hard grounds only), section counters,
+  spotlight, magnet, centred copy as a default, more than one eyebrow per three
+  sections, a scroll cue.
 
-5. **The one thing no site they have seen does.** In the user's words:
-   > "en cuanto a un capricho de diseno me gustaria que luego de que la compu se
-   > abra, al bajar a las siguientes funciones, un cursor se dirija a la
-   > siguiente funcion y la clickee, para pasar a esa."
+Why the other grammars lost: filmic one-shot needs footage and hides seams this
+page wants. Chaptered editorial forbids a media hero and pinned type, both of
+which the revolution sequence needs. Live surface forbids the archive
+photography that is the brand. Continuous world needs geography. Typographic
+poster forbids photos. Gallery has no argument. Split stage cannot hold the
+tabs, calculator and FAQ. Cutlist is the wrong pulse for a cautious buyer.
 
-6. **Aesthetic range.** Authored: premium-minimal, because the brand tokens are
-   already monochrome and the brief asks for a 3D laptop under a giant
-   wordmark. Not chosen by default: chosen because the user said "respetando las
-   fuentes y paletas" and those tokens are quiet.
+## Feeling curve (written before the acts)
 
-7. **One world or distinct scenes.** Authored: one object. The laptop is the
-   only stage and it persists from the hero to the end of the tour. Not a
-   worldflight (no camera travel), not chapters (no cuts between grounds until
-   the close).
+1. **Relief, glimpsed.** The promise: "Vos atendés pacientes. Pultzo hace el
+   resto." over the 1937 records office, messages floating forward.
+2. **Recognition, with unease.** Four things from tonight, with the real clock.
+   Each one drops into the pile in the corner as it is read.
+3. **Weight, then the turn (PEAK).** 1946, 1984, 1987 wipe over each other while
+   the year rolls; "Cambió la herramienta. El trabajo siguió siendo tuyo." The
+   frame cuts to black and the year reads "Hoy": "Con Pultzo, no."
+4. **Control.** The real screens. Opening a tab clears its item from the pile.
+5. **Sobriety.** The empty chair in pesos, with their own numbers.
+6. **Trust.** Calm, specific facts about the data and the setup.
+7. **Belonging.** The first flight: "Toda revolución empezó con pocos." Ten
+   founding clinics.
+8. **Resolve.** Questions answered, then the empty list and the time. Demo.
 
-8. **Assets they have.** None supplied. No photography, no footage, no logo
-   file. The wordmark is typeset in Inter like the product's own rail. The laptop
-   is built in CSS 3D so the screen is real markup, not an image. No generated
-   imagery; the page needs no API key.
+Peak, as a visitor would say it: "the years kept rolling, 1946, 1984, 1987, and
+then everything went black, the year said Hoy, and it said: Con Pultzo, no."
+Lives in the eras act, which has the largest span on the page.
 
-Contact, in the user's words:
-> "pone mail, y whatsapp, mi numero de whatsapp es 54 9 223 541 2083, y mi mail
-> es steffanfelipe@gmail.com"
+Tell-someone sentence: "It's the site where the things I had pending tonight
+piled up in the corner, and they disappeared one by one while I looked at the
+product."
 
-## Grammar
-
-**Object stage** (new grammar, constraints below). One physical object holds
-the whole tour; the page is that object's lid opening and its screen being
-operated. Navigation is the product's own sidebar inside the screen, driven by
-a guided cursor and clickable by the visitor. The hero is the wordmark with the
-object closed beneath it. The close is the funnel's tip: the object leaves, the
-column narrows, the ground inverts, two contact actions hold.
-
-Forbids: scrub video, photography, full-bleed media, kinetic headline stacks,
-card grids, section counters, any second stage object. Copy sits beside the
-object, never over it.
-
-Why the other grammars lost: filmic one-shot wants a full-bleed scrub hero and
-corner-anchored copy, and there is no footage. Live surface forbids the giant
-wordmark hero the user asked for. Chaptered editorial cuts grounds between
-chapters, which breaks the one-object continuity. Continuous world needs camera
-travel through a place. Typographic poster forbids the product surface.
-Gallery has no argument. Split stage needs two sides in tension. Cutlist is the
-wrong pulse for a clinic.
-
-## Revision 3 (same day): items, order, mobile window
-
-The user asked for the functions to read as items that accumulate while
-scrolling, the assistant first, the agenda second, a nicer onboarding, and a
-mobile design that stops looking like a tablet. What changed:
-
-- Tour order: assistant (peak, 3.2) → agenda (2.2) → seguimiento (2.0) → panel
-  (2.0). The lid opens onto the Panel, the product's real home, and the tour
-  ends back there.
-- Every act is a heading plus three or four outcome items on staggered cues
-  that hold until the act ends, so the list builds under the hand. Each item is
-  paired with a beat on the surface: a message landing, confirmed cards
-  stepping forward, the "Reservar un turno" dialog, a counter ticking, a tile
-  ringing. Beats can send the cursor to press something (`data-cursor`).
-- Onboarding is a four-step sequence on a hairline (a real sequence, so the
-  numbers carry information), revealed as one object.
-- Phone: the laptop keeps real 16:10 proportions and lives only in the hero.
-  As the hero ends the app node moves out of the lid into a flat window at the
-  top of the viewport and renders at 1:1 in its compact layout; the copy takes
-  the band below. Same DOM, same state, same cursor.
-
-## Revision 4 (same day): no empty slide before the first function
-
-The user felt the first function took too much scroll, and some copy ended up
-under the machine. Both had one cause: the hero and the assistant were two
-pinned acts, so a full viewport of un-pin slide sat between the lid opening
-and the first heading. They are now one act (span 4.4): the lid opens in the
-first quarter, the machine settles by a third, the heading fades in at 0.34 and
-the cursor has already pressed Conversaciones. `data-tour-at` / `data-beat-from`
-/ `data-beat-to` key the view switch and the beats to that act's later
-progress. On desktop the laptop is now posed so the deck's left edge (which
-reaches further left than the screen, in perspective) sits flush to the right
-of the copy column, and the scale is capped so the screen stays inside the
-viewport. The copy can no longer be covered at any width.
-
-## Revision 5 (same day): one rhythm for every act
-
-Items were timed as fractions of their act, and acts had different lengths,
-so Seguimiento and Panel raced past. Now every act follows the same rule in
-scroll distance: heading at 0.2 viewport-heights (1.5 in the merged hero, after
-the lid), one item every 0.5, a 0.2 ramp each, and a full viewport of reading
-after the last item before the copy fades. Spans: hero+assistant 4.6, agenda
-3.0, seguimiento 3.0, panel 3.4 (the machine leaves from 0.8). Total about
-16.5 viewport-heights: longer than the skill's reference band on purpose,
-because the owner asked for slower, even pacing.
-
-On a phone the first view switch waits for the handover to the window
-(`data-tour-at-phone="0.42"`), so the cursor, the layout change and the view
-change never happen in the same moment. Copy verified to clear the fold on
-390x844 and 360x640 (a short-screen rule tightens the window and the type).
-
-## Journey
-
-```
-1  Recognition   the name, the machine, nothing moving yet
-2  Surprise      the lid rises under the hand and the screen lights up: today's agenda
-3  Recognition   their own day, ordered, who confirmed and who did not
-4  Awe           23:14, a patient writes, the assistant answers and books (PEAK)
-5  Relief        nobody gets lost: the follow-up list updates itself
-6  Control       the panel says who is drifting away before it is late
-7  Trust         "you set up nothing": account, professionals, migration, done by us
-8  Resolve       dark ground, one line, two ways to write
-```
-
-## Feeling curve (one line per act)
-
-| Act | Feeling | What on screen causes it |
-|---|---|---|
-| hero | calm, then surprise | PULTZO at 19vw over a closed laptop; the lid opens as you scroll and occludes the word; the Panel is on screen |
-| bot (peak) | awe | the cursor clicks Conversaciones; a WhatsApp thread plays line by line under the wheel while four outcomes stack up; a toast lands: appointment reserved |
-| agenda | recognition | the cursor clicks Agenda; their own Tuesday; confirmed cards step forward; the cursor presses Reservar and a dialog opens |
-| seguimiento | relief | the cursor clicks Seguimiento; a row goes out, two rows resolve by themselves, the counters tick |
-| panel | control | the cursor clicks Panel; a tile rings under "cada número abre la lista"; then the machine recedes and leaves |
-| onboarding | trust | plain type in a narrower column; a four-line list wipes in: what we do so they do nothing |
-| close | resolve | hard cut to the dark rail colour; one heading, two buttons, held |
-
-No two adjacent acts share a feeling.
-
-## The peak
-
-> "Bajé y vi cómo el asistente le contestó a una paciente a las once de la
-> noche, le ofreció horarios y el turno apareció solo en la agenda."
-
-Lives in the bot act. Largest span on the page (3.4vh against 1.7 to 2.0 for the
-others). The silence before it is authored: the agenda copy fades at p 0.92, the
-stage slides for a viewport with only the laptop on screen while the cursor
-travels to Conversaciones, and the thread is empty until the first message
-lands at p 0.06 of the bot act.
-
-## Tell-someone sentence
-
-It's the site where the laptop opens when you scroll and a cursor gives you the
-tour, clicking through the app by itself.
-
-## Signature move
-
-The guided cursor. A real DOM cursor inside the screen travels to the next
-sidebar item, presses it, and the view switches, in sync with the act you are
-scrolling into. Scrolling back runs it in reverse. The sidebar is also real
-navigation: clicking an item scrolls the page to that act. Not a kit device; page
-JS reading each act's `--sc-p`.
-
-## Fingerprint gate
-
-`~/dashboard-demo/FINGERPRINTS.md` is empty. First build in this workspace,
-nothing to clear. Row appended after verification.
-
-## Authored silence
-
-- The un-pin slide between every two tour acts: laptop only, cursor moving.
-- The bot act from p 0 to 0.06: thread open, no messages yet.
+Authored silence: the black frame right before "Con Pultzo, no." (about 0.06
+of the eras act). Intentional.
 
 ## Score
 
-| Act | Device | Span | Why |
-|---|---|---|---|
-| hero | `pin` + page-local 3D pose from `--sc-p`; wordmark recedes on a far plane | 1.7 | the lid opening is the hook and it must be scrubbed by the hand; shortened on review so the first screen costs under a viewport of scroll |
-| agenda | `pin` + cue | 1.6 | copy crosses while the surface holds |
-| bot | `pin` + three crossing cues + thread lines keyed to `--sc-p` | 3.4 | the peak needs room and a settle |
-| seguimiento | `pin` + cue + row states keyed to `--sc-p` | 1.6 | same surface, different feeling: things resolve without you |
-| panel | `pin` + cue; the object recedes and exits at p 0.72 to 1 | 2.0 | the tour ends with the machine leaving, and the shrinking object is the funnel narrowing |
-| onboarding | `flow` + `in` stagger + one big `reveal="left"` on the list | ~1.3 | administrative content, compressed, but the list wipes in as one object |
-| close | `pin`, greet-and-hold cue, `magnet` on the primary button, dark ground | 1.4 | the funnel's tip resolves and holds |
+| Beat | Device | Why |
+|---|---|---|
+| Promise | pin 1.3 + parallax planes (photo far, copy mid, messages near) | Depth and a readable promise on screen one |
+| Pain | flow + in, rows feed the pile | Quiet, read at your own pace |
+| History and turn (peak) | pin 4.0 + full-bleed reveal wipes + kinetic + rolling year | The argument needs held breath; the cut needs silence before it |
+| Screens | flow + tabs (pointer) | Operating something, not watching |
+| Cost | pin 1.3, kinetic heading, live calculator | Short hold so the number is the only thing |
+| Trust | flow + in | Information, compressed |
+| Founders | pin 1.8, a slow push-in on the 1903 photo, kinetic line, then the offer | The second, smaller lift |
+| FAQ | flow | Administrative, compressed |
+| Close | pin 1.2, hold cues, empty pile | The page arrives and stops |
 
-Families: pin, flow/in, reveal, parallax (hero planes: wordmark, shadow,
-laptop), pointer (magnet). Total about 12.6 viewport-heights across seven acts,
-outside the 13.6 to 13.8 band the skill flags.
+Device families: pin, flow+in, parallax, reveal, kinetic, pointer. Never the
+same act device twice in a row. No scrub. 9 acts, about 14.5 viewport-heights:
+longer than the reference band because the critique adds sections
+(calculator, trust, FAQ) that stay compressed.
 
-The four screens were rebuilt against screenshots of the running product
-(`lab/ref/`): every page opens with a display title and a grey summary line,
-the rail carries line icons and the white "P" mark, and the agenda is the
-product's timeline (date title, turnos summary, Hoy and date navigation,
-Reservar un turno, per-professional chips, columns with count and hours, cards
-with a status stripe and the time range above the name). The panel act is 2.0 rather than
-1.6 because the machine's exit lives inside it.
+## Fingerprint gate
 
-A lid-closing exit was built first and rejected on the contact sheet: with the
-hinge at the bottom of the open screen, closing swings the light screen face
-toward the camera and it reads as a grey slab rising from the floor. Receding
-keeps the physics honest and draws the funnel.
+Against `pultzo (2026-09-22)`: grammar differs (pending list vs object stage),
+nav differs (pending pile vs product sidebar with a guided cursor), hero
+differs (layered archive photo with floating messages vs wordmark over a closed
+laptop), sequence differs (alternating pin/flow, 9 acts vs one persistent object
+over 7 acts), close differs (empty list with live time, CTA in place vs hard cut
+to dark with two contact buttons), signature differs. 6 of 6.
 
-## Mobile art direction
+## Revision 2 (same day): the user's direction
 
-Below 860px the laptop's virtual screen is 400 x 600 (portrait), so the app
-renders in a compact layout with a bottom tab strip the cursor can still
-press. The closed machine sits under a 21vw wordmark; open, the screen fills
-82vw at the top of the viewport and the copy takes the lower band. Base tilt
-increases to 80 degrees so the deck costs little height.
+> "no me gusta esto los pendientes y los mensajes en el aire, despues saca las
+> balizas del inicio en el nombre de pultzo, y gestion odontologica. asi debe
+> quedar las partes de las tres fotos, cambio la herramienta, el trabajo siguio
+> siendo tuyo. el inicio me gusta que figure asi con la letra bien grande y el
+> texto de pulzo de esa manera, la CTA arriba o al costado"
+
+- The pending pile is gone, and with it the "Lista de pendientes" grammar. The
+  page is now a filmic sequence with hard grounds: no nav beyond a bar that
+  appears after the hero (mark + CTA).
+- No floating messages, no pulsing dots anywhere.
+- Hero: the 1937 photo full-bleed and dimmed, "Pultzo" set large with the
+  spaced line "Gestión odontológica con inteligencia artificial", the CTA beside
+  it, the headline very large ("Vos atendés pacientes. Pultzo hace el resto.").
+  The user rejected the near plane, so depth is now the photo's slow push-in
+  against fixed copy only.
+- Eras: the three photos wipe over each other, then settle side by side as a
+  triptych with year and name over each third, dimmed, and "Cambió la
+  herramienta. El trabajo siguió siendo tuyo." over it. Then the cut to black,
+  the year reads "Hoy": "Con Pultzo, no." Signature move: the triptych assembly
+  with the rolling year that lands on "Hoy".
